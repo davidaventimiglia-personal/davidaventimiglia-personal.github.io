@@ -1,3 +1,10 @@
+---
+layout: post
+title: Algolia Search
+date: 2023-10-30 16:07:00 -0700
+categories: jekyll update
+---
+
 [Demo Video](https://drive.google.com/file/d/1R5j8xA8fI32_Y7Nqk1YiqKAYFEmZ_QcW/view?usp=sharing)
 
 # Abstract #
