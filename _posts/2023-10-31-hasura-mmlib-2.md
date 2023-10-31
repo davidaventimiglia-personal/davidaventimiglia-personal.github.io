@@ -1,0 +1,11 @@
+---
+layout: post
+title: hasura-mmlib-2
+date: 2022-11-22 16:07:00 -0700
+categories: hasura events algolia search
+---
+# PostgresML Dashboard
+
+PostgresML provides a dashboard with analytical views of the training data and model performance, as well as integrated notebooks for rapid iteration. It is primarily written in Rust using [Rocket](https://rocket.rs/) as a lightweight web framework and [SQLx](https://github.com/launchbadge/sqlx) to interact with the database.
+
+Please see the [quick start instructions](https://postgresml.org/user_guides/setup/quick_start_with_docker/) for general information on installing or deploying PostgresML. A [developer guide](https://postgresml.org/developer_guide/overview/) is also available for those who would like to contribute.

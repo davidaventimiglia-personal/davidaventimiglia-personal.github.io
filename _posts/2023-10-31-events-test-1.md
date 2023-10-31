@@ -1,0 +1,454 @@
+---
+layout: post
+title: events-test-1
+date: 2022-11-22 16:07:00 -0700
+categories: hasura events algolia search
+---
+
+# Table of Contents
+
+1.  [What](#orgcb5564b)
+2.  [Why](#orgae08942)
+3.  [How](#org3d5e3fe)
+4.  [Steps](#org5c0dffa)
+    1.  [Step 1:  Clone the hasura-projects GitHub repository.](#org50b4855)
+    2.  [Step 2:  Change to the `events-test-1` project sub-directory.](#org4732606)
+    3.  [Step 3:  Create a `.env` file.](#org43a809f)
+    4.  [Step 4:  Edit the `.env` file specific to your environment.](#org0e66c3a)
+    5.  [Step 5:  Use Docker Compose to launch the services.](#orgaa55eb5)
+    6.  [Step 6:  Fetch the database logs and process with jq.](#org6f355fc)
+
+
+<a id="orgcb5564b"></a>
+
+# What
+
+This Proof-Of-Concept (POC) illustrates using [postgres-logfdw](https://github.com/aws/postgresql-logfdw) to fetch
+PostgreSQL log files as database tables and views, track them in
+Hasura, and make them available via REST endpoints.
+
+
+<a id="orgae08942"></a>
+
+# Why
+
+1.  to demonstrate `postgres-logfdw`
+2.  to get the DDL Hasura uses to support event triggers
+
+
+<a id="org3d5e3fe"></a>
+
+# How
+
+This project uses a [Dockerfile](Dockerfile) file to build a custom PostgreSQL Docker
+image with the `postgres-logfdw` extension installed.  It also uses a
+[docker-compose.yaml](docker-compose.yaml) file to launch servies for `graphql-engine`, for
+`metadata`, and for `postgres`.  The `postgres` database service has
+the `postgres-logfdw` extension installed.  The Hasura migrations then
+set up this extension to expose the database log file as a table, to
+track that table, to create a convenient database view for it, to
+track that view, and then to expose a useful GraphQL query as a REST
+endpoint. 
+
+
+<a id="org5c0dffa"></a>
+
+# Steps
+
+
+<a id="org50b4855"></a>
+
+## Step 1:  Clone the [hasura-projects](https://github.com/dventimihasura/hasura-projects) GitHub repository.
+
+    git clone https://github.com/dventimihasura/hasura-projects.git
+
+
+<a id="org4732606"></a>
+
+## Step 2:  Change to the `events-test-1` project sub-directory.
+
+    cd events-test-1
+
+
+<a id="org43a809f"></a>
+
+## Step 3:  Create a `.env` file.
+
+    cat <<EOF > .env
+    HGEPORT=8081
+    PGPORT=5433
+    EOF
+
+
+<a id="org0e66c3a"></a>
+
+## Step 4:  Edit the `.env` file specific to your environment.
+
+
+<a id="orgaa55eb5"></a>
+
+## Step 5:  Use [Docker Compose](https://docs.docker.com/compose/) to launch the services.
+
+    docker compose up -d # Or docker-compose up -d
+
+
+<a id="org6f355fc"></a>
+
+## Step 6:  Fetch the database logs and process with [jq](https://jqlang.github.io/jq/).
+
+    curl -s http://localhost:8081/api/rest/log_file | jq -r '.v_log_file[].string_agg'
+
+    2023-08-29 19:33:43.166 UTC [1] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+    			       2023-08-29 19:33:43.166 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+    			       2023-08-29 19:33:43.166 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+    			       2023-08-29 19:33:43.171 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+    			       2023-08-29 19:33:43.178 UTC [64] LOG:  database system was shut down at 2023-08-29 19:33:43 UTC
+    			       2023-08-29 19:33:43.185 UTC [1] LOG:  database system is ready to accept connections
+    			       2023-08-29 19:34:11.957 UTC [68] LOG:  statement: -- -*- sql-product: postgres; -*-
+    			       	
+    			       	CREATE EXTENSION IF NOT EXISTS pgcrypto;
+    			       	
+    			       	CREATE EXTENSION IF NOT EXISTS log_fdw;
+    			       	
+    			       	CREATE SERVER IF NOT EXISTS log_fdw_server FOREIGN DATA WRAPPER log_fdw;
+    			       	
+    			       	create or replace function create_foreign_table_for_log_file (fdw_server text) returns void
+    			       	  language plpgsql
+    			       	  volatile
+    			       	  not leakproof
+    			       	  parallel unsafe
+    			       	as $plpgsql$
+    			       	  declare
+    			       	    log_files record;
+    			       	begin
+    			       	  for log_files in select file_name from list_postgres_log_files() limit 1 loop
+    			       	    execute 'select create_foreign_table_for_log_file($1, $2, $3)' using 'log_file', fdw_server, log_files.file_name;
+    			       	  end loop;
+    			       	end;
+    			       	$plpgsql$;
+    			       	
+    			       	select create_foreign_table_for_log_file('log_fdw_server');
+    			       	
+    			       	create or replace view v_log_file as
+    			       	  select string_agg(log_entry, '
+    			       				       ') from log_file;
+    			       	
+    			       	-- account table
+    			       	
+    			       	CREATE TABLE "public"."account" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "name" text NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") );
+    			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+    			       	  RETURNS TRIGGER AS $$
+    			       	  DECLARE
+    			       	    _new record;
+    			       	  BEGIN
+    			       	    _new := NEW;
+    			       	    _new."updated_at" = NOW();
+    			       	    RETURN _new;
+    			       	  END;
+    			       	$$ LANGUAGE plpgsql;
+    			       	CREATE TRIGGER "set_public_account_updated_at"
+    			       	  BEFORE UPDATE ON "public"."account"
+    			       	  FOR EACH ROW
+    			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+    			       	COMMENT ON TRIGGER "set_public_account_updated_at" ON "public"."account" 
+    			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+    			       	
+    			       	-- product table
+    			       	
+    			       	CREATE TABLE "public"."product" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "name" text NOT NULL, "price" integer NOT NULL, PRIMARY KEY ("id") );
+    			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+    			       	  RETURNS TRIGGER AS $$
+    			       	  DECLARE
+    			       	    _new record;
+    			       	  BEGIN
+    			       	    _new := NEW;
+    			       	    _new."updated_at" = NOW();
+    			       	    RETURN _new;
+    			       	  END;
+    			       	$$ LANGUAGE plpgsql;
+    			       	CREATE TRIGGER "set_public_product_updated_at"
+    			       	  BEFORE UPDATE ON "public"."product"
+    			       	  FOR EACH ROW
+    			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+    			       	COMMENT ON TRIGGER "set_public_product_updated_at" ON "public"."product" 
+    			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+    			       	
+    			       	-- order table
+    			       	
+    			       	CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
+    			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+    			       	  RETURNS TRIGGER AS $$
+    			       	  DECLARE
+    			       	    _new record;
+    			       	  BEGIN
+    			       	    _new := NEW;
+    			       	    _new."updated_at" = NOW();
+    			       	    RETURN _new;
+    			       	  END;
+    			       	$$ LANGUAGE plpgsql;
+    			       	CREATE TRIGGER "set_public_order_updated_at"
+    			       	  BEFORE UPDATE ON "public"."order"
+    			       	  FOR EACH ROW
+    			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+    			       	COMMENT ON TRIGGER "set_public_order_updated_at" ON "public"."order" 
+    			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+    			       	
+    			       	create index on "order" (account_id);
+    			       	
+    			       	-- order_detail table
+    			       	
+    			       	CREATE TABLE "public"."order_detail" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "units" integer NOT NULL, "order_id" uuid NOT NULL, "product_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("order_id") REFERENCES "public"."order"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON UPDATE restrict ON DELETE restrict);
+    			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+    			       	  RETURNS TRIGGER AS $$
+    			       	  DECLARE
+    			       	    _new record;
+    			       	  BEGIN
+    			       	    _new := NEW;
+    			       	    _new."updated_at" = NOW();
+    			       	    RETURN _new;
+    			       	  END;
+    			       	$$ LANGUAGE plpgsql;
+    			       	CREATE TRIGGER "set_public_order_detail_updated_at"
+    			       	  BEFORE UPDATE ON "public"."order_detail"
+    			       	  FOR EACH ROW
+    			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+    			       	COMMENT ON TRIGGER "set_public_order_detail_updated_at" ON "public"."order_detail" 
+    			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+    			       	
+    			       	create index on order_detail (order_id);
+    			       	
+    			       	create index on order_detail (product_id);
+    			       	
+    			       	-- product_search function
+    			       	
+    			       	create or replace function product_search(search text)
+    			       	  returns setof product as $$
+    			       	  select product.*
+    			       	  from product
+    			       	  where
+    			       	  name ilike ('%' || search || '%')
+    			       	$$ language sql stable;
+    			       	
+    			       	-- product_search_slow function
+    			       	
+    			       	create or replace function product_search_slow(search text, wait real)
+    			       	  returns setof product as $$
+    			       	  select product.*
+    			       	  from product, pg_sleep(wait)
+    			       	  where
+    			       	  name ilike ('%' || search || '%')
+    			       	$$ language sql stable;
+    			       	
+    			       	-- non_negative_price constraint
+    			       	
+    			       	alter table "public"."product" add constraint "non_negative_price" check (price > 0);
+    			       	
+    			       	-- index account(name)
+    			       	
+    			       	create index if not exists account_name_idx on account (name);
+    			       	
+    			       	-- status enum
+    			       	
+    			       	CREATE TYPE status AS ENUM ('new', 'processing', 'fulfilled');
+    			       	
+    			       	-- add status to order table
+    			       	
+    			       	alter table "public"."order" add column "status" status null;
+    			       	
+    			       	create index on "order" (status);
+    			       	
+    			       	-- region dictionary table
+    			       	
+    			       	create table if not exists region (
+    			       	  value text primary key,
+    			       	  description text);
+    			       	
+    			       	-- add region to order
+    			       	
+    			       	alter table "public"."order" add column "region" Text
+    			       	 null;
+    			       	
+    			       	alter table "public"."order"
+    			       	  add constraint "order_region_fkey"
+    			       	  foreign key ("region")
+    			       	  references "public"."region"
+    			       	  ("value") on update restrict on delete restrict;
+    			       	
+    			       	create index on "order" (region);
+    			       	
+    			       2023-08-29 19:34:12.010 UTC [68] WARNING:  there is already a transaction in progress
+    			       2023-08-29 19:34:13.747 UTC [68] WARNING:  there is no transaction in progress
+    			       2023-08-29 19:37:51.122 UTC [78] LOG:  execute <unnamed>: CREATE SCHEMA hdb_catalog
+    			       2023-08-29 19:37:51.125 UTC [78] LOG:  execute <unnamed>: CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA public
+    			       2023-08-29 19:37:51.125 UTC [78] LOG:  statement: /* We define our own uuid generator function that uses gen_random_uuid() underneath.
+    			       	   Since the column default is not directly referencing gen_random_uuid(),
+    			       	   it prevents the column default to be dropped when pgcrypto or public schema is dropped unwittingly.
+    			       	
+    			       	   See https://github.com/hasura/graphql-engine/issues/4217
+    			       	
+    			       	   There is another instance of this function, defined in `initialise.sql`. We
+    			       	   need to define them in both places because the `gen_hasura_uuid` function is
+    			       	   used as column defaults for various tables stored in both the metadata
+    			       	   database and the event log table in user's (source) database. In the case
+    			       	   where the metadata database is separate from the source database, we need to
+    			       	   create these functions separately. Note that both of these definitions have
+    			       	   to be the same.
+    			       	 */
+    			       	CREATE OR REPLACE FUNCTION hdb_catalog.gen_hasura_uuid() RETURNS uuid AS
+    			       	  -- We assume gen_random_uuid() is available in the search_path.
+    			       	  -- This may not be true but we can't do much till https://github.com/hasura/graphql-engine/issues/3657
+    			       	'select gen_random_uuid()' LANGUAGE SQL;
+    			       	
+    			       	CREATE TABLE hdb_catalog.hdb_source_catalog_version(
+    			       	  version TEXT NOT NULL,
+    			       	  upgraded_on TIMESTAMPTZ NOT NULL
+    			       	);
+    			       	
+    			       	CREATE UNIQUE INDEX hdb_source_catalog_version_one_row
+    			       	ON hdb_catalog.hdb_source_catalog_version((version IS NOT NULL));
+    			       	
+    			       	/* TODO: The columns `created_at` and `next_retry_at` does not contain timezone (TIMESTAMP type) while `locked` has a timezone
+    			       	offset (TIMESTAMPTZ). The time repesented by TIMESTAMP is in the timezone of the Postgres server. If the
+    			       	timezone of the PG server is changed, then the entries in the event_log table can be confusing since there is no
+    			       	timezone offset to highlight the difference. A possible solution to it is to change the type of the two columns to
+    			       	include the timezone offset and keep all the times in UTC. However, altering a column type is a time
+    			       	taking process, hence not migrating the source to add a timezone offset */
+    			       	CREATE TABLE hdb_catalog.event_log
+    			       	(
+    			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+    			       	  schema_name TEXT NOT NULL,
+    			       	  table_name TEXT NOT NULL,
+    			       	  trigger_name TEXT NOT NULL,
+    			       	  payload JSONB NOT NULL,
+    			       	  delivered BOOLEAN NOT NULL DEFAULT FALSE,
+    			       	  error BOOLEAN NOT NULL DEFAULT FALSE,
+    			       	  tries INTEGER NOT NULL DEFAULT 0,
+    			       	  created_at TIMESTAMP DEFAULT NOW(),
+    			       	  /* when locked IS NULL the event is unlocked and can be processed */
+    			       	  locked TIMESTAMPTZ,
+    			       	  next_retry_at TIMESTAMP,
+    			       	  archived BOOLEAN NOT NULL DEFAULT FALSE
+    			       	);
+    			       	
+    			       	/* This powers `archiveEvents` */
+    			       	CREATE INDEX ON hdb_catalog.event_log (trigger_name);
+    			       	/* This index powers `fetchEvents` */
+    			       	CREATE INDEX event_log_fetch_events
+    			       	  ON hdb_catalog.event_log (locked NULLS FIRST, next_retry_at NULLS FIRST, created_at)
+    			       	  WHERE delivered = 'f'
+    			       	    and error = 'f'
+    			       	    and archived = 'f'
+    			       	;
+    			       	
+    			       	
+    			       	CREATE TABLE hdb_catalog.event_invocation_logs
+    			       	(
+    			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+    			       	  trigger_name TEXT,
+    			       	  event_id TEXT,
+    			       	  status INTEGER,
+    			       	  request JSON,
+    			       	  response JSON,
+    			       	  created_at TIMESTAMP DEFAULT NOW()
+    			       	);
+    			       	
+    			       	/* This index improves the performance of deletes by event_id, so that if somebody
+    			       	tries to delete an event from the hdb_catalog.event_log along with the invocation log
+    			       	it will be faster with an index compared to without an index. */
+    			       	CREATE INDEX ON hdb_catalog.event_invocation_logs (event_id);
+    			       	
+    			       	CREATE OR REPLACE FUNCTION
+    			       	  hdb_catalog.insert_event_log(schema_name text, table_name text, trigger_name text, op text, row_data json)
+    			       	  RETURNS text AS $$
+    			       	  DECLARE
+    			       	    id text;
+    			       	    payload json;
+    			       	    session_variables json;
+    			       	    server_version_num int;
+    			       	    trace_context json;
+    			       	  BEGIN
+    			       	    id := gen_random_uuid();
+    			       	    server_version_num := current_setting('server_version_num');
+    			       	    IF server_version_num >= 90600 THEN
+    			       	      session_variables := current_setting('hasura.user', 't');
+    			       	      trace_context := current_setting('hasura.tracecontext', 't');
+    			       	    ELSE
+    			       	      BEGIN
+    			       	        session_variables := current_setting('hasura.user');
+    			       	      EXCEPTION WHEN OTHERS THEN
+    			       	                  session_variables := NULL;
+    			       	      END;
+    			       	      BEGIN
+    			       	        trace_context := current_setting('hasura.tracecontext');
+    			       	      EXCEPTION WHEN OTHERS THEN
+    			       	        trace_context := NULL;
+    			       	      END;
+    			       	    END IF;
+    			       	    payload := json_build_object(
+    			       	      'op', op,
+    			       	      'data', row_data,
+    			       	      'session_variables', session_variables,
+    			       	      'trace_context', trace_context
+    			       	    );
+    			       	    INSERT INTO hdb_catalog.event_log
+    			       	                (id, schema_name, table_name, trigger_name, payload)
+    			       	    VALUES
+    			       	    (id, schema_name, table_name, trigger_name, payload);
+    			       	    RETURN id;
+    			       	  END;
+    			       	$$ LANGUAGE plpgsql;
+    			       	
+    			       	CREATE TABLE hdb_catalog.hdb_event_log_cleanups
+    			       	(
+    			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+    			       	  trigger_name TEXT NOT NULL,
+    			       	  scheduled_at TIMESTAMP NOT NULL,
+    			       	  deleted_event_logs INTEGER,
+    			       	  deleted_event_invocation_logs INTEGER,
+    			       	  status TEXT NOT NULL,
+    			       	  CHECK (status IN ('scheduled', 'paused', 'completed', 'dead')),
+    			       	
+    			       	  UNIQUE (trigger_name, scheduled_at)
+    			       	);
+    			       	
+    			       2023-08-29 19:37:51.191 UTC [78] LOG:  statement: CREATE OR REPLACE function hdb_catalog."notify_hasura_insert_order_INSERT"() RETURNS trigger
+    			       	  LANGUAGE plpgsql
+    			       	  AS $$
+    			       	  DECLARE
+    			       	    _old record;
+    			       	    _new record;
+    			       	    _data json;
+    			       	  BEGIN
+    			       	    IF TG_OP = 'UPDATE' THEN
+    			       	      _old := row((SELECT  "e"  FROM  (SELECT  OLD."region" , OLD."account_id" , OLD."created_at" , OLD."id" , OLD."updated_at" , OLD."status"        ) AS "e"      ) );
+    			       	      _new := row((SELECT  "e"  FROM  (SELECT  NEW."region" , NEW."account_id" , NEW."created_at" , NEW."id" , NEW."updated_at" , NEW."status"        ) AS "e"      ) );
+    			       	    ELSE
+    			       	    /* initialize _old and _new with dummy values for INSERT and UPDATE events*/
+    			       	      _old := row((select 1));
+    			       	      _new := row((select 1));
+    			       	    END IF;
+    			       	    _data := json_build_object(
+    			       	      'old', NULL,
+    			       	      'new', row_to_json((SELECT  "e"  FROM  (SELECT  NEW."region" , NEW."account_id" , NEW."created_at" , NEW."id" , NEW."updated_at" , NEW."status"        ) AS "e"      ) )
+    			       	    );
+    			       	    BEGIN
+    			       	    /* NOTE: formerly we used TG_TABLE_NAME in place of tableName here. However in the case of
+    			       	    partitioned tables this will give the name of the partitioned table and since we use the table name to
+    			       	    get the event trigger configuration from the schema, this fails because the event trigger is only created
+    			       	    on the original table.  */
+    			       	      IF (TG_OP <> 'UPDATE') OR (_old <> _new) THEN
+    			       	        PERFORM hdb_catalog.insert_event_log(CAST('public' AS text), CAST('order' AS text), CAST('insert_order' AS text), TG_OP, _data);
+    			       	      END IF;
+    			       	      EXCEPTION WHEN undefined_function THEN
+    			       	        IF (TG_OP <> 'UPDATE') OR (_old *<> _new) THEN
+    			       	          PERFORM hdb_catalog.insert_event_log(CAST('public' AS text), CAST('order' AS text), CAST('insert_order' AS text), TG_OP, _data);
+    			       	        END IF;
+    			       	    END;
+    			       	
+    			       	    RETURN NULL;
+    			       	  END;
+    			       	$$;
+    			       	
+    			       2023-08-29 19:37:51.193 UTC [78] LOG:  execute <unnamed>: 
+    			       	         CREATE TRIGGER "notify_hasura_insert_order_INSERT" AFTER INSERT ON "public"."order" FOR EACH ROW EXECUTE PROCEDURE hdb_catalog."notify_hasura_insert_order_INSERT"()
+
