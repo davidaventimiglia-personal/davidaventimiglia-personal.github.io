@@ -1,6 +1,6 @@
 ---
 layout: post
-title: updatable-views-1
+title: Updatable Views
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

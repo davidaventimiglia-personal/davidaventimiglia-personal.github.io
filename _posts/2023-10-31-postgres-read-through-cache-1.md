@@ -1,6 +1,6 @@
 ---
 layout: post
-title: postgres-read-through-cache-1
+title: Postgres Read Through Cache
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

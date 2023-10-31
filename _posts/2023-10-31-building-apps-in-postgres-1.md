@@ -1,6 +1,6 @@
 ---
 layout: post
-title: building-apps-in-postgres-1
+title: Building Apps In Postgres
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

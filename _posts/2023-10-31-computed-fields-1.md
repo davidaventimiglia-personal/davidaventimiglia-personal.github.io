@@ -1,6 +1,6 @@
 ---
 layout: post
-title: computed-fields-1
+title: Computed Fields
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

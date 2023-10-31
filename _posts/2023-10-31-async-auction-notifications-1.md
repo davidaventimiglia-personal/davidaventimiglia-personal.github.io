@@ -1,6 +1,6 @@
 ---
 layout: post
-title: async-auction-notifications-1
+title: Async Auction Notifications 1
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

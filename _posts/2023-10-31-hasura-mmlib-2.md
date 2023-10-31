@@ -1,6 +1,6 @@
 ---
 layout: post
-title: hasura-mmlib-2
+title: Hasura Mmlib
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

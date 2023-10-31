@@ -1,6 +1,6 @@
 ---
 layout: post
-title: row-security-policies-1
+title: Row Security Policies
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

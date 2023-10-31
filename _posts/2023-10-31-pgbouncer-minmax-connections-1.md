@@ -1,6 +1,6 @@
 ---
 layout: post
-title: pgbouncer-minmax-connections-1
+title: Pgbouncer Minmax Connections
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

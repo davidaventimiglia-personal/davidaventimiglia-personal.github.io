@@ -1,6 +1,6 @@
 ---
 layout: post
-title: postgres-fdw-mssql-1
+title: Postgres Fdw Mssql
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

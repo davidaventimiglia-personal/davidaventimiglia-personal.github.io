@@ -1,6 +1,6 @@
 ---
 layout: post
-title: libpq-failover-1
+title: Libpq Failover
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---

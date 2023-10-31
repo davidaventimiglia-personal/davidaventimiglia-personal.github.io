@@ -1,6 +1,6 @@
 ---
 layout: post
-title: postgres-fdw-jdbc-1
+title: Postgres Fdw Jdbc
 date: 2022-11-22 16:07:00 -0700
 categories: hasura events algolia search
 ---
