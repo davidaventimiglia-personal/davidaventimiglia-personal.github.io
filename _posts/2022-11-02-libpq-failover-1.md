@@ -4,9 +4,6 @@ title: Libpq Failover
 date: 2022-11-02
 categories: hasura events algolia search
 ---
-# High-Availability Fail-over for Hasura Data (Almost) For Free #
-
-<https://drive.google.com/file/d/1q5o_xPOxrCErTDq9V1D-g6Yw_Nf2nSn7/view?usp=sharing>
 
 Hasura users often seek
 [High-Availability](https://en.wikipedia.org/wiki/High_availability)
@@ -40,6 +37,8 @@ It will attempt connections to each host in turn and in this way
 offers a basic implementation of fail-over. The libpq library does this
 and as a consequence Hasura does this.  This is what is illustrated
 here in this Proof-Of-Concept (POC).
+
+<https://drive.google.com/file/d/1q5o_xPOxrCErTDq9V1D-g6Yw_Nf2nSn7/view?usp=sharing>
 
 ## General Steps ##
 

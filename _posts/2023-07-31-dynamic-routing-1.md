@@ -4,7 +4,6 @@ title: Dynamic Routing
 date: 2023-07-31
 categories: hasura events algolia search
 ---
-# What #
 
 This Proof-Of-Concept (POC) illustrates using [Dynamic Routing for Databases](https://hasura.io/docs/latest/databases/database-config/dynamic-db-connection/) to choose different [Transaction Isolation](https://www.postgresql.org/docs/current/transaction-iso.html) levels based on the `x-hasura-role` header.
 

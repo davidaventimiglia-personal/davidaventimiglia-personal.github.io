@@ -4,7 +4,6 @@ title: Postgres Fdw Jdbc
 date: 2022-12-08
 categories: hasura events algolia search
 ---
-# Abstract #
 
 This is a Proof-Of-Concept (POC) demonstrating how to use PostgreSQL
 and its Foreign Data Wrapper (FDW) support as a gateway to a

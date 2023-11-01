@@ -5,6 +5,10 @@ date: 2023-03-03
 categories: hasura events algolia search
 ---
 
+This Proof-Of-Concept (POC) illustrates calling Microsoft SQL Server
+(MSSQL) stored procedures from PostgreSQL (postgres) using Foreign
+Data Wrappers (FDW).
+
 # Table of Contents
 
 1.  [What](#org520b832)

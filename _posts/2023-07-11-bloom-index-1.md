@@ -5,6 +5,9 @@ date: 2023-07-11
 categories: hasura events algolia search
 ---
 
+This illustrates using Bloom indexes in PostgreSQL to speed up queries
+with arbitrary combinations of predicates.
+
 # Table of Contents
 
 1.  [What](#org063e664)

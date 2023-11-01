@@ -4,7 +4,6 @@ title: Product Price
 date: 2022-11-11
 categories: hasura events algolia search
 ---
-# Abstract #
 
 As of writing, Hasura currently has limited support for ordering and
 filtering GraphQL queries that contain aggregates.  We illustrate how

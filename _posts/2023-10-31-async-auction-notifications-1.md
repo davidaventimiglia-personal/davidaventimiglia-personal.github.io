@@ -5,6 +5,13 @@ date: 2023-10-31
 categories: hasura events algolia search
 ---
 
+This Proof-Of-Concept (POC) demonstrates asynchronous messaging with
+Hasura Event Triggers and Hasura Subscriptions, operating in an auction
+involving truckers who want to receive message notifications when
+there are product deliveries whose origin and destination match the
+origin and destination of routes on their schedules, so that they can
+bid on those matching delivieries.
+
 # Table of Contents
 
 1.  [What](#org8cb5c2d)

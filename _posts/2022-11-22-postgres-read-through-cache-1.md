@@ -4,14 +4,12 @@ title: Postgres Read Through Cache
 date: 2022-11-22
 categories: hasura events algolia search
 ---
-[Demo Video](https://drive.google.com/file/d/1DYaf29RbLEJdbjMgjM3E55WUERHn_mLt/view?usp=sharing)
-
-
-# Abstract #
 
 This is a Proof-Of-Concept (POC) demonstrating how to use PostgreSQL
 and its Foreign Data Wrapper (FDW) support as a read-through cache to
 a data warehouse.
+
+[Demo Video](https://drive.google.com/file/d/1DYaf29RbLEJdbjMgjM3E55WUERHn_mLt/view?usp=sharing)
 
 # What #
 

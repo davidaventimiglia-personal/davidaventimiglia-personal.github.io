@@ -1,5 +1,12 @@
 <!-- -*- mode: markdown; -*- -->
 
+We model a dynamic permissions builder where permissions can be
+granted on an as-needed basis, where different users can be allowed
+to perform different operations on resources with fine-grained control
+and where this can be managed through an application using the API
+rather than through data modeling in Hasura Console.  Essentially,
+this extends the idea of Role-Based Access Control (RBAC).
+
 # What #
 
 We model a dynamic permissions builder where permissions can be

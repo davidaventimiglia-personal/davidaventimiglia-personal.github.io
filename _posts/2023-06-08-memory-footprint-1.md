@@ -5,6 +5,10 @@ date: 2023-06-08
 categories: hasura events algolia search
 ---
 
+This project helps measure the scaling relationship between the number
+of tracked tables, the number of roles, and the memory footprint for
+Hasura `graphql-engine` v2.
+
 # Table of Contents
 
 1.  [What](#org1229e2b)

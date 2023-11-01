@@ -5,6 +5,9 @@ date: 2023-09-01
 categories: hasura events algolia search
 ---
 
+This project demonstrates using [rules](https://www.postgresql.org/docs/current/sql-createrule.html) and [triggers](https://www.postgresql.org/docs/current/sql-createtrigger.html) to make updatable
+[views](https://www.postgresql.org/docs/current/sql-createview.html) in PostgreSQL.
+
 # Table of Contents
 
 1.  [What](#org632ae90)

@@ -5,11 +5,14 @@ date: 2022-11-07
 categories: hasura events algolia search
 ---
 
+This is a Proof-Of-Concept (POC) demonstrating how to use multiple
+instances of Hasura along with its support for Remote Schema to get
+around some limitations on custom Actions.  The code for this POC can
+be found in this [GitHub Repository
+Folder](https://github.com/dventimiglia/hasura-projects/tree/master/algolia-search-1
+"GitHub Repository Folder").
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6GpkobuRsEw?si=qDVepG6XEOYZaYV1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-# Abstract #
-
-This is a Proof-Of-Concept (POC) demonstrating how to use multiple instances of Hasura along with its support for Remote Schema to get around some limitations on custom Actions.  The code for this POC can be found in this [GitHub Repository Folder](https://github.com/dventimiglia/hasura-projects/tree/master/algolia-search-1 "GitHub Repository Folder").
 
 # What #
 

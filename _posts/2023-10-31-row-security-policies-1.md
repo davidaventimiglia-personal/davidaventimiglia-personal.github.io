@@ -4,7 +4,6 @@ title: Row Security Policies
 date: 2023-10-31
 categories: hasura events algolia search
 ---
-# Abstract #
 
 We explore the feasibility of using Row Level Security (RLS) provided
 by the database, with Hasura.

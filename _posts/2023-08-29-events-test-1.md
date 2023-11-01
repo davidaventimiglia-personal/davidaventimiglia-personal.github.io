@@ -5,6 +5,10 @@ date: 2023-08-29
 categories: hasura events algolia search
 ---
 
+This Proof-Of-Concept (POC) illustrates using [postgres-logfdw](https://github.com/aws/postgresql-logfdw) to fetch
+PostgreSQL log files as database tables and views, track them in
+Hasura, and make them available via REST endpoints.
+
 # Table of Contents
 
 1.  [What](#orgcb5564b)

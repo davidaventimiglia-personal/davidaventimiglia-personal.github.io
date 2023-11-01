@@ -4,7 +4,6 @@ title: Leaderboard
 date: 2022-09-07
 categories: hasura events algolia search
 ---
-# Abstract #
 
 To create a "leaderboard" or
 [standings](https://en.wikipedia.org/wiki/Standings "standings") in a

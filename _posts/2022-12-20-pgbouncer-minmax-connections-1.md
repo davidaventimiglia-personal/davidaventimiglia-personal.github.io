@@ -4,7 +4,6 @@ title: Pgbouncer Minmax Connections
 date: 2022-12-20
 categories: hasura events algolia search
 ---
-# Abstract #
 
 This project is a proof-of-concept (POC) exploring the use of
 [pgbouncer](https://www.pgbouncer.org/ "pgbouncer") as a connection

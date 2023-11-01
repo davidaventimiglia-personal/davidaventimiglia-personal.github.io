@@ -4,7 +4,6 @@ title: Snowflake Test
 date: 2023-08-01
 categories: hasura events algolia search
 ---
-# What #
 
 This demo illustrates using Hasura [Kriti](https://hasura.io/docs/latest/api-reference/kriti-templating/) templates to set a Snowflake GDC connection string in the metadata from environment variables.
 

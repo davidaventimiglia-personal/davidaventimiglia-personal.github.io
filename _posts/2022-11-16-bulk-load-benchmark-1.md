@@ -4,6 +4,7 @@ title: Bulk Load Benchmark
 date: 2022-11-16
 categories: hasura events algolia search
 ---
+
 ```shell
 pgbench -h localhost -p 5433 -U postgres -d postgres -f scratch.sql -T 60 2>/dev/null 
 Password: 

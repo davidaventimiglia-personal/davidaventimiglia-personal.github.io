@@ -4,7 +4,6 @@ title: Computed Fields
 date: 2022-09-10
 categories: hasura events algolia search
 ---
-# Abstract #
 
 In Hasura, ordering results by Computed Fields is not strictly
 necessary since it is already possible to order results of Custom
