@@ -28,6 +28,7 @@ twitter_username: TheRealDventimi
 github_username: dventimiglia
 
 # Build settings
+show_excerpts: true
 theme: minima
 plugins:
   - jekyll-feed
