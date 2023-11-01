@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Algolia Search
-date: 2022-11-22 16:07:00 -0700
+date: 2022-11-07
 categories: hasura events algolia search
 ---
 

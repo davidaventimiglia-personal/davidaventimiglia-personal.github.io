@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Snowflake Test
-date: 2022-11-22 16:07:00 -0700
+date: 2023-07-19
 categories: hasura events algolia search
 ---
 # What #

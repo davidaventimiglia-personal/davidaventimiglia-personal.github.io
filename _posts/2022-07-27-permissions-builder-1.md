@@ -86,7 +86,7 @@ permission.  The is implemented in two alternative ways.
    * `user.id`: `acadc590-1480-4cad-a21a-4da3f19405ab`
    * `user.assignments[0].project.id`:  `d73c7ba9-aca7-402c-ad45-7126ee44ddc9`
 
-9. In Altair (for example) run a mutation to update the name of this
+9. In Altair (for example) run a mutation to update t2022-07-27
    project as this user.  To assume the identity of this user, set the
    `x-hasura-user-id` header.
    
