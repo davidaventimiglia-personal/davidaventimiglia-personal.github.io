@@ -3,17 +3,103 @@ layout: post
 title: Hasura Mmlib
 date: 2022-07-03
 categories: hasura events algolia search
+published: false
 ---
 
-PostgresML provides a dashboard with analytical views of the training
-data and model performance, as well as integrated notebooks for rapid
-iteration. It is primarily written in Rust using
-[Rocket](https://rocket.rs/) as a lightweight web framework and
-[SQLx](https://github.com/launchbadge/sqlx) to interact with the
-database.
+It's Hasura with PostgresML
 
-Please see the [quick start
-instructions](https://postgresml.org/user_guides/setup/quick_start_with_docker/)
-for general information on installing or deploying PostgresML. A
-[developer guide](https://postgresml.org/developer_guide/overview/) is
-also available for those who would like to contribute.
+# Quick Start #
+
+1. Clone this Git repository.
+
+```shell
+git clone git@github.com:dventimihasura/hasura-projects.git
+```
+
+2. Navigate to the `./hasura-mmlib-1/hasura` sub-directory.
+
+```shell
+cd hasura-mmlib-1/hasura
+```
+
+3. Launch the services using Docker Compose:
+
+ - **postgres**: PosgreSQL database running PostgresML with example
+   data and models
+ - **graphql-engine**: Hasura instance connected to the **postgres**
+   database
+ 
+```shell
+docker-compose up -d
+```
+
+4. Use the Hasura CLI to set up the application with metadata and
+   migrations.
+
+```shell
+hasura metadata apply
+hasura migrate apply
+hasura metadata reload
+```
+
+5. Use the Hasura Console to begin exploring Machine Learning in
+   PostgreSQL and Hasura.
+
+```shell
+hasura console
+```
+
+6. Use the GraphQL API to query for `pulse_rate` predictions based
+   exercise factors `chins`, `situps`, `situps`, with JSON output
+   illustrating the expected pulse rate for this individual.
+   
+```graphql
+query PredutPulseRate {
+  pulse_rate(args: {chins: 50, jumps: 50, situps: 50}) {
+    rate
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "pulse_rate": [
+      {
+        "rate": 55.670792260952766
+      }
+    ]
+  }
+}
+```
+
+# Further Information #
+
+[PostgresML](https://postgresml.org/) installs several example projects, with data, trained
+models, and model deployments.
+
+1. **Exercise vs Physiology**: regression
+2. **Diabetes Progression**: regression
+3. **Breast Cancer Detection**: classification
+4. **Iris Flower Types**: classification
+5. **Handwritten Digits**: classification
+
+Any of these are available for exploration, but this Proof-Of-Concept
+(POC) focuses on the **Exercise vs Physiology** project.  PostgresML
+installs its API functions including `pgml.train` and `pgml.predict`
+into the `pgml` schema, but these need to be wrapped with additional
+functions that satisfy Hasura's requirements for [trackable functions](https://hasura.io/docs/latest/schema/postgres/custom-functions/#pg-supported-sql-functions).
+In this POC we 
+
+```sql
+-- Create a trackable table to hold a prediction
+create table if not exists pulse (rate double precision);
+
+-- Create a stable wrapper function to return the predicted pulse
+create or replace function pulse_rate(chins real, situps real, jumps real)
+  returns setof pulse
+  stable
+as $$
+  select row((pgml.predict_joint('Exercise vs Physiology', ARRAY[chins, situps, jumps]))[3])
+  $$ language sql;
+```

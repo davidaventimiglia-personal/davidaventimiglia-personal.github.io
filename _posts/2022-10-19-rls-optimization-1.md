@@ -1,10 +1,11 @@
 ---
 layout: post
-title: Rls Optimization
+title: RLS Optimization
 date: 2022-10-19
 categories: hasura events algolia search
 ---
-# README #
+
+RLS Optimization
 
 ## Steps ##
 
