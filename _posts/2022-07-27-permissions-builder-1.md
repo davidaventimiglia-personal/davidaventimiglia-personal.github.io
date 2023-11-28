@@ -1,29 +1,24 @@
-<!-- -*- mode: markdown; -*- -->
+---
+layout: post
+title: Permissions Builder in Hasura
+date: 2022-07-27
+categories: hasura authorization
+---
 
-We model a dynamic permissions builder where permissions can be
-granted on an as-needed basis, where different users can be allowed
-to perform different operations on resources with fine-grained control
-and where this can be managed through an application using the API
-rather than through data modeling in Hasura Console.  Essentially,
-this extends the idea of Role-Based Access Control (RBAC).
+This Proof-Of-Concept (POC) models a dynamic permissions builder where
+permissions can be granted on an as-needed basis, where different
+users can be allowed to perform different operations on resources with
+fine-grained control and where this can be managed through an
+application using the API rather than through data modeling in Hasura
+Console.  Essentially, this extends the idea of Role-Based Access
+Control (RBAC).
 
-# What #
-
-We model a dynamic permissions builder where permissions can be
-granted on an as-needed basis, where different users can be allowed
-to perform different operations on resources with fine-grained control
-and where this can be managed through an application using the API
-rather than through data modeling in Hasura Console.  Essentially,
-this extends the idea of Role-Based Access Control (RBAC).
-
-# Why #
+[GitHub Project](https://github.com/dventimiglia/hasura-projects/tree/master/permissions-builder-1 "GitHub Project")
 
 Customers and potential customers have asked for guidance on how to
 implement this in Hasura.  This is a Proof-Of-Concept (POC) intended
 to explore its feasibility and to suggest possible product
 improvements. 
-
-# How #
 
 We model a simple application involving people working at
 organizations, assigned to projects at those organizations, and
@@ -45,23 +40,23 @@ permission.  The is implemented in two alternative ways.
 2. Open a terminal in the `permissions-builder-1/hasura`
    sub-directory.
 
+3. Create the `.env` file.
+
+	```bash
+	cat <<EOF > .env
+	PGPORT=5433
+	HGEPORT1=8081
+	HGEPORT2=8082
+	EOF
+	```
+
 3. Launch the Docker Compose services.
 
 	```shell
 	docker-compose up -d
 	```
 
-4. Create the Hasura application.
-
-	```shell
-	hasura deploy
-	```
-
-5. Launch the Hasura Console.
-
-	```shell
-	hasura console
-	```
+5. Launch the Hasura from <http://localhost:${HGEPORT1}>
 
 7. Connect a GraphQL Client to http://localhost:8081/v1/graphql.  Good
    choices are:
@@ -93,9 +88,9 @@ permission.  The is implemented in two alternative ways.
    * `user.id`: `acadc590-1480-4cad-a21a-4da3f19405ab`
    * `user.assignments[0].project.id`:  `d73c7ba9-aca7-402c-ad45-7126ee44ddc9`
 
-9. In Altair (for example) run a mutation to update t2022-07-27
-   project as this user.  To assume the identity of this user, set the
-   `x-hasura-user-id` header.
+9. In Altair (for example) run a mutation to update a project as this
+   user.  To assume the identity of this user, set the
+   `x-hasura-user-id` header:
    
    `x-hasura-user-id: acadc590-1480-4cad-a21a-4da3f19405ab`
 
