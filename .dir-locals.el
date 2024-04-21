@@ -6,7 +6,7 @@
 		       (let ((d (dir-locals-find-file "./")))
 			 (if (stringp d) d (car d))))))
 	 (eval . (set (make-local-variable 'org-publish-project-alist) `(("dventimiglia.github.io"
-									  :exclude "^_"
+									  :exclude "^_|docs"
 									  :recursive t
 									  :auto-sitemap t
 									  :sitemap-filename "index.html"
@@ -42,5 +42,5 @@ ul li ul li {
 													 (upcase-initials (org-publish-sitemap-default-entry file style project)))
 													(t
 													 (org-publish-sitemap-default-entry file style project))))
-									  :publishing-directory ,(format "%s_site" my-project-path)
+									  :publishing-directory ,(format "%sdocs" my-project-path)
 									  :base-directory ,(format "%s" my-project-path))))))))
