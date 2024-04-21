@@ -6,7 +6,7 @@
 		       (let ((d (dir-locals-find-file "./")))
 			 (if (stringp d) d (car d))))))
 	 (eval . (set (make-local-variable 'org-publish-project-alist) `(("dventimiglia.github.io"
-									  :exclude "_"
+									  :exclude "^_"
 									  :recursive t
 									  :auto-sitemap t
 									  :sitemap-filename "index.html"
