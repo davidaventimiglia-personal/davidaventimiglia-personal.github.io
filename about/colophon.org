@@ -1,3 +1,4 @@
 #+title: Colophon
 
-This is the colophon page.
+This web site was created and is maintained using [[https://www.gnu.org/software/emacs/][Emacs]], [[https://orgmode.org/][Org Mode]], and
+[[https://simplecss.org/][Simple.css]].

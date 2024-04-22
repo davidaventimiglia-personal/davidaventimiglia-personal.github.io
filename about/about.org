@@ -1,3 +1,23 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:nil
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:nil todo:t |:t
 #+title: About
+#+subtitle: Software Engineer, Data Engineer, Machine Learning Engineer, Architect
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.3 (Org mode 9.6.15)
+#+cite_export:
 
-This is the about page.
+My name is David A. Ventimiglia.  I'm a versatile, resourceful, and
+creative back-end engineer and technology generalist with experience
+in math, physics, database applications, data engineering, data
+science, machine learning, and cloud infrastructure. My deepest
+programming experience is in Java, but I am a fervent believer that
+the best code is the code that isn't written. Design a good data model
+using the power of modern data systems and their query languages, and
+you won't need very many algorithms.
+
+[[file:profile.jpg]]
