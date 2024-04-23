@@ -72,6 +72,9 @@ ul li ul li {
   font-size: xx-large;
   font-weight: lighter;
 }
+.subtitle {
+  font-size: x-large;
+}
 </style>
 "
 			 :sitemap-format-entry (lambda (file style project)

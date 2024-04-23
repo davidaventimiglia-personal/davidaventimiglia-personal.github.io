@@ -20,4 +20,5 @@ the best code is the code that isn't written. Design a good data model
 using the power of modern data systems and their query languages, and
 you won't need very many algorithms.
 
+#+attr_html: :alt profile image :title Profile :width 30%
 [[file:profile.jpg]]
