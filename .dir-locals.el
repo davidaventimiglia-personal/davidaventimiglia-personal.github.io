@@ -11,9 +11,10 @@
 			 :base-extension "jpg\\|gif\\|png"
 			 :publishing-directory ,(format "%sdocs" my-project-path)
 			 :publishing-function org-publish-attachment
+			 :exclude "^_\\|docs"
 			 :recursive t)
 			("orgfiles"
-			 :exclude "^_|docs"
+			 :exclude "^_\\|docs"
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
@@ -21,6 +22,12 @@
 			 :html-preamble t
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
+			 :html-home/up-format "
+<nav>
+ <a accesskey=\"h\" href=\"%s\"> UP </a>
+ <a accesskey=\"H\" href=\"%s\"> HOME </a>
+</nav>
+"
 			 :html-preamble-format (("en" "
 <header>
   <h1 class=\"title\">David A. Ventimiglia</h1>
@@ -43,20 +50,26 @@
 						  ))
 			 :html-head-include-default-style nil
 			 :html-head "
-<link rel=\"stylesheet\" href=\"https://cdn.simplecss.org/simple.min.css\">
+<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css\">
+<!--<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css\">-->
+<!--<link rel=\"stylesheet\" href=\"https://fonts.xz.style/serve/inter.css\">-->
+<!--<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css\">-->
 <style>
 body {
   grid-template-columns: 1fr min(55rem, 90%) 1fr;
+}
+header h1 {
+  font-size: xxx-large;
 }
 ul {
   list-style-type: none;
 }
 ul li {
-  font-size: larger;
+  font-size: xx-large;
   font-weight: bolder;
 }
 ul li ul li {
-  font-size: smaller;
+  font-size: xx-large;
   font-weight: lighter;
 }
 </style>
