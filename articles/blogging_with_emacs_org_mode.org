@@ -29,6 +29,4 @@ Because it's cool.
 
 We're using lots of customizations.
 
-* Steps
-
-Here's what you do.
+#+include: "../.dir-locals.el" src emacs-lisp
