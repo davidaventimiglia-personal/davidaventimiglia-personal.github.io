@@ -69,7 +69,7 @@ ul li {
   font-weight: bolder;
 }
 ul li ul li {
-  font-size: xx-large;
+  font-size: large;
   font-weight: lighter;
 }
 .subtitle {
