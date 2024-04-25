@@ -11,10 +11,10 @@
 			 :base-extension "jpg\\|gif\\|png"
 			 :publishing-directory ,(format "%sdocs" my-project-path)
 			 :publishing-function org-publish-attachment
-			 :exclude "^_\\|docs"
+			 :exclude "docs"
 			 :recursive t)
 			("orgfiles"
-			 :exclude "^_\\|docs"
+			 :exclude "docs"
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
@@ -59,13 +59,13 @@ body {
   grid-template-columns: 1fr min(55rem, 90%) 1fr;
 }
 header h1 {
-  font-size: xxx-large;
+  font-size: xx-large;
 }
 ul {
   list-style-type: none;
 }
 ul li {
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: bolder;
 }
 ul li ul li {
@@ -73,7 +73,7 @@ ul li ul li {
   font-weight: lighter;
 }
 .subtitle {
-  font-size: x-large;
+  font-size: large;
 }
 </style>
 "
