@@ -55,6 +55,12 @@
 <!--<link rel=\"stylesheet\" href=\"https://fonts.xz.style/serve/inter.css\">-->
 <!--<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css\">-->
 <style>
+h1 {
+  font-size: x-large;
+}
+h2 {
+  font-size: large;
+}
 body {
   grid-template-columns: 1fr min(55rem, 90%) 1fr;
 }
@@ -66,11 +72,9 @@ ul {
 }
 ul li {
   font-size: x-large;
-  font-weight: bolder;
 }
 ul li ul li {
   font-size: large;
-  font-weight: lighter;
 }
 .subtitle {
   font-size: large;
