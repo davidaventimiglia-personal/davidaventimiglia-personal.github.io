@@ -20,6 +20,7 @@
 			 :sitemap-filename "index.html"
 			 :sitemap-title "Contents"
 			 :html-preamble t
+			 :html-doctype "html5"
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
 			 :html-home/up-format "
@@ -68,6 +69,15 @@ header h1 {
 }
 .subtitle {
   font-size: large;
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+}
+details[open] {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
 }
 </style>
 "

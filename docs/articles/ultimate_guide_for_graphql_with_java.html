@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GraphQL for the Java Developer</title>
+<title>GraphQL and Java</title>
 <meta name="author" content="David A. Ventimiglia" />
 <meta name="generator" content="Org Mode" />
 
@@ -28,6 +26,15 @@ header h1 {
 }
 .subtitle {
   font-size: large;
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+}
+details[open] {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
 }
 </style>
 <script>
@@ -75,39 +82,12 @@ header h1 {
 </header>
 </div>
 <div id="content" class="content">
-<h1 class="title">GraphQL for the Java Developer</h1>
-<div id="table-of-contents" role="doc-toc">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents" role="doc-toc">
-<ul>
-<li><a href="#org7fb3e82">What is GraphQL and why do people want it?</a></li>
-<li><a href="#orge6fa86c">How do I provide the GraphQL that people want, especially as a Java developer?</a></li>
-<li><a href="#org7d04a7e">How exactly do I build a GraphQL API server in Java for a real application?</a></li>
-<li><a href="#orgca944fa">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</a>
-<ul>
-<li><a href="#orgc6d0130">Step 6:  Choose Docker Compose for orchestrating a development database server.</a></li>
-<li><a href="#org51c499c">Step 7:  Choose the Chinook data model.</a></li>
-<li><a href="#org3cba915">Step 8:  Choose the Spring Initializr for bootstrapping the application.</a></li>
-<li><a href="#org054a1f2">Step 9: Create a GraphQL schema file.</a></li>
-<li><a href="#orgfc12a93">Step 10:  Write Java model classes.</a></li>
-<li><a href="#orgab9d206">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</a></li>
-<li><a href="#org5cf3b0c">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</a>
-<ul>
-<li><a href="#orgf99713e">Editorial Aside!</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgfc94290">Is this the <i>Only</i> way to build a GraphQL API server?</a></li>
-<li><a href="#orgb86fa41">How to choose "Buy" over "Buy"</a></li>
-<li><a href="#orgcc7e196">Wrapping up</a></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-org7fb3e82" class="outline-2">
-<h2 id="org7fb3e82">What is GraphQL and why do people want it?</h2>
-<div class="outline-text-2" id="text-org7fb3e82">
+<header>
+<h1 class="title">GraphQL and Java</h1>
+</header>
+<div id="outline-container-org0ea93bd" class="outline-2">
+<h2 id="org0ea93bd">What is GraphQL and why do people want it?</h2>
+<div class="outline-text-2" id="text-org0ea93bd">
 <p>
 GraphQL is an important evolution in the design of Application
 Performance Interfaces (API), but even today it can be difficult to
@@ -119,7 +99,7 @@ GraphQL is, and as a bonus I'll tell you what GraphQL <i>really</i> is.
 Second, I'll show you how to implement state-of-the-art GraphQL in
 Java for a real application.  Third, I'll offer you an alternative
 path beyond the state-of-the-art that may suit your needs better in
-every dimension.  And, if you feel like skipping to <a href="#orgb86fa41">the end</a>, who am I
+every dimension.  And, if you feel like skipping to <a href="#org681de59">the end</a>, who am I
 to stop you?  It certainly will save a great deal of effort.
 </p>
 
@@ -202,7 +182,7 @@ constraints in relational databases.</dd>
 There's more to GraphQL, but that's pretty much the essence.  Note the
 similarities between concepts in GraphQL and in programming languages,
 and especially between concepts in GraphQL and in relational
-databases.  That will be important <a href="#orgfc94290">later</a>.
+databases.  That will be important <a href="#orgfe79264">later</a>.
 </p>
 
 <p>
@@ -241,9 +221,9 @@ discoverability, etc. ain't easy, so how do you do it?
 </div>
 </div>
 
-<div id="outline-container-orge6fa86c" class="outline-2">
-<h2 id="orge6fa86c">How do I provide the GraphQL that people want, especially as a Java developer?</h2>
-<div class="outline-text-2" id="text-orge6fa86c">
+<div id="outline-container-orgd82eb9e" class="outline-2">
+<h2 id="orgd82eb9e">How do I provide the GraphQL that people want, especially as a Java developer?</h2>
+<div class="outline-text-2" id="text-orgd82eb9e">
 <p>
 On the journey to providing a GraphQL API we confront a series
 interdependent choices, which <i>can</i> make life easier (or harder) for
@@ -283,7 +263,7 @@ using DGS then you <i>will</i> also be using graphql-java under-the-hood,
 but typically you won't come into contact with graphql-java.
 Instead, you will be sprinkling <a href="https://en.wikipedia.org/wiki/Java_annotation">annotations</a> throughout the Java code
 to identify the code segments (called "resolvers" or "data
-fetchers"&#x2026;more on that <a href="#orgfc94290">later</a>) that execute GraphQL requests.
+fetchers"&#x2026;more on that <a href="#orgfe79264">later</a>) that execute GraphQL requests.
 Thoughtworks <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/netflix-dgs">said</a> <b>Trial</b> as of 2023 for DGS but this is a dynamic
 space and their opinion may have changed.  I say <b>Hold</b>, for reasons
 given below.</dd>
@@ -384,9 +364,9 @@ from DGS and just use Spring for GraphQL.
 </div>
 </div>
 
-<div id="outline-container-org7d04a7e" class="outline-2">
-<h2 id="org7d04a7e">How exactly do I build a GraphQL API server in Java for a real application?</h2>
-<div class="outline-text-2" id="text-org7d04a7e">
+<div id="outline-container-org6835789" class="outline-2">
+<h2 id="org6835789">How exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-org6835789">
 <p>
 Opinions are free to differ on what it even means to be a "real
 application."  For the purpose of this guide, what <i>I</i> mean by "real
@@ -505,9 +485,9 @@ for a single related entity.</li>
 </div>
 </div>
 
-<div id="outline-container-orgca944fa" class="outline-2">
-<h2 id="orgca944fa">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</h2>
-<div class="outline-text-2" id="text-orgca944fa">
+<div id="outline-container-org8861328" class="outline-2">
+<h2 id="org8861328">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-org8861328">
 <p>
 That is a <i>long recipe</i> above!  Instead of going into
 chapter-and-verse for every single step, in this guide I do two
@@ -519,9 +499,9 @@ context, discuss the choices involved, and offer some alternatives.
 </p>
 </div>
 
-<div id="outline-container-orgc6d0130" class="outline-3">
-<h3 id="orgc6d0130">Step 6:  Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database server.</h3>
-<div class="outline-text-3" id="text-orgc6d0130">
+<div id="outline-container-org9fba197" class="outline-3">
+<h3 id="org9fba197">Step 6:  Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database server.</h3>
+<div class="outline-text-3" id="text-org9fba197">
 <p>
 Again, there are other ways to pull this off, but this is one good
 way.
@@ -556,9 +536,9 @@ Start the server with:
 </div>
 </div>
 
-<div id="outline-container-org51c499c" class="outline-3">
-<h3 id="org51c499c">Step 7:  Choose the <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">Chinook</a> data model.</h3>
-<div class="outline-text-3" id="text-org51c499c">
+<div id="outline-container-org72a55be" class="outline-3">
+<h3 id="org72a55be">Step 7:  Choose the <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">Chinook</a> data model.</h3>
+<div class="outline-text-3" id="text-org72a55be">
 <p>
 The Chinook files from <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">YugaByte</a> work out-of-the-box for PostgreSQL and
 are a good choice.  Just make sure that there is a sub-directory
@@ -605,7 +585,7 @@ way using <code>psql</code>.
 </pre>
 </div>
 
-<pre class="example" id="org025938b">
+<pre class="example" id="orgc9ee515">
               List of relations
  Schema |      Name       | Type  |  Owner   
 --------+-----------------+-------+----------
@@ -637,9 +617,9 @@ You should at least see Chinook-specific tables like <code>Album</code>,
 </div>
 </div>
 
-<div id="outline-container-org3cba915" class="outline-3">
-<h3 id="org3cba915">Step 8:  Choose the <a href="https://start.spring.io/">Spring Initializr</a> for bootstrapping the application.</h3>
-<div class="outline-text-3" id="text-org3cba915">
+<div id="outline-container-org6496c95" class="outline-3">
+<h3 id="org6496c95">Step 8:  Choose the <a href="https://start.spring.io/">Spring Initializr</a> for bootstrapping the application.</h3>
+<div class="outline-text-3" id="text-org6496c95">
 <p>
 The important things with this form are to make these choices:
 </p>
@@ -664,9 +644,9 @@ above.
 </div>
 </div>
 
-<div id="outline-container-org054a1f2" class="outline-3">
-<h3 id="org054a1f2">Step 9: <a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.</h3>
-<div class="outline-text-3" id="text-org054a1f2">
+<div id="outline-container-orgd8f9324" class="outline-3">
+<h3 id="orgd8f9324">Step 9: <a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.</h3>
+<div class="outline-text-3" id="text-orgd8f9324">
 <p>
 Maven projects have a standard directory layout, and a standard place
 within that layout for resource files to be packaged into the build
@@ -774,9 +754,9 @@ like.  Or, just use the complete version from the shared repository.
 </div>
 </div>
 
-<div id="outline-container-orgfc12a93" class="outline-3">
-<h3 id="orgfc12a93">Step 10:  Write Java model classes.</h3>
-<div class="outline-text-3" id="text-orgfc12a93">
+<div id="outline-container-org2ef5604" class="outline-3">
+<h3 id="org2ef5604">Step 10:  Write Java model classes.</h3>
+<div class="outline-text-3" id="text-org2ef5604">
 <p>
 Within the standard Maven directory layout, Java source code goes into
 <code>./src/main/java</code> and its sub-directories.  Within an appropriate
@@ -831,9 +811,9 @@ Java Record classes just for the minimal amount of boilerplate.
 </div>
 </div>
 
-<div id="outline-container-orgab9d206" class="outline-3">
-<h3 id="orgab9d206">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</h3>
-<div class="outline-text-3" id="text-orgab9d206">
+<div id="outline-container-org2093367" class="outline-3">
+<h3 id="org2093367">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</h3>
+<div class="outline-text-3" id="text-org2093367">
 <p>
 These are the Spring <code>@Controller</code> classes, and within them are the
 Spring for GraphQL <code>QueryMapping</code> and <code>@SchemaMapping</code>
@@ -958,7 +938,7 @@ simple scalar field (e.g., <code>Int</code>, <code>String</code>, <code>Boolean<
 will need a resolver/data-fetcher.</li>
 <li>Every resolver is implemented with a Java method.</li>
 <li>Every resolver method gets annotated with <code>@SchemaMapping</code>,
-<code>@QueryMapping</code>, or <code>@BatchMapping</code> (more on that <a href="#org5cf3b0c">later</a>).</li>
+<code>@QueryMapping</code>, or <code>@BatchMapping</code> (more on that <a href="#orgf014b48">later</a>).</li>
 <li>Use <code>@QueryMapping</code> when you can because it's simpler.  Use
 <code>@SchemaMapping</code> when you have to (your IDE should nag you).</li>
 <li>If you keep the Java method names in sync with the GraphQL field
@@ -979,14 +959,14 @@ resolver methods, and more combinations thereof.  Deal with it.</li>
 <li>You <i>will</i> experience the urge to be clever, to create abstractions
 that dynamically respond to more and more complex combinations of
 parameters, filters, and other conditions.  Congratulations:
-you're on your way to building a <a href="#orgfc94290">general-purpose query engine</a>.</li>
+you're on your way to building a <a href="#orgfe79264">general-purpose query engine</a>.</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org5cf3b0c" class="outline-3">
-<h3 id="org5cf3b0c">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</h3>
-<div class="outline-text-3" id="text-org5cf3b0c">
+<div id="outline-container-orgf014b48" class="outline-3">
+<h3 id="orgf014b48">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</h3>
+<div class="outline-text-3" id="text-orgf014b48">
 <p>
 You will quickly realize that this can lead to overly chatty
 interaction with the database, sending too many small SQL statements
@@ -1095,7 +1075,7 @@ parent entries (<code>Album</code> in this case).  There are many ways to do it,
 and this is just one way.  The important point is that however it's
 done, <i>it has to be done in Java</i>.  One last thing: note the absence
 of the <code>limit</code> parameter.  Where did that go?  It turns out that
-<code>InputValue&lt;T&gt;</code> is <a href="https://github.com/spring-projects/spring-graphql/issues/232#issuecomment-1071044083">not supported</a> by Spring for GraphQL for
+<code>InputValue&lt;T&gt;</code> is not supported by Spring for GraphQL for
 <code>@BatchMapping</code>.  Oh well! 😒 In this case, it's no great loss because
 arguably these <code>limit</code> parameters make little sense.  How often does
 one really need a random subset of an artist's albums?  It's a more
@@ -1108,10 +1088,10 @@ with <a href="https://www.oracle.com/technical-resources/articles/java/ma14-java
 </p>
 </div>
 
-<div id="outline-container-orgf99713e" class="outline-4">
-<h4 id="orgf99713e">Editorial Aside!</h4>
-<div class="outline-text-4" id="text-orgf99713e">
-<blockquote>
+<div id="outline-container-org2bdb95a" class="outline-4">
+<h4 id="org2bdb95a">Editorial Aside!</h4>
+<div class="outline-text-4" id="text-org2bdb95a">
+<details id="org032d78e">
 <p>
 This raises an important point about the "N+1 problem" that is <i>never</i>
 addressed, and that neglect just serves to exaggerate the scale of the
@@ -1141,15 +1121,15 @@ application, it probably will be a constant factor well below 100.
 Consider this when balancing the trade-offs in developer time, in
 complexity, and in hardware scaling, when confronting the N+1 problem.
 </p>
-</blockquote>
+</details>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgfc94290" class="outline-2">
-<h2 id="orgfc94290">Is this the <i>Only</i> way to build a GraphQL API server?</h2>
-<div class="outline-text-2" id="text-orgfc94290">
+<div id="outline-container-orgfe79264" class="outline-2">
+<h2 id="orgfe79264">Is this the <i>Only</i> way to build a GraphQL API server?</h2>
+<div class="outline-text-2" id="text-orgfe79264">
 <p>
 We saw that the "easy way" of building GraphQL servers is the one
 typically offered in tutorials and "Getting Started" guides, and is
@@ -1254,9 +1234,9 @@ GraphQL maturity.
 </div>
 </div>
 
-<div id="outline-container-orgb86fa41" class="outline-2">
-<h2 id="orgb86fa41">How to choose "Buy" over "Buy"</h2>
-<div class="outline-text-2" id="text-orgb86fa41">
+<div id="outline-container-org681de59" class="outline-2">
+<h2 id="org681de59">How to choose "Buy" over "Buy"</h2>
+<div class="outline-text-2" id="text-org681de59">
 <p>
 You don't <i>literally</i> need to <i>buy</i> a GraphQL server.  You can, and
 there can be good reasons to do so in some settings, but there are
@@ -1348,9 +1328,9 @@ host of other databases.
 </div>
 </div>
 
-<div id="outline-container-orgcc7e196" class="outline-2">
-<h2 id="orgcc7e196">Wrapping up</h2>
-<div class="outline-text-2" id="text-orgcc7e196">
+<div id="outline-container-org3559aeb" class="outline-2">
+<h2 id="org3559aeb">Wrapping up</h2>
+<div class="outline-text-2" id="text-org3559aeb">
 <p>
 What I'd like you to take away from this article are these things.
 </p>
