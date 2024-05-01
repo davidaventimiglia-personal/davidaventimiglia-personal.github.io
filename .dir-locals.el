@@ -18,7 +18,7 @@
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
-			 :sitemap-title ""
+			 :sitemap-title "David A. Ventimiglia"
 			 :html-preamble t
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
@@ -66,15 +66,6 @@ body {
 }
 header h1 {
   font-size: xx-large;
-}
-div.content ul {
-  list-style-type: none;
-}
-div.content ul li {
-  font-size: x-large;
-}
-div.content ul li ul li {
-  font-size: large;
 }
 .subtitle {
   font-size: large;
