@@ -1,0 +1,1403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GraphQL for the Java Developer</title>
+<meta name="author" content="David A. Ventimiglia" />
+<meta name="generator" content="Org Mode" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css">-->
+<!--<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">-->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">-->
+<style>
+h1 {
+  font-size: x-large;
+}
+h2 {
+  font-size: large;
+}
+body {
+  grid-template-columns: 1fr min(55rem, 90%) 1fr;
+}
+header h1 {
+  font-size: xx-large;
+}
+ul {
+  list-style-type: none;
+}
+ul li {
+  font-size: x-large;
+}
+ul li ul li {
+  font-size: large;
+}
+.subtitle {
+  font-size: large;
+}
+</style>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+
+<nav>
+ <a accesskey="h" href="/index.html"> UP </a>
+ <a accesskey="H" href="/index.html"> HOME </a>
+</nav>
+<div id="preamble" class="status">
+
+<header>
+  <h1 class="title">David A. Ventimiglia</h1>
+</header>
+</div>
+<div id="content" class="content">
+<h1 class="title">GraphQL for the Java Developer</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org1c3c954">What is GraphQL and why do people want it?</a></li>
+<li><a href="#orgc24a1e1">How do I provide the GraphQL that people want, especially as a Java developer?</a></li>
+<li><a href="#orgbba484f">How exactly do I build a GraphQL API server in Java for a real application?</a></li>
+<li><a href="#orgee848ad">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</a>
+<ul>
+<li><a href="#org5e97285">Step 6:  Choose Docker Compose for orchestrating a development database server.</a></li>
+<li><a href="#orgf496034">Step 7:  Choose the Chinook data model.</a></li>
+<li><a href="#org6e414dd">Step 8:  Choose the Spring Initializr for bootstrapping the application.</a></li>
+<li><a href="#org39bbc7b">Step 9: Create a GraphQL schema file.</a></li>
+<li><a href="#orge8213d3">Step 10:  Write Java model classes.</a></li>
+<li><a href="#org396a166">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</a></li>
+<li><a href="#org3fe0824">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</a>
+<ul>
+<li><a href="#org7851a9a">Editorial Aside!</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga69fcad">Is this the <i>Only</i> way to build a GraphQL API server?</a></li>
+<li><a href="#orgd79f7e5">How to choose "Buy" over "Buy"</a></li>
+<li><a href="#org5470bab">Wrapping up</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1c3c954" class="outline-2">
+<h2 id="org1c3c954">What is GraphQL and why do people want it?</h2>
+<div class="outline-text-2" id="text-org1c3c954">
+<p>
+GraphQL is an important evolution in the design of Application
+Performance Interfaces (API), but even today it can be difficult to
+know how to get started with GraphQL, how to move beyond "Getting
+Started" with GraphQL, and how to move beyond the conventional wisdom
+on GraphQL.  This is especially true for Java.  This guide attempts to
+cover all these bases in three steps.  First, I'll tell you what
+GraphQL is, and as a bonus I'll tell you what GraphQL <i>really</i> is.
+Second, I'll show you how to implement state-of-the-art GraphQL in
+Java for a real application.  Third, I'll offer you an alternative
+path beyond the state-of-the-art that may suit your needs better in
+every dimension.  And, if you feel like skipping to <a href="#orgd79f7e5">the end</a>, who am I
+to stop you?  It certainly will save a great deal of effort.
+</p>
+
+<p>
+So, what <i>is</i> GraphQL?  Well, GraphQL.org <a href="https://graphql.org/learn/">says</a>
+</p>
+
+<blockquote>
+<p>
+GraphQL is a query language for your API, and a server-side runtime
+for executing queries using a type system you define for your
+data. GraphQL isn’t tied to any specific database or storage engine
+and is instead backed by your existing code and data.
+</p>
+</blockquote>
+
+<p>
+That's not wrong, but let me take a few more runs at it from different
+directions.  Sure, GraphQL <i>is</i> "a query language for your API", but
+you might as well just say that it <i>is</i> an API, or a way of building
+an API.  That puts it in contrast with <a href="https://htmx.org/essays/rest-explained/">REST</a>, which GraphQL is an
+evolution from and an alternative to.  GraphQL offers several
+improvements over REST (or at least, the <a href="https://en.wikipedia.org/wiki/Richardson_Maturity_Model#Level_2:_HTTP_verbs">way</a> that REST is usually
+done):
+</p>
+
+<dl class="org-dl">
+<dt>expressivity</dt><dd>A client can say exactly what data they need from a
+server, no more and no less.</dd>
+<dt>efficiency</dt><dd>Expressivity leads to efficiency gains, reducing
+network chatter and wasted bandwidth.</dd>
+<dt>discoverability</dt><dd>In order to know what to say to a server, a
+client needs to know what <i>can</i> be said to a server.  That's where
+discoverability comes in, allowing data consumers to know exactly
+what's available from data producers.</dd>
+<dt>simplicity</dt><dd>GraphQL puts clients in the driver's seat, so there
+had better be some good ergonomics for driving.  GraphQL's
+highly-regular machine-readable syntax, simple execution model, and
+simple <a href="https://spec.graphql.org/">specification</a> lend themselves to inter-operable and composable
+tools:
+<ul class="org-ul">
+<li><a href="https://altairgraphql.dev/">query</a> <a href="https://github.com/graphql/graphiql/tree/main/packages/graphiql#readme">tools</a></li>
+<li><a href="https://the-guild.dev/graphql/hive">schema registries</a></li>
+<li><a href="https://the-guild.dev/graphql/mesh">gateways</a></li>
+<li><a href="https://the-guild.dev/graphql/codegen">code generators</a></li>
+<li><a href="https://commerce.nearform.com/open-source/urql/">client</a> <a href="https://www.apollographql.com/docs/react/">libraries</a></li>
+</ul></dd>
+</dl>
+
+<p>
+But, what <i>else</i> is GraphQL.  What <i>really</i> is GraphQL?  GraphQL is
+<i>also</i> a data model for its query language and, despite the name,
+neither the query language nor the data model are very "graphy."  The
+data model is <a href="https://spec.graphql.org/October2021/#sec-JSON-Serialization">essentially</a> just JSON.  The query language <i>looks</i> like
+JSON and can be boiled down to a few simple features:
+</p>
+
+<dl class="org-dl">
+<dt>types</dt><dd>A <a href="https://spec.graphql.org/October2021/#sec-Types">type</a> is a simple value (a <a href="https://spec.graphql.org/October2021/#sec-Scalars">scalar</a>) or a set of fields (an
+<a href="https://spec.graphql.org/October2021/#sec-Objects">object</a>).  While you naturally introduce new types for your own
+problem domain, there are few special types (called <a href="https://spec.graphql.org/October2021/#sec-Language.Operations">Operations</a>).
+One of theses is <a href="https://spec.graphql.org/October2021/#sec-Query">Query</a>, which is the root of requests for data
+(setting aside <a href="https://spec.graphql.org/October2021/#sec-Subscription">Subscription</a> for now, for the sake of simplicity).  A
+type essentially is a set of rules for determining if a piece of
+data&#x2013;or a request for that piece of data&#x2013;validly conforms to the
+given type.  A GraphQL type is very much like a user-defined type in
+programming languages like C++, Java, and Typescript, and is very
+much like a table in a relational database.</dd>
+<dt>field</dt><dd>A field within <i>one</i> type contains one or more pieces of
+data that validly conform to <i>another</i> type, thus establishing
+<i>relationships</i> among types.  A GraphQL field is very much like a
+property of a user-defined type in a programming language, and is
+very much like a column in a relational database.  Relationships
+between GraphQL types are very much like pointers or references in
+programming languages, and are very much like foreign key
+constraints in relational databases.</dd>
+</dl>
+
+<p>
+There's more to GraphQL, but that's pretty much the essence.  Note the
+similarities between concepts in GraphQL and in programming languages,
+and especially between concepts in GraphQL and in relational
+databases.  That will be important <a href="#orga69fcad">later</a>.
+</p>
+
+<p>
+OK, that's enough for now about what GraphQL <i>is</i>, but what is GraphQL
+<i>for</i>?  Why should we consider GraphQL, especially as an alternative
+to REST?  I listed above some of GraphQL's improvements over typical
+REST&#x2013;expressivity, efficiency, discoverability, simplicity&#x2013;but
+another perhaps more concise way to put it is this:
+</p>
+
+<blockquote>
+<p>
+GraphQL's expressivity, efficiency, discoverability, and simplicity
+make life easier for data consumers.
+</p>
+</blockquote>
+
+<p>
+However, there's a corollary:
+</p>
+
+<blockquote>
+<p>
+GraphQL's expressivity, efficiency, discoverability, and simplicity
+make life harder for data producers.
+</p>
+</blockquote>
+
+<p>
+That's <i>you</i>!  If you're a Java programmer working with GraphQL, your
+job is probably to <i>produce</i> GraphQL API servers for clients to
+<i>consume</i> (there are relatively few&#x2013;not "none", but "few"&#x2013;settings
+for Java on the client).  Offering all that expressivity,
+discoverability, etc. ain't easy, so how do you do it?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc24a1e1" class="outline-2">
+<h2 id="orgc24a1e1">How do I provide the GraphQL that people want, especially as a Java developer?</h2>
+<div class="outline-text-2" id="text-orgc24a1e1">
+<p>
+On the journey to providing a GraphQL API we confront a series
+interdependent choices, which <i>can</i> make life easier (or harder) for
+data producers.  One choice is over just <i>how</i> "expressive, efficient,
+discoverable, and simple" is our API, but let's set that aside for a
+moment and treat that as an emergent property of the other choices we
+make.  Life is about trade-offs, after all.
+</p>
+
+<p>
+Another choice is over <a href="https://www.thoughtworks.com/content/dam/thoughtworks/documents/e-book/tw_ebook_build_vs_buy_2022.pdf">build-versus-buy [PDF]​</a>, but let's also set that
+aside for a moment, accept that we're building a GraphQL API server
+(in Java), explore how that is done, and evaluate the consequences.
+</p>
+
+<p>
+If we're building a GraphQL API server in Java, another choice is over
+whether to build it completely from scratch or to use libraries and
+frameworks, and if the latter then which libraries and frameworks to
+use.  Let's set <i>that</i> aside, rightfully regard a complete <a href="https://en.wikipedia.org/wiki/Do_it_yourself">DIY</a>
+solution as pointless masochism, and survey the landscape of Java
+libraries and frameworks for GraphQL.  As of writing (April 2024)
+there are three important interdependent players in this space:
+</p>
+
+<dl class="org-dl">
+<dt>graphql-java</dt><dd><a href="https://www.graphql-java.com/">graphql-java</a> is a lower-level foundational library
+for working with GraphQL in Java, which began in 2015.  Since the
+other players depend on and use graphql-java, consider graphql-java
+to be <i>non-optional</i>.  Another crucial choice is whether you are or
+are not using the <a href="https://spring.io/projects/spring-boot">Spring Boot</a> framework.  If you're <i>not</i> using
+Spring Boot then <i>stop here!</i> 🛑 Since this is a prerequisite, in
+the parlance of the <a href="https://www.thoughtworks.com/radar">ThoughtWorks Radar</a> this is unavoidably <b>Adopt</b>.</dd>
+<dt>Netflix DGS</dt><dd><a href="https://netflix.github.io/dgs/">DGS</a> is a higher-level library for working with
+GraphQL in Java <i>with Spring Boot</i>, which began in 2021.  If you're
+using DGS then you <i>will</i> also be using graphql-java under-the-hood,
+but typically you won't come into contact with graphql-java.
+Instead, you will be sprinkling <a href="https://en.wikipedia.org/wiki/Java_annotation">annotations</a> throughout the Java code
+to identify the code segments (called "resolvers" or "data
+fetchers"&#x2026;more on that <a href="#orga69fcad">later</a>) that execute GraphQL requests.
+Thoughtworks <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/netflix-dgs">said</a> <b>Trial</b> as of 2023 for DGS but this is a dynamic
+space and their opinion may have changed.  I say <b>Hold</b>, for reasons
+given below.</dd>
+<dt>Spring for GraphQL</dt><dd><a href="https://spring.io/projects/spring-graphql">Spring for GraphQL</a> is <i>another</i> higher-level
+library for working with GraphQL in Java with Spring Boot, which
+began around 2023, and is also based on annotations.  It may be too
+new for ThoughtWorks, but it's not too new for me.  I say <b>adopt</b>,
+and read on for why.</dd>
+</dl>
+
+<p>
+The makers of Spring for GraphQL <a href="https://spring.io/projects/spring-graphql">say</a>:
+</p>
+
+<blockquote>
+<p>
+It is a joint collaboration between the GraphQL Java team and Spring
+engineering&#x2026;It aims to be the foundation for all Spring, GraphQL
+applications.
+</p>
+</blockquote>
+
+<p>
+Translation:
+</p>
+
+<blockquote>
+<p>
+The Spring team has a privileged collaboration with the makers of the
+foundational library for GraphQL in Java, and intends to "win" in this
+space.
+</p>
+</blockquote>
+
+<p>
+Moreover, the makers of Netflix DGS have much to <a href="https://netflix.github.io/dgs/spring-graphql-integration/">say</a> on the subject of
+that library's relationship to Spring for GraphQL.
+</p>
+
+<blockquote>
+<p>
+Soon after we open-sourced the DGS framework, we learned about
+parallel efforts by the Spring team to develop a GraphQL framework for
+Spring Boot. The Spring GraphQL project was in the early stages at the
+time and provided a low-level of integration with graphql-java. Over
+the past year, however, Spring GraphQL has matured and is mostly at
+feature parity with the DGS Framework. We now have 2 competing
+frameworks that solve the same problems for our users.
+</p>
+
+<p>
+Today, new users must choose between the DGS Framework or Spring
+GraphQL, thus missing out on features available in one framework but
+not the other. This is not an ideal situation for the GraphQL Java
+community.
+</p>
+
+<p>
+For the maintainers of DGS and Spring GraphQL, it would be far more
+effective to collaborate on features and improvements instead of
+having to solve the same problem independently. Finally, a unified
+community would provide us with better channels for feedback.
+</p>
+
+<p>
+The DGS framework is widely used and plays a vital role in the
+architecture of many companies, including Netflix. Moving away from
+the framework in favor of Spring-GraphQL would be a costly migration
+without any real benefits.
+</p>
+
+<p>
+From a Spring Framework perspective, it makes sense to have an
+out-of-the-box GraphQL offering, just like Spring supports REST.
+</p>
+</blockquote>
+
+<p>
+Translation:
+</p>
+
+<blockquote>
+<p>
+If you're a Spring Boot shop already using DGS, go ahead and keep
+using it for now.  If you're a Spring Boot shop starting afresh, you
+should probably just use Spring for GraphQL.
+</p>
+</blockquote>
+
+<p>
+In this guide I've told you what GraphQL <i>is</i>.  I've told you what
+GraphQL <i>really</i> is.  I've set the stage by giving some background on
+the relevant libraries and frameworks in Java.  Now, let me show you
+how to implement state-of-the-art GraphQL in Java for a real
+application, and since we're starting afresh we'll take the advice
+from DGS and just use Spring for GraphQL.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbba484f" class="outline-2">
+<h2 id="orgbba484f">How exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-orgbba484f">
+<p>
+Opinions are free to differ on what it even means to be a "real
+application."  For the purpose of this guide, what <i>I</i> mean by "real
+application" in this settings is an application that has at least
+these features:
+</p>
+
+<dl class="org-dl">
+<dt>persistence</dt><dd>Many <a href="https://www.graphql-java.com/tutorials/getting-started-with-spring-boot">tutorials</a>, <a href="https://netflix.github.io/dgs/">getting-started guides</a>, and <a href="https://docs.spring.io/spring-graphql/reference/">overviews</a>
+only address in-memory data models, stopping well short of
+interacting with a database.  This guide shows you <i>some</i> ways to
+cross this crucial chasm and discusses <i>some</i> of the consequences,
+challenges, and trade-offs involved.  This is a vast topic so I
+barely scratch the surface, but it's a start.  The primary goal is
+to support <code>Query</code> operations.  A stretch goal is to support
+<code>Mutation</code> operations.  <code>Subscription</code> operations are thoroughly
+off-the-table for now.</dd>
+<dt>flexibility</dt><dd>I wrote above that just <i>how</i> expressive, efficient,
+discoverable, and simple we make our GraphQL API is technically a
+choice we make, but is practically a property that emerges from other
+choices we make.  I also wrote that building GraphQL API servers is
+difficult for data producers.  Consequently, many data producers
+cope with that difficulty by dialing way back on those other
+properties of the API.  Many GraphQL API servers in the real world
+are inflexible, are superficial, are shallow, and are in many ways
+"GraphQL-in-name-only."  This guide shows <i>some</i> of what's involved
+in going beyond the <i>status quo</i> and how that comes into tension
+with other properties, like efficiency.  <b>Spoiler Alert</b>:  It isn't
+pretty.</dd>
+<dt>efficiency</dt><dd>In fairness, many GraphQL API servers in the real
+world achieve decent efficiency, albeit at the expense of
+flexibility, by essentially encoding REST API endpoints into a
+shallow GraphQL schema.  The standard approach in GraphQL is the
+<a href="https://www.graphql-java.com/documentation/batching/">data-loader pattern</a>, but few tutorials really show how this is used
+even with an in-memory data model let alone with a database.  This
+guide offers one implementation of the data loader pattern to combat
+the N+1 problem.  Again, we see how that comes into tension with
+flexibility and simplicity.</dd>
+<dt>modernity</dt><dd>Anyone writing a Java application that accesses a
+database will have to make choices about <i>how</i> to access a database.
+That could involve just <a href="https://en.wikipedia.org/wiki/Java_Database_Connectivity">JDBC</a> and raw SQL (for a relational database)
+but arguably the current industry standard is still to use an
+Object-Relational Mapping (<a href="https://web.archive.org/web/20220823105749/http://blogs.tedneward.com/post/the-vietnam-of-computer-science/">ORM</a>) layer like <a href="https://hibernate.org/orm/">Hibernate</a>, <a href="https://www.jooq.org/">jooq</a>, or the
+standard <a href="https://docs.oracle.com/javaee/6/tutorial/doc/bnbpz.html">JPA</a>.  Getting an ORM to play nice with GraphQL is a tall
+order, may not be prudent, and may not even be possible.  Few if any
+other guides touch this with a ten-foot-pole.  This guide at least
+<del>makes an attemp</del> <i>will make an attempt with an ORM in the future!</i></dd>
+</dl>
+
+<p>
+The recipe I follow in this guide for building a GraphQL API server in
+Java <i>for a relational database</i> is the following:
+</p>
+
+<ol class="org-ol">
+<li>Choose <a href="https://spring.io/projects/spring-boot">Spring Boot</a> for the overall server framework.</li>
+<li>Choose <a href="https://spring.io/projects/spring-graphql">Spring for GraphQL</a> for the GraphQL-specific parts.</li>
+<li>Choose <a href="https://spring.io/projects/spring-data-jdbc">Spring Data for JDBC</a> for data access in lieu of an ORM <i>for
+now</i>.</li>
+<li>Choose <a href="https://maven.apache.org/">Maven</a> over <a href="https://gradle.org/">Gradle</a> because I prefer the former.  If you
+choose the latter, you're on your own.</li>
+<li>Choose <a href="https://www.postgresql.org/">PostgreSQL</a> for the database.  Most of the principles should
+apply for pretty much any relational database, but you've got to
+start somewhere.</li>
+<li>Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database
+server.  There are <a href="https://testcontainers.com/">other</a> ways of bringing in a database, but again,
+you've got to start somewhere.</li>
+<li>Choose the <a href="https://docs.yugabyte.com/preview/sample-data/chinook">Chinook</a> data model.  Naturally, you will have your own
+data model, but Chinook is a good choice for illustration purposes
+because it's fairly rich, has quite a few tables and relationships,
+goes well beyond the ubiquitous but trivial <a href="https://todomvc.com/">To-Do</a> apps, is
+available for a wide variety of databases, and is generally
+well-understood.</li>
+<li>Choose the <a href="https://netflix.github.io/dgs/#create-a-new-spring-boot-application">Spring Initializr</a> for bootstrapping the application.
+There's so much ceremony in Java, any way to race through some of
+it is welcomed.</li>
+<li><a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.  This is a necessary step for
+graphql-java, for DGS, and for Spring for GraphQL.  Weirdly, the
+Spring for GraphQL overview seems to overlook this step, but the
+DGS "Getting Started" guide is there to remind us.  Many "thought
+leaders" will exhort you to isolate your underlying data model from
+your API.  Theoretically, you could do this by having different
+GraphQL types from your database tables.  Practically, this is a
+source of busy-work.</li>
+<li>Write Java model classes, one for every GraphQL type in the schema
+file and every table in the database.  You're free to make other
+choices for this data model or for any other data model, and you
+can even write code or SQL views to isolate your underlying data
+model from your API, but do ask how important this really is when
+the number of tables/classes/types grows to the hundreds or
+thousands.</li>
+<li>Write Java controller classes, with one method at least for every
+<a href="https://www.apollographql.com/tutorials/fullstack-quickstart/04-writing-query-resolvers">root field</a>.  In practice, this is the bare minimum.  There
+probably will be many more.  By the way, these methods <i>are</i> your
+"resolvers".</li>
+<li>Annotate every controller class with <code>@Controller</code> to tell Spring
+to inject it as a Java Bean that can serve network traffic.</li>
+<li>Annotate every resolver/data-fetcher method with <code>@SchemaMapping</code>
+or <code>QueryMapping</code> to tell Spring for GraphQL how to execute the
+parts of a GraphQL operation.</li>
+<li>Implement those resolver/data-fetcher methods <i>by whatever means
+necessary</i> to mediate interactions with the database.  In version
+0, this will be just simple raw SQL statements.</li>
+<li>Upgrade <i>some</i> of those resolver/data-fetcher methods by replacing
+<code>@SchemaMapping</code> or <code>@QueryMapping</code> with <code>@BatchMapping</code>.  This
+latter annotation signals to Spring for GraphQL that we want make
+the execution more efficient by combating the N+1 problem, and
+we're prepared to pay the price in more code in order do do it.</li>
+<li>Refactor those <code>@BatchMapping</code>-annotated methods to support the
+data loader pattern, by accepting (and processing) a <i>list</i> of
+identifiers for related entities, rather than a single identifier
+for a single related entity.</li>
+<li><del>Write copious test-cases for every possible interaction.</del></li>
+<li>Just use a <a href="https://github.com/EMResearch/EvoMaster">fuzz-tester</a> on the API and call it a day.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgee848ad" class="outline-2">
+<h2 id="orgee848ad">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-orgee848ad">
+<p>
+That is a <i>long recipe</i> above!  Instead of going into
+chapter-and-verse for every single step, in this guide I do two
+things.  First, I provide a public <a href="https://github.com/dventimihasura/graphql-with-java">repository</a> with working code that
+is easy to use, easy to run, easy to read, and easy to understand.  If
+you feel it falls short in any of these objects <i>please do let me
+know!</i>  Second, I highlight <i>some</i> of the important steps, put them in
+context, discuss the choices involved, and offer some alternatives.
+</p>
+</div>
+
+<div id="outline-container-org5e97285" class="outline-3">
+<h3 id="org5e97285">Step 6:  Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database server.</h3>
+<div class="outline-text-3" id="text-org5e97285">
+<p>
+Again, there are other ways to pull this off, but this is one good
+way.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-yaml"><span style="color: #7fffd4;">version</span>: <span style="color: #ffc1c1;">"3.6"</span>
+<span style="color: #7fffd4;">services</span>:
+  <span style="color: #7fffd4;">postgres</span>:
+    <span style="color: #7fffd4;">image</span>: postgres:16
+    <span style="color: #7fffd4;">ports</span>:
+      - ${PGPORT:-5432}:5432
+    <span style="color: #7fffd4;">restart</span>: always
+    <span style="color: #7fffd4;">environment</span>:
+      <span style="color: #7fffd4;">POSTGRES_PASSWORD</span>: postgres
+      <span style="color: #7fffd4;">PGDATA</span>: /var/lib/pgdata
+    <span style="color: #7fffd4;">volumes</span>:
+      - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
+      - <span style="color: #7fffd4;">type</span>: tmpfs
+        <span style="color: #7fffd4;">target</span>: /var/lib/pg/data
+</pre>
+</div>
+
+<p>
+Set an environment variable for <code>PGPORT</code> to expose PostgreSQL on a
+host port, or hard-code it to whatever value you like.
+</p>
+
+<p>
+Start the server with:
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf496034" class="outline-3">
+<h3 id="orgf496034">Step 7:  Choose the <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">Chinook</a> data model.</h3>
+<div class="outline-text-3" id="text-orgf496034">
+<p>
+The Chinook files from <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">YugaByte</a> work out-of-the-box for PostgreSQL and
+are a good choice.  Just make sure that there is a sub-directory
+<code>initdb.d-postgres</code> and download the Chinook DDL and DML files into
+that directory, taking care to give them numeric prefixes so that
+they're run by the PostgreSQL initialization script in the proper
+order.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">mkdir -p ./initdb.d-postgres
+wget -O ./initdb.d-postgres/04_chinook_ddl.sql
+wget -O ./initdb.d-postgres/05_chinook_genres_artists_albums.sql
+wget -O ./initdb.d-postgres/06_chinook_songs.sql
+</pre>
+</div>
+
+<p>
+Now, you can start the database service using Docker Compose.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">docker compose up -d
+</pre>
+</div>
+
+<p>
+or
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">docker-compose up -d
+</pre>
+</div>
+
+<p>
+There are many ways to spot check the validity of the database.  If
+the Docker Compose service seems to have started correctly, here's one
+way using <code>psql</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">psql <span style="color: #ffc1c1;">"postgresql://postgres:postgres@localhost:5432/postgres"</span> -c <span style="color: #ffc1c1;">'\d'</span>
+</pre>
+</div>
+
+<pre class="example" id="org91606ea">
+              List of relations
+ Schema |      Name       | Type  |  Owner   
+--------+-----------------+-------+----------
+ public | Album           | table | postgres
+ public | Artist          | table | postgres
+ public | Customer        | table | postgres
+ public | Employee        | table | postgres
+ public | Genre           | table | postgres
+ public | Invoice         | table | postgres
+ public | InvoiceLine     | table | postgres
+ public | MediaType       | table | postgres
+ public | Playlist        | table | postgres
+ public | PlaylistTrack   | table | postgres
+ public | Track           | table | postgres
+ public | account         | table | postgres
+ public | account_summary | view  | postgres
+ public | order           | table | postgres
+ public | order_detail    | table | postgres
+ public | product         | table | postgres
+ public | region          | table | postgres
+(17 rows)
+
+</pre>
+
+<p>
+You should at least see Chinook-specific tables like <code>Album</code>,
+<code>Artist</code>, and <code>Track</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6e414dd" class="outline-3">
+<h3 id="org6e414dd">Step 8:  Choose the <a href="https://start.spring.io/">Spring Initializr</a> for bootstrapping the application.</h3>
+<div class="outline-text-3" id="text-org6e414dd">
+<p>
+The important things with this form are to make these choices:
+</p>
+
+<dl class="org-dl">
+<dt>Project</dt><dd>Maven</dd>
+<dt>Language</dt><dd>Java</dd>
+<dt>Spring Boot</dt><dd>3.2.5</dd>
+<dt>Packaging</dt><dd>Jar</dd>
+<dt>Java</dt><dd>21</dd>
+<dt>Dependencies</dt><dd><ul class="org-ul">
+<li>Spring for GraphQL</li>
+<li>PostgreSQL Driver</li>
+</ul></dd>
+</dl>
+
+<p>
+You can make other choices (e.g. Gradle, Java 22, MySQL, etc.) but
+bear in mind that this guide has only been tested with the choices
+above.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org39bbc7b" class="outline-3">
+<h3 id="org39bbc7b">Step 9: <a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.</h3>
+<div class="outline-text-3" id="text-org39bbc7b">
+<p>
+Maven projects have a standard directory layout, and a standard place
+within that layout for resource files to be packaged into the build
+artifact (a JAR file) is <code>./src/main/java/resources</code>.  Within that
+directory, create a sub-directory <code>graphql</code> and deposit a
+<code>schema.graphqls</code> file.  There are other ways to organize the GraphQL
+schema files needed by graphql-java, DGS, and Spring for GraphQL, but
+they all are rooted in <code>./src/main/java/resources</code> (for a Maven
+project).
+</p>
+
+<p>
+Within the <code>schema.graphqls</code> file (or its equivalent), first there
+will a definition for the root <code>Query</code> object, with root-level fields
+for every GraphQL type that we want in our API.  As a starting point,
+there will be a root-level field under <code>Query</code> for every table, and a
+corresponding <code>type</code> for every table.  For example, for <code>Query</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Query</span> {
+  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Artist</span>]
+  ArtistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Artist</span>
+  Album(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Album</span>]
+  AlbumById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Album</span>
+  Track(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Track</span>]
+  TrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Track</span>
+  Playlist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Playlist</span>]
+  PlaylistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Playlist</span>
+  PlaylistTrack(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">PlaylistTrack</span>]
+  PlaylistTrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">PlaylistTrack</span>
+  Genre(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Genre</span>]
+  GenreById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Genre</span>
+  MediaType(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">MediaType</span>]
+  MediaTypeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">MediaType</span>
+  Customer(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Customer</span>]
+  CustoemrById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Customer</span>
+  Employee(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Employee</span>]
+  EmployeeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Employee</span>
+  Invoice(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Invoice</span>]
+  InvoiceById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Invoice</span>
+  InvoiceLine(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">InvoiceLine</span>]
+  InvoiceLineById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">InvoiceLine</span>
+}
+</pre>
+</div>
+
+<p>
+Note the parameters on these fields.  I have written it so that every
+root-level field that has a <a href="https://spec.graphql.org/October2021/#sec-Wrapping-Types">List</a> return type accepts one optional
+<code>limit</code> parameter which accepts an <code>Int</code>.  The intention is to support
+limiting the number of entries that should be returned from a
+root-level field.  Note also that every root-level field that has a
+<a href="https://spec.graphql.org/October2021/#ScalarTypeDefinition">Scalar</a> object return type accepts one optional <code>id</code> parameter which
+also accepts an <code>Int</code>.  The intention is to support fetching a single
+entry by its identifier (which happen all to be <code>integer</code> primary keys
+in the Chinook data model).
+</p>
+
+<p>
+Next, here is an illustration of <i>some</i> of the corresponding GraphQL
+types:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Album</span> {
+  AlbumId  : <span style="color: #63b8ff;">Int</span>
+  Title    : <span style="color: #63b8ff;">String</span>
+  ArtistId : <span style="color: #63b8ff;">Int</span>
+  Artist   : <span style="color: #63b8ff;">Artist</span>
+  Tracks   : [<span style="color: #63b8ff;">Track</span>]
+}
+
+<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span> {
+  ArtistId: <span style="color: #63b8ff;">Int</span>
+  Name: <span style="color: #63b8ff;">String</span>
+  Albums: [<span style="color: #63b8ff;">Album</span>]
+}
+
+<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Customer</span> {
+  CustomerId   : <span style="color: #63b8ff;">Int</span>
+  FirstName    : <span style="color: #63b8ff;">String</span>
+  LastName     : <span style="color: #63b8ff;">String</span>
+  Company      : <span style="color: #63b8ff;">String</span>
+  Address      : <span style="color: #63b8ff;">String</span>
+  City         : <span style="color: #63b8ff;">String</span>
+  State        : <span style="color: #63b8ff;">String</span>
+  Country      : <span style="color: #63b8ff;">String</span>
+  PostalCode   : <span style="color: #63b8ff;">String</span>
+  Phone        : <span style="color: #63b8ff;">String</span>
+  Fax          : <span style="color: #63b8ff;">String</span>
+  Email        : <span style="color: #63b8ff;">String</span>
+  SupportRepId : <span style="color: #63b8ff;">Int</span>
+  SupportRep   : <span style="color: #63b8ff;">Employee</span>
+  Invoices     : [<span style="color: #63b8ff;">Invoice</span>]
+}
+</pre>
+</div>
+
+<p>
+Fill out the rest of the <code>schema.graphqls</code> file as you see fit,
+exposing whatever table (and possibly views, if you create them) you
+like.  Or, just use the complete version from the shared repository.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge8213d3" class="outline-3">
+<h3 id="orge8213d3">Step 10:  Write Java model classes.</h3>
+<div class="outline-text-3" id="text-orge8213d3">
+<p>
+Within the standard Maven directory layout, Java source code goes into
+<code>./src/main/java</code> and its sub-directories.  Within an appropriate
+sub-directory for whatever Java package you use, create Java model
+classes.  These can be Plain Old Java Objects (<a href="https://en.wikipedia.org/wiki/Plain_old_Java_object">POJOs</a>).  They can be
+Java <a href="https://docs.oracle.com/en/java/javase/17/language/records.html">Record</a> classes.  They can be whatever you like, so long as they
+have "getter" and "setter" property methods for the corresponding
+fields in the GraphQL schema.  In this guide's repository, I choose
+Java Record classes just for the minimal amount of boilerplate.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java">  <span style="color: #00ffff;">package</span> com.graphqljava.tutorial.retail.<span style="color: #8470ff; font-weight: bold;">models</span>;
+
+  <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ChinookModels</span> {
+      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
+          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Album</span>
+          (
+           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">AlbumId</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Title</span>,
+           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">ArtistId</span>
+           ) {}
+
+      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
+          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span>
+          (
+           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">ArtistId</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Name</span>
+           ) {}
+
+      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
+          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Customer</span>
+          (
+           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">CustomerId</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">FirstName</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">LastName</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Company</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Address</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">City</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">State</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Country</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">PostalCode</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Phone</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Fax</span>,
+           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Email</span>,
+           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">SupportRepId</span>
+           ) {}
+  ...
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org396a166" class="outline-3">
+<h3 id="org396a166">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</h3>
+<div class="outline-text-3" id="text-org396a166">
+<p>
+These are the Spring <code>@Controller</code> classes, and within them are the
+Spring for GraphQL <code>QueryMapping</code> and <code>@SchemaMapping</code>
+resolver/data-fetcher methods.  These are the real workhorses of the
+application, accepting input parameters, mediating interaction with
+the database, validating data, implementing (or delegating) to
+business logic code segments, arranging for SQL and DML statements to
+be sent to the database, returning the data, processing the data, and
+sending it along to the GraphQL libraries (graphql-java, DGS, Spring
+for GraphQL) to package up and send off to the client.  There are <i>so</i>
+many choices one can make in implementing these and I can't go into
+every detail.  Let me just illustrate how <i>I</i> have done it, highlight
+some things to look out for, and discuss some of the options that are
+available.
+</p>
+
+<p>
+For reference, we will look at a section of the <code>ChinookControllers</code>
+file from the example repository.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #00ffff;">package</span> com.graphqljava.tutorial.retail.<span style="color: #8470ff; font-weight: bold;">controllers</span>; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">It's got to go into a package somewhere.</span>
+
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">sql</span>.<span style="color: #63b8ff;">ResultSet</span>;      <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">There's loads of symbols to import.</span>
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">sql</span>.<span style="color: #63b8ff;">SQLException</span>;   <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">This is Java and there's no getting around that.</span>
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #63b8ff;">List</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #63b8ff;">Map</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #8470ff; font-weight: bold;">stream</span>.<span style="color: #63b8ff;">Collectors</span>;
+
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">beans</span>.<span style="color: #8470ff; font-weight: bold;">factory</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">Autowired</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #63b8ff;">ArgumentValue</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">BatchMapping</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">QueryMapping</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">SchemaMapping</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #63b8ff;">RowMapper</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #8470ff; font-weight: bold;">simple</span>.<span style="color: #63b8ff;">JdbcClient</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #8470ff; font-weight: bold;">simple</span>.<span style="color: #8470ff; font-weight: bold;">JdbcClient</span>.<span style="color: #63b8ff;">StatementSpec</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">stereotype</span>.<span style="color: #63b8ff;">Controller</span>;
+
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Album</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Artist</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Customer</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Employee</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Genre</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Invoice</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">InvoiceLine</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">MediaType</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Playlist</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">PlaylistTrack</span>;
+<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Track</span>;
+
+
+<span style="color: #00ffff;">public</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ChinookControllers</span> { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">You don't have to nest all your controllers in one file. It's just what I do.</span>
+    <span style="color: #8470ff; font-weight: bold;">@Controller</span> <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ArtistController</span> { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Tell Spring about this controller class.</span>
+        <span style="color: #8470ff; font-weight: bold;">@Autowired</span> <span style="color: #63b8ff;">JdbcClient</span> <span style="color: #7fffd4;">jdbcClient</span>; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Lots of ways to get DB access from the container.  This is one way in Spring Data.</span>
+        <span style="color: #63b8ff;">RowMapper</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt;                 <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">I'm not using an ORM, and only a tiny bit of help from Spring Data.</span>
+            <span style="color: #7fffd4;">mapper</span> = <span style="color: #00ffff;">new</span> <span style="color: #63b8ff;">RowMapper</span>&lt;&gt;() {  <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Consequently, there are these RowMapper utility classes involved.</span>
+                    <span style="color: #00ffff;">public</span> Artist mapRow (<span style="color: #63b8ff;">ResultSet</span> <span style="color: #7fffd4;">rs</span>, <span style="color: #63b8ff;">int</span> <span style="color: #7fffd4;">rowNum</span>) <span style="color: #00ffff;">throws</span> <span style="color: #63b8ff;">SQLException</span> {
+                        <span style="color: #00ffff;">return</span>
+                        <span style="color: #00ffff;">new</span> <span style="color: #63b8ff;">Artist</span>(rs.getInt(<span style="color: #ffc1c1;">"ArtistId"</span>),
+                                   rs.getString(<span style="color: #ffc1c1;">"Name"</span>));}};
+        <span style="color: #8470ff; font-weight: bold;">@SchemaMapping</span> <span style="color: #63b8ff;">Artist</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span> (<span style="color: #63b8ff;">Album</span> <span style="color: #7fffd4;">album</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">@QueryMapping when we can, @SchemaMapping when we have to</span>
+            <span style="color: #00ffff;">return</span>                                   <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Here, we're getting an Artist for a given Album.</span>
+                jdbcClient
+                .sql(<span style="color: #ffc1c1;">"select * from \"Artist\" where \"ArtistId\" = ? limit 1"</span>) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Simple PreparedStatement wrapper</span>
+                .param(<span style="color: #8470ff; font-weight: bold;">album</span>.ArtistId()) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Fish out the relating field ArtistId and pass it into the PreparedStatement</span>
+                .query(mapper)           <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use our RowMapper to turn the JDBC Row into the desired model class object.</span>
+                .optional()              <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use optional to guard against null returns!</span>
+                .orElse(<span style="color: #8470ff; font-weight: bold;">null</span>);}
+        <span style="color: #8470ff; font-weight: bold;">@QueryMapping</span>(name = <span style="color: #ffc1c1;">"ArtistById"</span>) <span style="color: #63b8ff;">Artist</span> <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Another resolver, this time to get an Artist by its primary key identifier</span>
+            <span style="color: #00fa9a; font-weight: bold;">artistById</span> (<span style="color: #63b8ff;">ArgumentValue</span>&lt;<span style="color: #63b8ff;">Integer</span>&gt; <span style="color: #7fffd4;">id</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Note the annotation "name" parameter, when the GraphQL field name doesn't match exactly the method name</span>
+            <span style="color: #00ffff;">for</span> (<span style="color: #63b8ff;">Artist</span> <span style="color: #7fffd4;">a</span> : jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\" where \"ArtistId\" = ?"</span>).param(id.value()).query(mapper).list()) <span style="color: #00ffff;">return</span> a;
+            <span style="color: #00ffff;">return</span> <span style="color: #8470ff; font-weight: bold;">null</span>;}
+        <span style="color: #8470ff; font-weight: bold;">@QueryMapping</span>(name = <span style="color: #ffc1c1;">"Artist"</span>) <span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Yet another resolver, this time to get a List of Artists.</span>
+            <span style="color: #00fa9a; font-weight: bold;">artist</span> (<span style="color: #63b8ff;">ArgumentValue</span>&lt;<span style="color: #63b8ff;">Integer</span>&gt; <span style="color: #7fffd4;">limit</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Note the one "limit" parameter.  ArgumentValue&lt;T&gt; is the way you do this with GraphQL for Java.</span>
+            <span style="color: #63b8ff;">StatementSpec</span>
+                <span style="color: #7fffd4;">spec</span> = limit.isOmitted() ? <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Switch SQL on whether we did or did not get the limit parameter.</span>
+                jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\""</span>) :
+                jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\" limit ?"</span>).param(limit.value());
+            <span style="color: #00ffff;">return</span>              <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Run the SQL, map the results, return the List.</span>
+                spec
+                .query(mapper)
+                .list();}}
+...
+</pre>
+</div>
+
+<p>
+There's a lot to unpack here, so let's go through it step by step.
+First, I included the <code>package</code> and <code>import</code> statements in the example
+because all too often, tutorials and guides that you find online elide
+these details for brevity.  The problem with that, however, is that
+it's <i>not compilable or runnable code</i>.  You don't know where these
+symbols are coming from, what packages they're in, and what libraries
+they're coming from.  Any decent editor like IntelliJ, VSCode, or even
+Emacs will help sort this out for you <i>when you're writing code</i>, but
+you don't have that when reading a blog article.  Moreover, there
+<i>can</i> be name conflicts and ambiguities among symbols across
+libraries, so even with a smart editor it can leave the reader
+scratching their head.
+</p>
+
+<p>
+Next, please forgive the nested inner classes.  Feel free to explode
+your classes out into their own individual files as you see fit.  This
+is just how I do it, largely for pedagogical purposes like this one,
+to promote <a href="https://htmx.org/essays/locality-of-behaviour/">Locality of Behavior</a>, which is just a fancy way of saying,
+"let's not make the reader have to jump through a lot of hoops to
+understand the code."
+</p>
+
+<p>
+Now for the meat of the code.  Aside from niggling details like "How
+do I get a database connection", "How do I map data", etc., the
+patterns I want you to see through the forest of code are these:
+</p>
+
+<ol class="org-ol">
+<li>Every field in our schema file (<code>schema.graphqls</code>) which isn't a
+simple scalar field (e.g., <code>Int</code>, <code>String</code>, <code>Boolean</code>) probably
+will need a resolver/data-fetcher.</li>
+<li>Every resolver is implemented with a Java method.</li>
+<li>Every resolver method gets annotated with <code>@SchemaMapping</code>,
+<code>@QueryMapping</code>, or <code>@BatchMapping</code> (more on that <a href="#org3fe0824">later</a>).</li>
+<li>Use <code>@QueryMapping</code> when you can because it's simpler.  Use
+<code>@SchemaMapping</code> when you have to (your IDE should nag you).</li>
+<li>If you keep the Java method names in sync with the GraphQL field
+names, it's a little less code, but don't make a federal case out
+of it.  You can fix it with a <code>name</code> parameter in the annotations.</li>
+<li>Unless you do something different (such as adding filtering,
+sorting, and pagination), you probably will be fetching either a
+single entry by its primary key, or a list of entries.  You <i>won't</i>
+be fetching "child" entries; that's handled by the GraphQL
+libraries and the recursive divide-and-conquer way they process
+GraphQL operations.  <b>Note</b>: This has implications for performance,
+efficiency, and code complexity.</li>
+<li>The "something different" in the above item refers to richness that
+you want to add to your GraphQL API.  Want <code>limit</code> operations?
+Filter predicates?  Aggregations?  Supporting those cases will
+involve more <code>ArgumentValue&lt;&gt;</code> parameters, more <code>SchemaMapping</code>
+resolver methods, and more combinations thereof.  Deal with it.</li>
+<li>You <i>will</i> experience the urge to be clever, to create abstractions
+that dynamically respond to more and more complex combinations of
+parameters, filters, and other conditions.  Congratulations:
+you're on your way to building a <a href="#orga69fcad">general-purpose query engine</a>.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org3fe0824" class="outline-3">
+<h3 id="org3fe0824">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</h3>
+<div class="outline-text-3" id="text-org3fe0824">
+<p>
+You will quickly realize that this can lead to overly chatty
+interaction with the database, sending too many small SQL statements
+and impacting performance and availability.  This is the proverbial
+"N+1" problem.
+</p>
+
+<p>
+In a nutshell, the N+1 problem can be illustrated by our Chinook data
+model.  Suppose we have this GraphQL query.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-graphql">query {
+  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">10</span>) {
+    ArtistId
+    Album {
+      AlbumId
+      Track {
+        TrackId
+      }
+    }
+  }
+}
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>Get up to 10 <code>Artist</code> entry.</li>
+<li>For each <code>Artist</code>, get all of the related <code>Album</code> entries.</li>
+<li>For each <code>Album</code>, get all of the related <code>Track</code> entries.</li>
+<li>For each entry, just get its identifier field:  <code>ArtistId</code>,
+<code>AlbumId</code>, <code>TrackId</code>.</li>
+<li>This query is nested 2 levels below <code>Artist</code>.  Let \(~n=2~\).</li>
+<li><code>Album</code> is a <a href="https://spec.graphql.org/October2021/#sec-Wrapping-Types">List</a> wrapping type on <code>Artist</code>, as is <code>Track</code> is a
+<a href="https://spec.graphql.org/October2021/#sec-Wrapping-Types">List</a> wrapping type on <code>Album</code>.  Suppose the typical <a href="https://en.wikipedia.org/wiki/Cardinality">cardinality</a> is
+\(m\).</li>
+</ol>
+
+<p>
+How many SQL statements will typically be involved
+</p>
+
+<ol class="org-ol">
+<li>1 to fetch 10 <code>Artist</code> entries.</li>
+<li>\(10*m\) to fetch the <code>Album</code> entries.</li>
+<li>\(10*m^2\) to fetch the <code>Track</code> entries.</li>
+</ol>
+
+<p>
+In general, we can see that the number of queries scales as \(m^n\),
+which is exponential in \(n\).  Of course, observe that the amount of data
+retrieved also scales as \(m^n\).  In any case, on its face, this
+<i>seems</i> like an alarmingly inefficient way to go about fetching these
+data.  Is there another way?
+</p>
+
+<p>
+There is another way and it it is the standard answer within the
+GraphQL community for combating this N+1 problem: the data loader
+pattern (aka "batching").  This encompasses two ideas:
+</p>
+
+<ol class="org-ol">
+<li>Rather than fetch the related child entities (e.g. <code>Album</code>) for a
+<i>single</i> parent entity (e.g. <code>Artist</code>) using one identifier, fetch
+the related entities for <i>all</i> of the parent entities in one go,
+using a list of identifiers.</li>
+<li>Group the resulting child entities according to their respective
+parent entities (in code).</li>
+<li>While we're at it, we might as well cache the entities for the
+lifetime of executing the one GraphQL operation, in case a given
+entity appears in more than one place in the graph.</li>
+</ol>
+
+<p>
+Now, for some code.  Here's how this looks in our example.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #8470ff; font-weight: bold;">@BatchMapping</span>(field = <span style="color: #ffc1c1;">"Albums"</span>) <span style="color: #00ffff;">public</span> <span style="color: #63b8ff;">Map</span>&lt;<span style="color: #63b8ff;">Artist</span>, <span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Album</span>&gt;&gt; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Switch to @BatchMapping</span>
+    <span style="color: #00fa9a; font-weight: bold;">albumsForArtist</span> (<span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt; <span style="color: #7fffd4;">artists</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Take in a List of parents rather than a single parent</span>
+    <span style="color: #00ffff;">return</span>
+        jdbcClient
+        .sql(<span style="color: #ffc1c1;">"select * from \"Album\" where \"ArtistId\" in (:ids)"</span>) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use a SQL "in" predicate taking a list of identifiers</span>
+        .param(<span style="color: #ffc1c1;">"ids"</span>, artists.stream().map(x -&gt; <span style="color: #8470ff; font-weight: bold;">x</span>.ArtistId()).toList()) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Fish the list of identifiers out of the list of parent objects</span>
+        .query(mapper)  <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Can re-use our usual mapper</span>
+        .list()
+        .stream().collect(Collectors.groupingBy(x -&gt; artists.stream().collect(Collectors.groupingBy(Artist::ArtistId)).get(<span style="color: #8470ff; font-weight: bold;">x</span>.ArtistId()).getFirst()));
+    <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">^ Java idiom for grouping child Albums according to their parent Albums</span>
+}
+</pre>
+</div>
+
+<p>
+Like before, let's unpack this.  First, we switch from either the
+<code>@QueryMapping</code> or <code>@SchemaMapping</code> annotation to <code>@BatchMapping</code>, to
+signal to Spring for GraphQL that we want to use the data loader
+pattern.  Second, we switch from a single <code>Artist</code> parameter to a
+<code>List&lt;Artist&gt;</code> parameter.  Third, we somehow have to arrange the
+necessary SQL (with an <code>in</code> predicate in this case) and the
+corresponding parameter (a <code>List&lt;Integer&gt;</code> extracted from the
+<code>List&lt;Album&gt;</code> parameter).  Fourth, we have somehow have to arrange for
+the child entries (<code>Album</code> in this case) to get sorted to the right
+parent entries (<code>Album</code> in this case).  There are many ways to do it,
+and this is just one way.  The important point is that however it's
+done, <i>it has to be done in Java</i>.  One last thing: note the absence
+of the <code>limit</code> parameter.  Where did that go?  It turns out that
+<code>InputValue&lt;T&gt;</code> is <a href="https://github.com/spring-projects/spring-graphql/issues/232#issuecomment-1071044083">not supported</a> by Spring for GraphQL for
+<code>@BatchMapping</code>.  Oh well! 😒 In this case, it's no great loss because
+arguably these <code>limit</code> parameters make little sense.  How often does
+one really need a random subset of an artist's albums?  It's a more
+serious issue if we had filtering and sorting, however.  Filtering and
+sorting parameters are more justified, and if we had them we would
+somehow have to find a way to sneak them into the data loader pattern.
+Presumably, it can be done, but it will not be so easy as just
+slapping a <code>@BatchMapping</code> annotation onto the method and tinkering
+with <a href="https://www.oracle.com/technical-resources/articles/java/ma14-java-se-8-streams.html">Java streams</a>.
+</p>
+</div>
+
+<div id="outline-container-org7851a9a" class="outline-4">
+<h4 id="org7851a9a">Editorial Aside!</h4>
+<div class="outline-text-4" id="text-org7851a9a">
+<blockquote>
+<p>
+This raises an important point about the "N+1 problem" that is <i>never</i>
+addressed, and that neglect just serves to exaggerate the scale of the
+problem in a real world setting.  <i>If</i> we have limits and/or
+filtering, then we have a way of reducing the cardinality of related
+child entities below \(m\) (recall that we took \(m\) to be the typical
+cardinality of a child entity).  In a real world setting <i>limits or
+more precisely filtering are necessary for usability</i>.  GraphQL APIs
+are meant for humans, in that at the end of the day, the data are
+being painted onto a screen or in some other way presented to a human
+user who then has to absorb and process those data.  Humans have
+severe limits in perception, cognition, and memory, for the quantity
+of data we can process.  Only another machine (i.e. computers) could
+possibly process a large volume of data, but if you're extracting
+large volumes of data from one machine to another, then you are
+building an <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a> pipeline.  If you are using GraphQL for ETL then <i>you
+are doing it wrong</i> and should stop immediately!
+</p>
+
+<p>
+In any event, in a real world setting, with human users, both \(m\) and
+\(n\) will be very small.  The number of SQL queries <i>will not</i> scale as
+\(m^n\) to very large numbers.  Effectively, the N+1 problem will
+inflate the number of SQL queries not by an <i>arbitrarily large
+factor</i>, but by approximately a <i>constant factor</i>.  In a well-designed
+application, it probably will be a constant factor well below 100.
+Consider this when balancing the trade-offs in developer time, in
+complexity, and in hardware scaling, when confronting the N+1 problem.
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga69fcad" class="outline-2">
+<h2 id="orga69fcad">Is this the <i>Only</i> way to build a GraphQL API server?</h2>
+<div class="outline-text-2" id="text-orga69fcad">
+<p>
+We saw that the "easy way" of building GraphQL servers is the one
+typically offered in tutorials and "Getting Started" guides, and is
+over tiny unrealistic in-memory data models, without a database.
+</p>
+
+<p>
+We saw that the "real way" of building GraphQL servers (in Java)
+described in some detail above, regardless of library or framework,
+involves:
+</p>
+
+<ul class="org-ul">
+<li>writing schema file entries, possibly for every table</li>
+<li>writing Java model classes, possibly for every table</li>
+<li>writing Java resolver methods, possibly for every field in every table</li>
+<li>eventually writing code to solve arbitrarily complex compositions of
+input parameters</li>
+<li>writing code to budget SQL operations efficiently</li>
+</ul>
+
+<p>
+We also observe that GraphQL lends itself to a "recursive
+<a href="https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm">divide-and-conquer</a> with an accumulator approach": a GraphQL query is
+recursively divided and sub-divided along type and field boundaries
+into a "graph", internal nodes in the graph are processed individually
+by resolvers, but the data are passed up the graph <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow</a> style,
+accumulating into a JSON envelope that is returned to the user.  The
+GraphQL libraries are decomposing the incoming queries into something
+like an Abstract Syntax Tree (<a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>), firing SQL statements for all the
+internal nodes (ignoring the data loader pattern for a moment), then
+re-composing the data.  And, we are its willing accomplices!
+</p>
+
+<p>
+We <i>also</i> observe that building GraphQL servers according to the above
+recipes leads to other outcomes:
+</p>
+
+<ul class="org-ul">
+<li>lots of repetition</li>
+<li>lots of boilerplate code</li>
+<li>bespoke servers</li>
+<li>that are tied to a particular data model</li>
+</ul>
+
+<p>
+Build a GraphQL server more than once according to the above recipes
+and you will make these observations.  Making these observations, you
+will naturally feel a powerful urge to build more sophisticated
+abstractions that reduce the repetition, reduce the boilerplate,
+generalize the servers, and decouple them from any particular data
+model.  This is what I call the "natural way" of building a GraphQL
+API, as it's a natural evolution from the trivial "easy way" of
+tutorials and "Getting Started" guides, and from the cumbersome "real
+way" of resolvers and even data loaders.
+</p>
+
+<p>
+Building a GraphQL server with a network of nested resolvers offers
+some flexibility and dynamism, and requires a lot of code.  Adding in
+more flexibility and dynamism with limits, pagination, filtering, and
+sorting, requires more code still. And while it may be dynamic, it
+will also be very chatty with the database, as we saw.  Reducing the
+chattiness necessitates composing the many fragmentary SQL statements
+into fewer SQL statements which individually do more work.  That's
+what the data loader pattern does: it reduces the number of SQL
+statements from "a few tens" to "less than 10 but more than 1".  In
+practice, that may not be a huge win and it comes at the cost of
+developer time and lost dynamism, but it <i>is</i> a step down the path of
+generating fewer, more sophisticated queries.  The terminus of that
+path is "1": the optimal number of SQL statements (ignoring caching)
+is 1.  Generate one giant SQL statement that does <i>all</i> the work of
+fetching the data, teach it to generate JSON while you're at it, and
+this is the best you will ever do with a GraphQL server (for a
+relational database).  It will be hard work, but you can take solace
+that having done it once, it need not ever be done again if you do it
+right, by introspecting the database to <i>generate</i> the schema.
+</p>
+
+<p>
+Do <i>that</i>, and what you will build won't be so much a "GraphQL API
+server" as a "GraphQL to SQL compiler."  If that gives you pause,
+consider that this is what you were already doing all along, anyway.
+<del>The easy way</del>, the real way, the natural way:  they're <del>all</del> both
+necessarily GraphQL to SQL compilers!  They just lie along a spectrum
+of versatility, flexibility, and efficiency.  Acknowledge that
+building a GraphQL to SQL compiler is what you were doing all along,
+embrace that fact, and lean into it, and you may never need to build
+another GraphQL server again.  What could be better than that?
+</p>
+
+<p>
+One thing that could be better than building your last GraphQL server,
+or your only GraphQL server, is never building a GraphQL server in the
+first place.  After all, your goal wasn't to <i>build</i> a GraphQL API,
+but rather to <i>have</i> a GraphQL API.  The easiest way to <i>have</i> a
+GraphQL API is just to go get one.  Get one for free if you can.  Buy
+one if the needs justify it.  This is the <a href="https://en.wikipedia.org/wiki/Boss_(video_games)#Final_boss">final boss</a> on the journey of
+GraphQL maturity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd79f7e5" class="outline-2">
+<h2 id="orgd79f7e5">How to choose "Buy" over "Buy"</h2>
+<div class="outline-text-2" id="text-orgd79f7e5">
+<p>
+You don't <i>literally</i> need to <i>buy</i> a GraphQL server.  You can, and
+there can be good reasons to do so in some settings, but there are
+other options.  What I really mean to address is the decision over
+whether or not to <i>build</i> a GraphQL server.  In some cases, this may
+be warranted, but in most cases <i>it is not</i>.
+</p>
+
+<p>
+It <i>does</i> depend on the data sources involved.  If there are
+<a href="https://www.postgresql.org/">PostgreSQL</a> databases or <a href="https://wiki.postgresql.org/wiki/PostgreSQL_derived_databases">PostgreSQL-ish</a> databases for which we want
+APIs, then we are blessed with many fine choices.
+</p>
+
+<p>
+First, in this case it pays to consider whether or not we truly need a
+<i>GraphQL</i> API.  How do we decide if we need a GraphQL API?  Of course,
+there's no right answer, but the following considerations are useful
+guide.
+</p>
+
+<dl class="org-dl">
+<dt>Are your data consumers humans or machines?</dt><dd>If they're machines
+<i>you DO NOT need GraphQL</i>.</dd>
+<dt>Similarly, are you serving <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a> use cases?</dt><dd>If you're performing ETL
+<i>you DO NOT need GraphQL</i>.</dd>
+<dt>Do you have primarily <a href="https://en.wikipedia.org/wiki/Online_analytical_processing">analytical</a> workloads?</dt><dd>If you're serving
+analytical workloads <i>you DO NOT need GraphQL</i>.</dd>
+<dt>Do you have a public, semi-public, or private API?</dt><dd>Well, it depends.
+<dl class="org-dl">
+<dt>Public</dt><dd><i>You MAY have GraphQL</i>.  GraphQL is a good choice for
+fully public freely-available APIs because of its flexibility,
+efficiency, and especially its discoverability.  You <i>will</i> have
+to take steps to secure the API against <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">DoS</a> attacks (rate
+limits, time limits, query complexity limits, throttling) but
+probably not against exfiltration or tampering.  You probably won't
+need query white-listing and you probably won't want to turn off
+GraphQL introspection queries.  Tampering probably won't be an
+issue as typically these are read-only APIs.  In any case, when
+you cannot anticipate the range of queries, GraphQL is a good
+choice.</dd>
+<dt>Semi-public</dt><dd><i>You MAY have GraphQL</i>.  GraphQL is a good choice
+for semi-public APIs, such as those secured by credentials,
+subject to authorization, and open only to select customers and
+partners, but still operating over the open internet.
+Denial-of-Service (DoS) attacks are still a threat, though less
+so, but now exfiltration and especially tampering are bigger
+concerns.  Like with a public API, if you cannot anticipate the
+full range of queries and other operations, GraphQL is a good
+choice.</dd>
+<dt>Private</dt><dd><i>You MAY NOT NEED GraphQL</i>.  This is the most
+interesting case to me.  In this setting, the clients are
+typically developed <i>in-house</i>.  A firm's "back-end" teams supply
+APIs that are used by the same firm's "front-end" teams.  API
+calls may still go over the open internet, as with a mobile app,
+but they're typically "baked-in" with the app.  The range of API
+calls is <i>finite</i> and <i>known in advance</i>.  In this case, there's
+little need for GraphQL discoverability and even flexibility, at
+least in the production environment.  You can and <i>should</i> disable
+introspection queries, and you <i>should</i> consider white-listing.
+At this point, however, it throws into question the <i>value</i> of a
+GraphQL API.  If you know all of the operations in advance <i>you
+MAY just use REST!</i></dd>
+</dl></dd>
+</dl>
+
+<p>
+With those considerations in mind, we return to the subject of
+<i>acquiring</i> an API server over building one, and in that case which
+one to acquire.  If you don't <i>need</i> a GraphQL API&#x2013;perhaps because
+you have private API needs, you <i>may</i> stick with REST.  If you have
+PostgreSQL or PostgreSQL-ish databases, <a href="https://postgrest.org/">PostgREST</a> is a very good
+open-source choice.
+</p>
+
+<p>
+If you <i>do</i> need a GraphQL API, and you are on PostgreSQL, then
+<a href="https://www.graphile.org/postgraphile/">PostGraphile</a> is another very good open-source choice.
+</p>
+
+<p>
+If you add other databases to the mix, however, the choices narrow
+considerably.  <a href="https://hasura.io/opensource/">Hasura Community Edition</a> is a good choice, but
+unfortunately that Open-Source version only works with PostgreSQL.  If
+you are not constrained by free tools, however, <a href="https://hasura.io/enterprise/">Hasura Enterprise</a>
+expands support to include Microsoft SQL Server, MySQL, Oracle, and a
+host of other databases.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5470bab" class="outline-2">
+<h2 id="org5470bab">Wrapping up</h2>
+<div class="outline-text-2" id="text-org5470bab">
+<p>
+What I'd like you to take away from this article are these things.
+</p>
+
+<ul class="org-ul">
+<li>GraphQL is a general-purpose query language, like SQL.</li>
+<li>GraphQL is less powerful than SQL.</li>
+<li>GraphQL is simpler than SQL.</li>
+<li>But, that simplicity and diminution of power make it good for web APIs.</li>
+<li>GraphQL is meant for humans.</li>
+<li>Therefore, don't use GraphQL for ETL.</li>
+<li>GraphQL is meant for transactional workloads.</li>
+<li>Therefore, don't use GraphQL for analytical or OLAP.</li>
+<li>GraphQL is useful for public and semi-public APIs.</li>
+<li>Consider treating GraphQL just as a <i>development</i> tool for private APIs.</li>
+<li>But then for private APIs, you might as well just substitute SQL for development.</li>
+<li>If you do go with GraphQL, seriously consider <i>acquiring</i> a GraphQL
+server rather than building one.</li>
+<li>To acquire a GraphQL server, you're on firmest ground if you're
+using PostgreSQL.</li>
+<li>If you go with building a GraphQL server and you're using Java, this
+guide is a good start.</li>
+<li>For that case, I go well beyond the usual tutorials and "Getting
+Started" guides to get you started building a real server in Java.</li>
+<li>However, strap yourself in.  It's a lot of work.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+
+<footer>
+  <p>&copy; 2014-2024 David A. Ventimiglia
+    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Some rights
+      reserved.</a></p>
+  <p>Powered by <a href="https://gnu.org">GNU/Linux</a></p>
+</footer>
+</div>
+</body>
+</html>
