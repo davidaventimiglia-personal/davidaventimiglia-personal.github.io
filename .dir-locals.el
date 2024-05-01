@@ -18,7 +18,7 @@
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
-			 :sitemap-title "David A. Ventimiglia"
+			 :sitemap-title "Contents"
 			 :html-preamble t
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
