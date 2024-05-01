@@ -14,7 +14,7 @@
 			 :exclude "docs"
 			 :recursive t)
 			("orgfiles"
-			 :exclude "docs"
+			 :exclude "docs\\|drafts"
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
@@ -24,7 +24,6 @@
 			 :html-link-up "/index.html"
 			 :html-home/up-format "
 <nav>
- <a accesskey=\"h\" href=\"%s\"> UP </a>
  <a accesskey=\"H\" href=\"%s\"> HOME </a>
 </nav>
 "
