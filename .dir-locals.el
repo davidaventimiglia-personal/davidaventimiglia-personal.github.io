@@ -67,13 +67,13 @@ body {
 header h1 {
   font-size: xx-large;
 }
-ul {
+div.content ul {
   list-style-type: none;
 }
-ul li {
+div.content ul li {
   font-size: x-large;
 }
-ul li ul li {
+div.content ul li ul li {
   font-size: large;
 }
 .subtitle {

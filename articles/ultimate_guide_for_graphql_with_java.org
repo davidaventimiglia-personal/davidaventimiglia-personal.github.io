@@ -1053,6 +1053,23 @@ What I'd like you to take away from this article are these things.
 - For that case, I go well beyond the usual tutorials and "Getting
   Started" guides to get you started building a real server in Java.
 - However, strap yourself in.  It's a lot of work.
+- You will write a lot of boilerplate, in schema files, model files,
+  controller files, and maybe ORM mapping files.
+- Consequently, resist lectures about "not exposing your data model"
+  because doing anything else for a large data model is a ton of work.
+- /Probably/ resist an pressure internal or external to use an ORM.
+  It probably won't help and will only hurt.
+- Adding expressivity to your GraphQL API--the /raison d'etre of
+  GraphQL/--requires a lot of work.
+- /Nominally/, that expressivivity also comes at the cost of
+  efficiency and performance.
+- That lost efficiency and performance is known as the "N+1 problem."
+- However, the N+1 problem is probably way overblown for APIs that
+  serve humans (see above).
+- If you're starting a GraphQL server in Java, and you're not using
+  Spring Boot, choose graphql-java and stop there.
+- If you're starting a GraphQL server in Java, and you ARE using
+  Spring Boot, prefer Spring for GraphQL over Netflix DGS.
 
 #  LocalWords:  runtime Initializr QueryMapping YugaByte InvoiceLine
 #  LocalWords:  MediaType PlaylistTrack ArtistById AlbumById AlbumId

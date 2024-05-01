@@ -26,13 +26,13 @@ body {
 header h1 {
   font-size: xx-large;
 }
-ul {
+div.content ul {
   list-style-type: none;
 }
-ul li {
+div.content ul li {
   font-size: x-large;
 }
-ul li ul li {
+div.content ul li ul li {
   font-size: large;
 }
 .subtitle {
@@ -1386,6 +1386,23 @@ guide is a good start.</li>
 <li>For that case, I go well beyond the usual tutorials and "Getting
 Started" guides to get you started building a real server in Java.</li>
 <li>However, strap yourself in.  It's a lot of work.</li>
+<li>You will write a lot of boilerplate, in schema files, model files,
+controller files, and maybe ORM mapping files.</li>
+<li>Consequently, resist lectures about "not exposing your data model"
+because doing anything else for a large data model is a ton of work.</li>
+<li><i>Probably</i> resist an pressure internal or external to use an ORM.
+It probably won't help and will only hurt.</li>
+<li>Adding expressivity to your GraphQL API&#x2013;the <i>raison d'etre of
+GraphQL</i>&#x2013;requires a lot of work.</li>
+<li><i>Nominally</i>, that expressivivity also comes at the cost of
+efficiency and performance.</li>
+<li>That lost efficiency and performance is known as the "N+1 problem."</li>
+<li>However, the N+1 problem is probably way overblown for APIs that
+serve humans (see above).</li>
+<li>If you're starting a GraphQL server in Java, and you're not using
+Spring Boot, choose graphql-java and stop there.</li>
+<li>If you're starting a GraphQL server in Java, and you ARE using
+Spring Boot, prefer Spring for GraphQL over Netflix DGS.</li>
 </ul>
 </div>
 </div>
