@@ -84,6 +84,7 @@ details[open] {
 <div id="content" class="content">
 <header>
 <h1 class="title">GraphQL and Java</h1>
+<p class="subtitle" role="doc-subtitle">The Agony and the Ecstasy</p>
 </header>
 <div id="outline-container-org0ea93bd" class="outline-2">
 <h2 id="org0ea93bd">What is GraphQL and why do people want it?</h2>
@@ -585,31 +586,6 @@ way using <code>psql</code>.
 </pre>
 </div>
 
-<pre class="example" id="orgc9ee515">
-              List of relations
- Schema |      Name       | Type  |  Owner   
---------+-----------------+-------+----------
- public | Album           | table | postgres
- public | Artist          | table | postgres
- public | Customer        | table | postgres
- public | Employee        | table | postgres
- public | Genre           | table | postgres
- public | Invoice         | table | postgres
- public | InvoiceLine     | table | postgres
- public | MediaType       | table | postgres
- public | Playlist        | table | postgres
- public | PlaylistTrack   | table | postgres
- public | Track           | table | postgres
- public | account         | table | postgres
- public | account_summary | view  | postgres
- public | order           | table | postgres
- public | order_detail    | table | postgres
- public | product         | table | postgres
- public | region          | table | postgres
-(17 rows)
-
-</pre>
-
 <p>
 You should at least see Chinook-specific tables like <code>Album</code>,
 <code>Artist</code>, and <code>Track</code>.
@@ -1091,7 +1067,7 @@ with <a href="https://www.oracle.com/technical-resources/articles/java/ma14-java
 <div id="outline-container-org2bdb95a" class="outline-4">
 <h4 id="org2bdb95a">Editorial Aside!</h4>
 <div class="outline-text-4" id="text-org2bdb95a">
-<details id="org032d78e">
+<details id="orgcd9346b">
 <p>
 This raises an important point about the "N+1 problem" that is <i>never</i>
 addressed, and that neglect just serves to exaggerate the scale of the
@@ -1364,7 +1340,7 @@ because doing anything else for a large data model is a ton of work.</li>
 It probably won't help and will only hurt.</li>
 <li>Adding expressivity to your GraphQL API&#x2013;the <i>raison d'etre of
 GraphQL</i>&#x2013;requires a lot of work.</li>
-<li><i>Nominally</i>, that expressivivity also comes at the cost of
+<li><i>Nominally</i>, that expressivity also comes at the cost of
 efficiency and performance.</li>
 <li>That lost efficiency and performance is known as the "N+1 problem."</li>
 <li>However, the N+1 problem is probably way overblown for APIs that

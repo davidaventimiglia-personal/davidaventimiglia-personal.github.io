@@ -8,7 +8,7 @@
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:nil title:t toc:nil todo:t |:t
 #+title: GraphQL and Java
-#+subtitle: 
+#+subtitle: The Agony and the Ecstasy
 #+date: <2024-04-30 Tue>
 #+author: David A. Ventimiglia
 #+email: davidaventimiglia@gmail.com
@@ -1062,7 +1062,7 @@ What I'd like you to take away from this article are these things.
   It probably won't help and will only hurt.
 - Adding expressivity to your GraphQL API--the /raison d'etre of
   GraphQL/--requires a lot of work.
-- /Nominally/, that expressivivity also comes at the cost of
+- /Nominally/, that expressivity also comes at the cost of
   efficiency and performance.
 - That lost efficiency and performance is known as the "N+1 problem."
 - However, the N+1 problem is probably way overblown for APIs that
