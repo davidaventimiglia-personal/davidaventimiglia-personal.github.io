@@ -1,0 +1,522 @@
+# -*- mode: org; -*-
+
+#+STARTUP: indent
+
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:nil
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:nil todo:t |:t
+#+title: GraphQL is Dead!
+#+subtitle: Long live GraphQL!
+#+date: <2024-06-11 Tue>
+#+author: David A. Ventimiglia
+#+email: davidaventimiglia@gmail.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.3 (Org mode 9.6.15)
+#+cite_export:
+
+* Birth
+
+GraphQL's [[https://youtu.be/783ccP__No8?si=3dbou_uhzBniMzz0][origin story]] is an old one: Developers at Facebook created
+GraphQL in 2012 as part of the social media giant's shift from web to
+mobile.  They /had/ a high-performance object-oriented data platform
+as a foundation.  They /needed/ a flexible and expressive web API on
+top of it to satisfy the needs of nimble mobile developers iterating
+rapidly on an inherently dynamic, graph-oriented application.  They
+revamped and open sourced it in 2015 to great fanfare, with the
+Facebook marketing might behind it.  It got a standard, it got a
+standards body, and it got a community.  Along the way, GraphQL's
+value proposition settled on a few simple promises.
+
+- Ask for what you need, get exactly that.
+- Describe what's possible with a type system.
+- Move faster with powerful developer tools.
+- Evolve your API without versions.
+- Bring your own data and code.
+
+And, it [[https://hasura.io/resources/graphql-handbook-2024][delivered]]!  GraphQL is a general-purpose query language,
+giving API consumers the ability to ask in a single request for all
+the data they need, and nothing more.  It gave API producers the
+ability to say in a single response exactly what data they offer and
+how.  It gave front-end developers the ability to iterate
+independently of back-end developers.  It gave back-end developers the
+ability to evolve independently of front-end developers.  It gave
+middle-ware developers the ability to help both front-end and back-end
+developers without needing to consult with either.  And, it gave
+architects and data governors the ability to fulfill their dreams of
+harmonic convergence.  GraphQL had its Technology Trigger and was on
+its way up.
+
+* Life
+
+GraphQL may have crested the Peak of Inflated Expectations since then,
+but it's reached a broad flat [[https://trends.google.com/trends/explore?date=all&geo=US&q=%2Fg%2F11cn3w0w9t,GraphQL&hl=en][plateau]] where the weather is mild and
+the terrain is gentle.  There have been laudable successes and no
+overt failures.  Needs were met, products were created, wars were
+fought, and empires were founded.
+
+When plateaus inevitably come to an end, however, pioneers have to
+plan a difficult descent and journey beyond.  The bloom is off the
+GraphQL rose and not all is a bed of roses.  Discontentment rises and
+disillusionment beckons, and the tools and tricks that got us here may
+not work for what lies ahead.
+
+* Death
+
+Rumors of GraphQL's demise are greatly exaggerated.  GraphQL is far
+from extinct, but what environmental conditions threaten its path to
+flourishing?  An emerging [[https://bessey.dev/blog/2024/05/24/why-im-over-graphql/][consensus]] groups the various grumblings
+about GraphQL into three main complaints.
+
+- Security :: GraphQL exposes public APIs to exfiltration, tampering,
+  and denial-of-service from bad actors.
+- Performance :: GraphQL exposes all APIs to bad performance even from
+  friendly actors.
+- Complexity :: GraphQL exposes developers--especially back-end
+  developers--to enormous complexity.
+
+In short, if GraphQL APIs are a dream to /use/, they're a nightmare to
+/create/, especially if security and performance needs are to be met.
+GraphQL's critics have valid points.  Addressing those points and
+leading it out of a dark wood may require rethinking GraphQL from the
+ground up.
+
+* Rebirth
+
+What is GraphQL and how is it implemented?  The GraphQL Foundation
+answers those questions in this way:
+
+#+begin_quote
+GraphQL is a query language for your API...[and] is created by
+...providing functions for each field on each type.
+#+end_quote
+
+It's time to rethink both parts of that answer.
+
+** Rethinking What GraphQL Is
+
+GraphQL is not /necessarily/ a "query language for your API".  Public
+and partner APIs don't control or even know their clients, can't
+control or even anticipate usage patterns, and therefore would benefit
+from a flexible query language, and yet there are [[https://xuorig.medium.com/why-we-dont-see-many-public-graphql-apis-ad972bcb201e][few]] public and
+partner GraphQL APIs.  Anecdotal evidence suggests that the security
+criticisms of GraphQL listed above constitute the main barrier to
+GraphQL adoption for public APIs.  While there do exist GraphQL
+[[https://hasura.io/security/][security measures]] that can blunt attacks, we should remember that the
+market for public APIs may be small and may be getting smaller as
+enthusiasm for public and even partner APIs [[https://youtu.be/BxV14h0kFs0?si=y2a4uhr9Z9X95dXm][wanes]].  That leaves
+private APIs.  Yet private APIs typically /own/ their clients, /know/
+their usage patterns, and don't /need/ a flexible query language.  So,
+what then even /is/ GraphQL in this setting?
+
+GraphQL is a /development tool/.  An emerging rebuttal to the
+criticisms of GraphQL listed above is to use persisted queries,
+[[https://hasura.io/docs/latest/security/allow-list/][allow-lists]], and [[https://hasura.io/docs/latest/restified/overview/][RESTified-endpoints]].  That blunts the security
+criticism against GraphQL APIs largely by /removing/ GraphQL APIs and
+substituting them with good old-fashioned REST.  GraphQL becomes a way
+to /define/ API endpoints.  It's an alternative to defining API
+endpoints in code, but code is a development tool, so then what /is/
+GraphQL but a development tool?  If GraphQL is a development tool,
+then what are its benefits (and its drawbacks)?
+
+The benefits of GraphQL over code as a development tool for defining
+API endpoints accrue to its original strengths: flexibility,
+efficiency, and discoverability.  GraphQL is a /lingua-franca/, a
+[[https://martinfowler.com/bliki/UbiquitousLanguage.html][ubiquitous-language]] to mediate conversations among front-end
+developers, back-end developers, data modelers, and product owners,
+but it's also an /implementation/ language for the outcome of those
+conversations.  It covers 80% of what code is being asked to do when
+building APIs--data marshaling--better
+than code can do it.
+
+The drawbacks of GraphQL over code as a development tool for defining
+API endpoints lie in that remaining 20%:  "business-logic".  API
+server code is a convenient if far from ideal arena for implementing
+business logic.  Business logic--unlike data marshaling--really does
+benefit from the power of code, and if you're using code to write your
+API server, you might as well just use the same code to implement the
+business logic right in the API server.  Never mind that this mixes
+concerns and leads to tight coupling, it at least has the virtue of
+being obvious.  But, these drawbacks can be overcome by building a
+GraphQL server that has no intrinsic business logic, but instead offers
+channels for injecting business logic:
+
+- [[https://hasura.io/docs/latest/schema/postgres/input-validations/][input-validation]] :: synchronous RPC into the language of your choice
+  for the simple but common case of validating input data
+- [[https://hasura.io/docs/latest/actions/overview/][remote-actions]] :: synchronous RPC into the language of your choice
+  for the less simple but less common general business-logic case
+- [[https://hasura.io/docs/latest/event-triggers/overview/][event-triggers]] :: asynchronous event processor in the language of
+  your choice for the common case of exhibiting side-effects
+- [[https://hasura.io/docs/latest/auth/authorization/index/][authorization]] :: elegant strategy for the common but thorny problem
+  of access control
+
+Not only do these features equal the "obvious" strategy for
+business-logic of writing it right into the server code, they exceed
+it by freeing it from the language of the server and by separating it
+from the concerns of the server.
+
+Rethinking what GraphQL is by thinking of it as a development tool
+frees us from a major impediment to GraphQL's progress into the
+future.  The other major impediment is removed as we will see by
+rethinking how GraphQL is implemented.
+
+#+begin_src restclient :results output :exports none
+  POST https://renewed-manatee-36.hasura.app/v1/metadata
+  Content-Type: application/json
+  x-hasura-role: admin
+  x-hasura-admin-secret: Ly2HR7mugO2Xy3h6SQC9BZl97yd5kC7ixQsiDfZhKhM9ZahQU4V2ubh3cPHVgSiX
+
+  {
+      "type" : "drop_query_collection",
+      "args": {
+          "collection": "rest_endpoints",
+          "cascade": false
+      }
+  }
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "message": "success"
+}
+// POST https://renewed-manatee-36.hasura.app/v1/metadata
+// HTTP/1.1 200 OK
+// Date: Tue, 18 Jun 2024 16:36:34 GMT
+// Content-Type: application/json; charset=utf-8
+// Content-Length: 21
+// Connection: keep-alive
+// x-request-id: cfdbb6224a76a5969fe9102250a1bfaa
+// CF-Cache-Status: DYNAMIC
+// Content-Security-Policy: upgrade-insecure-requests
+// Referrer-Policy: strict-origin-when-cross-origin
+// Strict-Transport-Security: max-age=31536000; includeSubDomains
+// X-Content-Type-Options: nosniff
+// X-Frame-Options: SAMEORIGIN
+// X-XSS-Protection: 0
+// Server: cloudflare
+// CF-RAY: 895cb2f50817969a-SJC
+// Request duration: 0.108242s
+#+END_SRC
+
+#+begin_src restclient :results output :exports none
+  POST https://renewed-manatee-36.hasura.app/v1/metadata
+  Content-Type: application/json
+  x-hasura-role: admin
+  x-hasura-admin-secret: Ly2HR7mugO2Xy3h6SQC9BZl97yd5kC7ixQsiDfZhKhM9ZahQU4V2ubh3cPHVgSiX
+
+  {
+      "type" : "create_query_collection",
+        "args": {
+            "name": "rest_endpoints",
+            "comment": "RESTified Endpoints",
+            "definition": {
+                "queries": [
+                    {
+                        "name": "get_one_post",
+                        "query": "query GetOnePost{post(limit:1){id content comments(limit:1){id content replies(limit:1){id content}}}}"
+                    }
+                ]
+            }
+        }
+  }
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "message": "success"
+}
+// POST https://renewed-manatee-36.hasura.app/v1/metadata
+// HTTP/1.1 200 OK
+// Date: Tue, 18 Jun 2024 16:36:59 GMT
+// Content-Type: application/json; charset=utf-8
+// Content-Length: 21
+// Connection: keep-alive
+// x-request-id: 5f3e4acc6b6d50ffa64ba1c244e80562
+// CF-Cache-Status: DYNAMIC
+// Content-Security-Policy: upgrade-insecure-requests
+// Referrer-Policy: strict-origin-when-cross-origin
+// Strict-Transport-Security: max-age=31536000; includeSubDomains
+// X-Content-Type-Options: nosniff
+// X-Frame-Options: SAMEORIGIN
+// X-XSS-Protection: 0
+// Server: cloudflare
+// CF-RAY: 895cb3908823969a-SJC
+// Request duration: 0.066812s
+#+END_SRC
+
+#+begin_src restclient :results output :exports none
+  POST https://renewed-manatee-36.hasura.app/v1/metadata
+  Content-Type: application/json
+  x-hasura-role: admin
+  x-hasura-admin-secret: Ly2HR7mugO2Xy3h6SQC9BZl97yd5kC7ixQsiDfZhKhM9ZahQU4V2ubh3cPHVgSiX
+
+  {
+      "type": "drop_rest_endpoint",
+      "args": {
+          "name": "get-one-post"
+      }
+  }
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "error": "endpoint with name: get-one-post does not exist",
+  "path": "$.args",
+  "code": "not-exists"
+}
+// POST https://renewed-manatee-36.hasura.app/v1/metadata
+// HTTP/1.1 400 Bad Request
+// Date: Tue, 18 Jun 2024 16:37:14 GMT
+// Content-Type: application/json; charset=utf-8
+// Content-Length: 95
+// Connection: keep-alive
+// CF-Cache-Status: DYNAMIC
+// Content-Security-Policy: upgrade-insecure-requests
+// Referrer-Policy: strict-origin-when-cross-origin
+// Strict-Transport-Security: max-age=31536000; includeSubDomains
+// X-Content-Type-Options: nosniff
+// X-Frame-Options: SAMEORIGIN
+// X-XSS-Protection: 0
+// Server: cloudflare
+// CF-RAY: 895cb3edcf98969a-SJC
+// Request duration: 0.040629s
+#+END_SRC
+
+#+begin_src restclient :results output :exports none
+  POST https://renewed-manatee-36.hasura.app/v1/metadata
+  Content-Type: application/json
+  x-hasura-role: admin
+  x-hasura-admin-secret: Ly2HR7mugO2Xy3h6SQC9BZl97yd5kC7ixQsiDfZhKhM9ZahQU4V2ubh3cPHVgSiX
+
+  {
+      "type": "create_rest_endpoint",
+      "args": {
+          "name": "get-one-post",
+          "url": "getonepost",
+          "methods": ["GET"],
+          "definition": {
+              "query": {
+                "query_name": "get_one_post",
+                "collection_name": "rest_endpoints"
+              }
+          },
+          "comment": "Get one post, comment, and reply."
+      }
+  }
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "message": "success"
+}
+// POST https://renewed-manatee-36.hasura.app/v1/metadata
+// HTTP/1.1 200 OK
+// Date: Tue, 18 Jun 2024 16:37:55 GMT
+// Content-Type: application/json; charset=utf-8
+// Content-Length: 21
+// Connection: keep-alive
+// x-request-id: 13eabf5f183e569418d093eff14f0839
+// CF-Cache-Status: DYNAMIC
+// Content-Security-Policy: upgrade-insecure-requests
+// Referrer-Policy: strict-origin-when-cross-origin
+// Strict-Transport-Security: max-age=31536000; includeSubDomains
+// X-Content-Type-Options: nosniff
+// X-Frame-Options: SAMEORIGIN
+// X-XSS-Protection: 0
+// Server: cloudflare
+// CF-RAY: 895cb4ed7e82969a-SJC
+// Request duration: 0.059412s
+#+END_SRC
+
+#+caption: GraphQL as a Development Tool: from Hasura GraphQL definition...
+#+begin_src graphql :exports code
+  query GetOnePost {
+    post(limit: 1) {
+      id
+      content
+      comments(limit: 1) {
+        id
+        content
+        replies(limit: 1) {
+          id
+          content
+        }
+      }
+    }
+  }
+#+end_src
+
+#+caption: GraphQL as a Development Tool:  ...to Hasura REST API!
+#+begin_src restclient :results output :exports both
+  GET https://renewed-manatee-36.hasura.app/api/rest/getonepost
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "post": [
+    {
+      "id": 1,
+      "content": "This is my first post!",
+      "comments": [
+        {
+          "id": 1,
+          "content": "I love your post! Can't wait for more.",
+          "replies": [
+            {
+              "id": 1,
+              "content": "Thank you! I'm glad you enjoyed it."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+#+END_SRC
+
+** Rethinking How GraphQL Is Implemented
+
+GraphQL need not /necessarily/ be implemented by "providing functions
+for each field on each type."  Those functions are typically called
+resolvers.  They are units of composition in how servers typically
+execute GraphQL operations.  Their granularity and composability
+fulfill the promise of GraphQL flexibility.  Yet they also are to
+blame for the performance criticisms of GraphQL listed above.  Not all
+servers GraphQL or otherwise are over SQL databases, but many are, and
+if we use SQL databases as a representative case, the granularity and
+composability of resolvers also gives rise to the N+1 Problem: a query
+graph whose node number grows exponentially with every level leads to
+a call graph whose resolver function calls grow exponentially, which
+leads to a batch of SQL statements that grows exponentially.  Never
+mind that the retrieved data volume also grows exponentially with
+every level, which imposes a natural limit on how far this can go,
+this is still a problem.  And yet the leading solution to this
+problem--the [[https://github.com/graphql/dataloader][data-loader]] pattern--only diminishes the problem without
+banishing it, sacrifices much of GraphQL's flexibility, and
+contributes to the complexity which is the third criticism listed
+above.  Confronted with this Gordian knot, it's worth asking another
+foundational question.  Can we implement GraphQL in some /other/ way,
+and if so, how?
+
+GraphQL can be implemented with a /[[https://hasura.io/blog/compile-dont-resolve-designing-a-feature-rich-high-performance-domain-driven-graphql-api][compiler]]/.  GraphQL is a
+general-purpose query language which often (if not always) is over
+data that ultimately comes from database engines with their own
+general-purpose query languages.  If those engines happen to process
+their queries with a network of operators that bear more than a
+passing resemblance to resolvers, that's their business.  All /we/
+have to do is compile (or translate, or transpile) our query into
+theirs and let them handle the rest.  [[https://exograph.dev/blog/graphql-better-with-exograph#data-fetching-and-the-n1-problem][Some]] [[https://grafast.org/grafast/#plan-resolvers][people]] in the GraphQL
+community are finally getting around to this idea.  [[https://www.graphile.org/][Some]] [[https://hasura.io/][of us]] have
+been here all along.
+
+The benefits of a compiler approach to GraphQL are many.  It
+/eliminates/ the N+1 problem.  It paves the way for a powerful
+strategy for implementing [[https://hasura.io/docs/latest/auth/authorization/index/][authorization]] as discussed above.  And, by
+generating the GraphQL schema from the database schema, it eliminates
+tedious repetitive boilerplate data modeling that serves high-minded
+ideals that are impractical [[https://letmegooglethat.com/?q=database+with+thousands+of+tables][at scale]].
+
+The drawbacks of a compiler approach to GraphQL are legendary, but in
+that word's first meaning rather than its second: /"of, relating to,
+or characteristic of legend or a legend"/, i.e. folklore.  The fear is
+that by generating the GraphQL schema from the database schema, the
+database is exposed and the data modeler's hands are tied.  That would
+be a problem if it were true, but it isn't.  The GraphQL schema can be
+curated as much or as little as needed via SQL views, SQL functions,
+and [[https://www.graphile.org/postgraphile/smart-tags/][affordances]] and [[https://hasura.io/docs/latest/schema/postgres/tables/#tracking-tables][configurations]] within the GraphQL server.
+Moreover, the proposed alternative isn't as different as one might
+think.  Deliberately, thoughtfully, lovingly "designing" a GraphQL
+data model by meticulously writing resolvers is just making the same
+choices in code as we recommend through configuration, albeit by
+taking the [[https://en.wikipedia.org/wiki/Long_Way_Round][long way around]].
+
+Rethinking how GraphQL is implemented by thinking of it as a
+/compiler/ opens up new strategies for addressing old problems.  It
+may not be possible in every case.  In Facebook's OG use-case for
+creating GraphQL, it had a high-performance object-based data model
+many layers of abstraction away from any databases.  That's a blessing
+and a curse.  There may be no query language to compile to, but on the
+other hand you can string together resolvers to your heart's content
+and sleep easy at night knowing the high-performance object-based data
+model's vast reserves of optimized performance will absorb or
+neutralize any N+1 performance problems thrown at it.  For the rest of
+us with our puny SQL databases?  Let's just generate our GraphQL
+schema, compile our GraphQL queries, and call it a day.
+
+#+caption: GraphQL implemented with a compiler:  From GraphQL...
+#+begin_src graphql
+query GetOnePost {
+  post(limit: 1) {
+    id
+    content
+    comments(limit: 1) {
+      id
+      content
+      replies(limit: 1) {
+        id
+        content
+      }
+    }
+  }
+}
+#+end_src
+
+#+caption: GraphQL implemented with a compiler:  ...to optimized SQL!
+#+begin_src sql
+  SELECT
+    coalesce(json_agg("root"), '[]') AS "root"
+  FROM
+    (
+      SELECT
+        row_to_json(
+          (
+            SELECT
+              "_e"
+            FROM
+              (
+                SELECT
+                  "_root.base"."id" AS "id",
+                  "_root.base"."content" AS "content",
+                  "_root.ar.root.comments"."comments" AS "comments"
+  -- ...
+  -- ...
+#+end_src
+
+* Closing
+
+GraphQL is far from dead but it /is/ entering a threatening woods
+prowled by three wolves:  *security*, *performance*, *complexity*.
+The good news is there's a strategy for getting out of the woods:
+rethink what GraphQL /is/ and rethink how GraphQL is /implemented/.
+
+- GraphQL is a /development/ tool. :: Benefit from GraphQL's promises
+  of independence and nimbleness without sacrificing *security*, by
+  using GraphQL to develop API endpoints.
+- GraphQL is implemented with a /compiler/. :: Benefit from GraphQL's
+  promises of efficiency and type safety without sacrificing
+  *performance* and without confronting *complexity*, by implementing
+  GraphQL with a compiler for the underlying data platform's native
+  query interface.
+
+Not every use-case can be satisfied just with API endpoints, and not
+every use-case has the luxury of an underlying data platform with a
+native query interface, of course, but many do. Moreover, they're
+often the ones most exposed to the perceived problems of security,
+performance, and complexity.
+
+Life is about trade-offs.  Choices have to be made.  GraphQL has a
+choice to live or die, but it won't be made without trade-offs.
+Cherished ideas about what GraphQL is and how it should be implemented
+may have to concede to a changing reality.  The old ways of thinking
+about GraphQL may /have/ to die, to give life to new ways of thinking
+that allow GraphQL to flourish.
+
+#  LocalWords:  autogenerating XFUNC hl
