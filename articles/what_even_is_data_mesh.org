@@ -6,7 +6,7 @@
 #+options: author:t broken-links:nil c:nil creator:nil
 #+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+options: timestamp:t title:t toc:t todo:t |:t
+#+options: timestamp:t title:t toc:nil todo:t |:t
 #+title: The State of the Mesh
 #+subtitle: What even is a Data Mesh?
 #+date: <2024-05-29 Wed>
