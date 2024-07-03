@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-07-03 Wed 13:18 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What Even Is A Data Mesh?</title>
+<meta name="author" content="David A. Ventimiglia" />
+<meta name="generator" content="Org Mode" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css">-->
+<!--<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">-->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">-->
+<style>
+h1 {
+  font-size: x-large;
+}
+h2 {
+  font-size: large;
+}
+body {
+  grid-template-columns: 1fr min(55rem, 90%) 1fr;
+}
+header h1 {
+  font-size: xx-large;
+}
+.subtitle {
+  font-size: large;
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+}
+details[open] {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+}
+</style>
+</head>
+<body>
+
+<nav>
+ <a accesskey="H" href="/index.html"> HOME </a>
+</nav>
+<div id="preamble" class="status">
+
+<header>
+  <h1 class="title">David A. Ventimiglia</h1>
+</header>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">What Even Is A Data Mesh?</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgd0f7743">1. Introduction</a></li>
+<li><a href="#org5911290">2. History</a></li>
+<li><a href="#org1017e67">3. The State of the Mesh</a>
+<ul>
+<li><a href="#orgab2f777">3.1. Data</a></li>
+<li><a href="#org260b9bd">3.2. Serving</a></li>
+<li><a href="#orged267fd">3.3. Data Catalogs</a></li>
+<li><a href="#org3881334">3.4. API Gateways</a></li>
+<li><a href="#orgb3976ec">3.5. Distributed Query Engines</a></li>
+</ul>
+</li>
+<li><a href="#orgae2dc6d">4. Data Mesh Recipe</a></li>
+<li><a href="#org42956f0">5. Wrapping Up</a></li>
+</ul>
+</div>
+</nav>
+
+<div id="outline-container-orgd0f7743" class="outline-2">
+<h2 id="orgd0f7743"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<a href="https://en.wikipedia.org/wiki/Data_mesh">Data Mesh</a> is a decentralized data architecture&#x2013;itself a subcategory
+of software architecture&#x2013;designed to enable businesses to become more
+data-driven.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5911290" class="outline-2">
+<h2 id="org5911290"><span class="section-number-2">2.</span> History</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Data Mesh was largely invented in 2019 by Zhamak Dehghani, who was at
+"Director of emerging technologies" at <a href="https://en.wikipedia.org/wiki/Thoughtworks">ThoughtWorks</a>.  ThoughtWorks is
+an influential technology company whose "Chief Scientist" Martin
+Fowler helped mint another "big idea" in
+software--<a href="https://en.wikipedia.org/wiki/Agile_software_development">Agile-Development</a>&#x2013;2001.  Agile was a re-branding of
+<a href="https://en.wikipedia.org/wiki/Extreme_programming">Extreme-Programming</a> (XP) after Microsoft Windows XP was released
+in 2001.  XP begat Agile which was also framed as a set of guiding
+"principles" but stripped of XP's implementation details.  While Data
+Mesh is more of a younger sibling to rather than a descendant of
+Agile, it too is framed in the same ThoughtWorks "house style" as a
+set of vague.  Data Mesh <i>is also</i> a descendant of Domain Driven
+Design (<a href="https://en.wikipedia.org/wiki/Domain-driven_design">DDD</a>), created by software design consultant Eric Evans
+in 2003.  Like Data Mesh, DDD also recommends decentralization, though
+more in the organization of software teams and their processes rather
+than in the software product itself.
+</p>
+
+<p>
+Alongside this history of software design theory is a history of
+software design actuality, especially in the design of data systems.
+A good candidate for marking the beginning of the recent history of
+data systems is the rise of <a href="https://en.wikipedia.org/wiki/Big_data">Big Data</a> and <a href="https://en.wikipedia.org/wiki/Cloud_computing">Cloud Computing</a> circa 2010.
+Cloud Computing and commodity hardware accelerated the downward trend
+on infrastructure costs, lowering the cost of generating and storing
+data.  Smartphones and ad networks readily exploited the added
+capacity, but computing sums and averages over Big Data exceeded the
+abilities of previous-generation <a href="https://en.wikipedia.org/wiki/Data_warehouse">Data-Warehouses</a>, <a href="https://en.wikipedia.org/wiki/Data_mart">Data-Marts</a>, and
+<a href="https://en.wikipedia.org/wiki/Data_cube">Data-Cubes</a>.  Specialized scale-out <a href="https://en.wikipedia.org/wiki/NoSQL">NoSQL</a> software/hardware solutions
+like Apache <a href="https://en.wikipedia.org/wiki/Apache_Hadoop">Hadoop</a> and Apache <a href="https://en.wikipedia.org/wiki/Apache_Spark">Spark</a> stepped into the gap until the
+first general-purpose scale-out SQL software solutions AWS <a href="https://en.wikipedia.org/wiki/Amazon_Redshift">Redshift</a>
+and Google <a href="https://en.wikipedia.org/wiki/BigQuery">BigQuery</a> became usable 5 years later.  All these factors
+preserved and even intensified the existing bias toward centralization
+in data systems, and all these factors were driven and determined by
+technology.  From the previous generation of vertically-scaled Data
+Warehouses to the current generation of horizontally-scaled Data
+Warehouses to the Extract-Translate-Load (<a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a>) pipelines to feed them
+to the Hadoop and Spark batch job analytics, these were specialized
+technologies demanding skill specialization and consequently
+centralization.
+</p>
+
+<p>
+The trend toward centralization continues, but the demand for
+specialization has relaxed as the data technology has evolved.
+Products like AWS Redshift <a href="https://docs.aws.amazon.com/redshift/latest/dg/c-using-spectrum.html">Spectrum</a> and AWS <a href="https://aws.amazon.com/what-is/presto/">Athena</a> thoroughly
+separated compute and storage, offered a SQL interface over
+heterogeneous data in object stores, relaxed the demand for
+Transformation (the "T" in "ETL"), and encouraged the dumping of raw
+data into <a href="https://en.wikipedia.org/wiki/Data_lake">Data Lakes</a> in AWS S3, Google Cloud Storage, or Azure Blob
+Storage.  Next-generation Data Warehouses like <a href="https://en.wikipedia.org/wiki/Snowflake_Inc.">Snowflake</a> and
+<a href="https://en.wikipedia.org/wiki/ClickHouse">ClickHouse</a> continued this trend by removing the need for specialized
+Data Warehouse schema designs altogether.
+</p>
+
+<p>
+Specialization, however, is just one of the forces that drove toward
+centralization.  There are others: <a href="https://en.wikipedia.org/wiki/Data_governance">Data-Governance</a>, <a href="https://en.wikipedia.org/wiki/Data_steward">Data Stewardship</a>,
+and the lingering technological impediments to any alternative.  This
+brings us to 2019 and sets the stage for the Data Mesh.
+</p>
+
+<p>
+What Zhamak Dehghani did in 2019 with Data Mesh was to identify
+countervailing forces driving toward decentralization, articulate
+those as threads and weave them into a narrative, connect this
+narrative to previous "big ideas" like DDD and microservices, urge
+practitioners to overcome the impediments involving Data Governance,
+Data Stewardship, etc., distill a set of guiding principles, and brand
+the whole package under an imaginative new term, "Data Mesh."  What
+was left out were concrete implementation details and actionable
+advice on how actually to <i>obtain</i> a Data Mesh.  <i>This</i> brings us to
+2024 and sets the stage for the current State of the (Data) Mesh
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1017e67" class="outline-2">
+<h2 id="org1017e67"><span class="section-number-2">3.</span> The State of the Mesh</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Let's evaluate the current state of the Data Mesh with respect to our
+summary above and to the guiding principles that Zhamak Dehghani first
+articulated in 2019.
+</p>
+
+<blockquote>
+<p>
+"Data Mesh" is a decentralized data architecture&#x2013;itself a subcategory
+of software architecture&#x2013;designed to enable businesses to become more
+data-driven.
+</p>
+</blockquote>
+
+<dl class="org-dl">
+<dt>Domain Ownership</dt><dd>Divide the data architecture into components
+according to the business units and assign responsibility for those
+components to those business units.</dd>
+<dt>Data as a product</dt><dd>Assign elevated responsibility to those
+business units over their data components, requiring them to offer
+the same level of quality to the data as they would to any product.</dd>
+<dt>Self-serve data platform</dt><dd>Provide those business units with
+software and hardware infrastructure, which enables them to meet
+their elevated responsibility.</dd>
+<dt>Federated computational governance</dt><dd>Foster collaboration so that
+the responsibility to comply with governance policies can be
+optimally shared between those business units and a central
+authority.</dd>
+</dl>
+
+<p>
+A necessary if not sufficient condition to make Data Mesh a reality is
+"Self-serve data platform".  This can be analyzed along two
+dimensions:  what the data is, and how the data is served.
+</p>
+</div>
+
+<div id="outline-container-orgab2f777" class="outline-3">
+<h3 id="orgab2f777"><span class="section-number-3">3.1.</span> Data</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Data typically falls into two broad categories: operational and
+analytical.
+</p>
+
+<dl class="org-dl">
+<dt>Operational Data</dt><dd>traditional On-Line Transaction Processing
+(<a href="https://en.wikipedia.org/wiki/Online_transaction_processing">OLTP</a>) data facilitating ongoing business functions, demanding
+low-latency and high-recency, allowing low volume, and comprising a
+mix of read and write operations</dd>
+<dt>Analytical Data</dt><dd>traditional On-Line Analytical Processing (<a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP</a>)
+data for decision-support, demanding high-volume, allowing
+high-latency and low-recency, and comprising exclusively read
+operations</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org260b9bd" class="outline-3">
+<h3 id="org260b9bd"><span class="section-number-3">3.2.</span> Serving</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Serving typically is performed in one of two ways:  with a query
+language, or with an Application Programming Interface (API)
+</p>
+
+<dl class="org-dl">
+<dt>Query Language</dt><dd>general-purpose highly-flexible high-expressivity
+language to represent the full intent of ad-hoc data requests in a
+single operation usually for OLAP over OLTP and powering
+decision-support and Business Intelligence (BI) systems, e.g. SQL</dd>
+<dt>API</dt><dd>special-purpose highly-inflexible low-expressivity set of
+Remote Procedure Calls (RPC) that each represent a pre-ordained data
+request usually for OLTP over OLAP and powering desktop and mobile
+applications, e.g. REST</dd>
+</dl>
+
+<p>
+A Data Mesh may be over operational data, analytical data, or both.
+Consequently, a Data Mesh may be powered by a query language, APIs, or
+both.  The list of candidate query languages is quite short: SQL,
+GraphQL.  The list of candidate API formats is equally short: REST,
+GraphQL.  The careful reader will note the presence of GraphQL in both
+of these lists; there will be more on that later.
+</p>
+
+<p>
+To make Data Mesh a reality, three technologies emerge for these
+candidates:  Data Catalogs, API Gateways, and Distributed Query
+Engines. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orged267fd" class="outline-3">
+<h3 id="orged267fd"><span class="section-number-3">3.3.</span> Data Catalogs</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+Data Catalogs such a <a href="https://atlan.com/">Atlan</a>, <a href="https://www.collibra.com/">Collibra</a>, and <a href="https://www.amundsen.io/">Amundsen</a> do abide by some of
+the four guiding principles listed above: Domain Ownership, Data as a
+Product, and Federated Computational Governance.  Where they tend to
+fall down is in the fourth principle, Self-service Data Platform.  A few
+of them&#x2013;notably <a href="https://www.alation.com/">Alation</a> and <a href="https://open-metadata.org/">OpenMetadata</a>&#x2013;do offer a limited
+Self-serve Data Platform using pass-through SQL.  However, they
+generally lack the ability to blend and join heterogeneous data from
+multiple sources.  
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3881334" class="outline-3">
+<h3 id="org3881334"><span class="section-number-3">3.4.</span> API Gateways</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+API Gateways such as <a href="https://hasura.io/">Hasura</a> and <a href="https://www.apollographql.com/docs/router/">Apollo Router</a> on the other hand tend
+to concentrate on just the one guiding principle:  Self-serve Data
+Platform.  Notably, both manage this by settling on GraphQL which, we
+recall, is both a query language and an API format.  As a query
+language, GraphQL arguably is less powerful than SQL, however its
+limitations coupled with its uniformity, its machine-readability, and
+its self-describing nature lend GraphQL to a Self-serve Data
+Platform over heterogeneous data from multiple sources.  Moreover, in
+its dual role as not just a query language but also as an API format,
+GraphQL covers not just analytical OLAP data but operational OLTP data
+needs as well.  
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb3976ec" class="outline-3">
+<h3 id="orgb3976ec"><span class="section-number-3">3.5.</span> Distributed Query Engines</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Not to be overlooked are Distributed Query Engines such as <a href="https://trino.io/">Trino</a> and
+<a href="https://prestodb.io/">PrestoDB</a>.  These build on the simpler pass-through SQL of Data
+Catalogs like Atlan and OpenMetadata with a much more sophisticated
+execution model, adding cross-database joins, predicate push-downs,
+and relatively efficient query processing.  Large latencies may limit
+their utility for operational data, but they are quite promising for
+at least the analytical data workloads of Data Meshes.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgae2dc6d" class="outline-2">
+<h2 id="orgae2dc6d"><span class="section-number-2">4.</span> Data Mesh Recipe</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+As of writing in 2024, arguably a real Data Mesh that takes theory
+into practice will have to be cobbled together from parts.  Few if any
+products currently on the market adequately adhere to all four of the
+four guiding principles.  Such a recipe for creating a Data Mesh would
+include these components.
+</p>
+
+<dl class="org-dl">
+<dt>Data Catalog</dt><dd>Domain Ownership, Data as a Product, and Federated
+Computational Governance require a vast suite of services which so
+far only Data Catalogs have offered in earnest:  lineage,
+provenance, quality metrics, documentation, collaboration.
+Consequently, a Data Catalog is probably a non-optional piece of
+your Data Mesh recipe.</dd>
+<dt>API Gateway</dt><dd>If operational data workloads are at all among the
+Data Mesh workloads, an API Gateway is almost a "must-have."  There
+are few options here and they all use GraphQL, so this necessitates
+GraphQL being present in your Data Mesh recipe.  The two leading
+options&#x2013;Hasura and Apollo Router&#x2013;actually work well together,
+however only Hasura is really set up for adapting existing data
+sources with GraphQL.</dd>
+</dl>
+
+<p>
+A Distributed Query Engine like Trino or Presto of course is an option
+to augment the Data Mesh's Self-serve Data Platform at the cost of
+additional operational complexity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org42956f0" class="outline-2">
+<h2 id="org42956f0"><span class="section-number-2">5.</span> Wrapping Up</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Actually building and deploying a Data Mesh from these components is a
+tall order that involves details beyond the scope of this introductory
+article.  However, hopefully this article has helped to clarify the
+history of Data Mesh, position it within one's Data Strategy, dispel
+some of the vagueness that rounds Data Mesh, develops a mental model
+for reasoning about a Data Mesh, and offers some concrete and
+actionable advice to anyone who wishes to take Data Mesh from theory
+into practice.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+
+<footer>
+  <p>&copy; 2014-2024 David A. Ventimiglia
+    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Some rights
+      reserved.</a></p>
+  <p>Powered by <a href="https://gnu.org">GNU/Linux</a></p>
+</footer>
+</div>
+</body>
+</html>
