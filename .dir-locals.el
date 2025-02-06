@@ -1,15 +1,11 @@
 ;;; Directory Local Variables            -*- no-byte-compile: t -*-
 ;;; For more information see (info "(emacs) Directory Variables")
 
-((nil . ((eval . (set (make-local-variable 'my-project-path)
-		      (file-name-directory
-		       (let ((d (dir-locals-find-file "./")))
-			 (if (stringp d) d (car d))))))
-	 (eval . (set (make-local-variable 'org-publish-project-alist)
+((nil . ((eval . (set (make-local-variable 'org-publish-project-alist)
 		      `(("images"
-			 :base-directory ,(format "%s" my-project-path)
-			 :base-extension "jpg\\|gif\\|png"
-			 :publishing-directory ,(format "%sdocs" my-project-path)
+			 :base-directory ,(format "%s" (project-root (project-current)))
+			 :base-extension "jpg\\|gif\\|png\\|svg"
+			 :publishing-directory ,(format "%sdocs" (project-root (project-current)))
 			 :publishing-function org-publish-attachment
 			 :exclude "docs"
 			 :recursive t)
@@ -41,7 +37,7 @@
 			 :html-postamble t
 			 :html-postamble-format (("en" "
 <footer>
-  <p>&copy; 2014-2024 David A. Ventimiglia
+  <p>&copy; 2014-2025 David A. Ventimiglia
     <a href=\"http://creativecommons.org/licenses/by-nc-sa/4.0/\">Some rights
       reserved.</a></p>
   <p>Powered by <a href=\"https://gnu.org\">GNU/Linux</a></p>
@@ -89,5 +85,5 @@ details[open] {
 							(upcase-initials (org-publish-sitemap-default-entry file style project)))
 						       (t
 							(org-publish-sitemap-default-entry file style project))))
-			 :publishing-directory ,(format "%sdocs" my-project-path)
-			 :base-directory ,(format "%s" my-project-path))))))))
+			 :publishing-directory ,(format "%sdocs" (project-root (project-current)))
+			 :base-directory ,(format "%s" (project-root (project-current))))))))))

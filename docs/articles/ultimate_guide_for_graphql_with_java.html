@@ -86,9 +86,9 @@ details[open] {
 <h1 class="title">GraphQL and Java</h1>
 <p class="subtitle" role="doc-subtitle">The Agony and the Ecstasy</p>
 </header>
-<div id="outline-container-org0ea93bd" class="outline-2">
-<h2 id="org0ea93bd">What is GraphQL and why do people want it?</h2>
-<div class="outline-text-2" id="text-org0ea93bd">
+<div id="outline-container-org44089c0" class="outline-2">
+<h2 id="org44089c0">What is GraphQL and why do people want it?</h2>
+<div class="outline-text-2" id="text-org44089c0">
 <p>
 GraphQL is an important evolution in the design of Application
 Performance Interfaces (API), but even today it can be difficult to
@@ -100,7 +100,7 @@ GraphQL is, and as a bonus I'll tell you what GraphQL <i>really</i> is.
 Second, I'll show you how to implement state-of-the-art GraphQL in
 Java for a real application.  Third, I'll offer you an alternative
 path beyond the state-of-the-art that may suit your needs better in
-every dimension.  And, if you feel like skipping to <a href="#org681de59">the end</a>, who am I
+every dimension.  And, if you feel like skipping to <a href="#orge86cd9c">the end</a>, who am I
 to stop you?  It certainly will save a great deal of effort.
 </p>
 
@@ -183,7 +183,7 @@ constraints in relational databases.</dd>
 There's more to GraphQL, but that's pretty much the essence.  Note the
 similarities between concepts in GraphQL and in programming languages,
 and especially between concepts in GraphQL and in relational
-databases.  That will be important <a href="#orgfe79264">later</a>.
+databases.  That will be important <a href="#orgd3e9d19">later</a>.
 </p>
 
 <p>
@@ -222,9 +222,9 @@ discoverability, etc. ain't easy, so how do you do it?
 </div>
 </div>
 
-<div id="outline-container-orgd82eb9e" class="outline-2">
-<h2 id="orgd82eb9e">How do I provide the GraphQL that people want, especially as a Java developer?</h2>
-<div class="outline-text-2" id="text-orgd82eb9e">
+<div id="outline-container-org70292c2" class="outline-2">
+<h2 id="org70292c2">How do I provide the GraphQL that people want, especially as a Java developer?</h2>
+<div class="outline-text-2" id="text-org70292c2">
 <p>
 On the journey to providing a GraphQL API we confront a series
 interdependent choices, which <i>can</i> make life easier (or harder) for
@@ -264,7 +264,7 @@ using DGS then you <i>will</i> also be using graphql-java under-the-hood,
 but typically you won't come into contact with graphql-java.
 Instead, you will be sprinkling <a href="https://en.wikipedia.org/wiki/Java_annotation">annotations</a> throughout the Java code
 to identify the code segments (called "resolvers" or "data
-fetchers"&#x2026;more on that <a href="#orgfe79264">later</a>) that execute GraphQL requests.
+fetchers"&#x2026;more on that <a href="#orgd3e9d19">later</a>) that execute GraphQL requests.
 Thoughtworks <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/netflix-dgs">said</a> <b>Trial</b> as of 2023 for DGS but this is a dynamic
 space and their opinion may have changed.  I say <b>Hold</b>, for reasons
 given below.</dd>
@@ -365,9 +365,9 @@ from DGS and just use Spring for GraphQL.
 </div>
 </div>
 
-<div id="outline-container-org6835789" class="outline-2">
-<h2 id="org6835789">How exactly do I build a GraphQL API server in Java for a real application?</h2>
-<div class="outline-text-2" id="text-org6835789">
+<div id="outline-container-orgcd0f7b5" class="outline-2">
+<h2 id="orgcd0f7b5">How exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-orgcd0f7b5">
 <p>
 Opinions are free to differ on what it even means to be a "real
 application."  For the purpose of this guide, what <i>I</i> mean by "real
@@ -486,9 +486,9 @@ for a single related entity.</li>
 </div>
 </div>
 
-<div id="outline-container-org8861328" class="outline-2">
-<h2 id="org8861328">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</h2>
-<div class="outline-text-2" id="text-org8861328">
+<div id="outline-container-org0dc6fb6" class="outline-2">
+<h2 id="org0dc6fb6">No, but really, how exactly do I build a GraphQL API server in Java for a real application?</h2>
+<div class="outline-text-2" id="text-org0dc6fb6">
 <p>
 That is a <i>long recipe</i> above!  Instead of going into
 chapter-and-verse for every single step, in this guide I do two
@@ -500,29 +500,29 @@ context, discuss the choices involved, and offer some alternatives.
 </p>
 </div>
 
-<div id="outline-container-org9fba197" class="outline-3">
-<h3 id="org9fba197">Step 6:  Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database server.</h3>
-<div class="outline-text-3" id="text-org9fba197">
+<div id="outline-container-orgca65f26" class="outline-3">
+<h3 id="orgca65f26">Step 6:  Choose <a href="https://docs.docker.com/compose/">Docker Compose</a> for orchestrating a development database server.</h3>
+<div class="outline-text-3" id="text-orgca65f26">
 <p>
 Again, there are other ways to pull this off, but this is one good
 way.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-yaml"><span style="color: #7fffd4;">version</span>: <span style="color: #ffc1c1;">"3.6"</span>
-<span style="color: #7fffd4;">services</span>:
-  <span style="color: #7fffd4;">postgres</span>:
-    <span style="color: #7fffd4;">image</span>: postgres:16
-    <span style="color: #7fffd4;">ports</span>:
+<pre class="src src-yaml">version: "3.6"
+services:
+  postgres:
+    image: postgres:16
+    ports:
       - ${PGPORT:-5432}:5432
-    <span style="color: #7fffd4;">restart</span>: always
-    <span style="color: #7fffd4;">environment</span>:
-      <span style="color: #7fffd4;">POSTGRES_PASSWORD</span>: postgres
-      <span style="color: #7fffd4;">PGDATA</span>: /var/lib/pgdata
-    <span style="color: #7fffd4;">volumes</span>:
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/pgdata
+    volumes:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
-      - <span style="color: #7fffd4;">type</span>: tmpfs
-        <span style="color: #7fffd4;">target</span>: /var/lib/pg/data
+      - type: tmpfs
+        target: /var/lib/pg/data
 </pre>
 </div>
 
@@ -537,9 +537,9 @@ Start the server with:
 </div>
 </div>
 
-<div id="outline-container-org72a55be" class="outline-3">
-<h3 id="org72a55be">Step 7:  Choose the <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">Chinook</a> data model.</h3>
-<div class="outline-text-3" id="text-org72a55be">
+<div id="outline-container-orga304c23" class="outline-3">
+<h3 id="orga304c23">Step 7:  Choose the <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">Chinook</a> data model.</h3>
+<div class="outline-text-3" id="text-orga304c23">
 <p>
 The Chinook files from <a href="https://www.yugabyte.com/blog/postgresql-how-to-installing-the-chinook-sample-db-on-a-distributed-sql-database/">YugaByte</a> work out-of-the-box for PostgreSQL and
 are a good choice.  Just make sure that there is a sub-directory
@@ -582,9 +582,34 @@ way using <code>psql</code>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">psql <span style="color: #ffc1c1;">"postgresql://postgres:postgres@localhost:5432/postgres"</span> -c <span style="color: #ffc1c1;">'\d'</span>
+<pre class="src src-shell">psql "postgresql://postgres:postgres@localhost:5432/postgres" -c '\d'
 </pre>
 </div>
+
+<pre class="example" id="org6490617">
+              List of relations
+ Schema |      Name       | Type  |  Owner   
+--------+-----------------+-------+----------
+ public | Album           | table | postgres
+ public | Artist          | table | postgres
+ public | Customer        | table | postgres
+ public | Employee        | table | postgres
+ public | Genre           | table | postgres
+ public | Invoice         | table | postgres
+ public | InvoiceLine     | table | postgres
+ public | MediaType       | table | postgres
+ public | Playlist        | table | postgres
+ public | PlaylistTrack   | table | postgres
+ public | Track           | table | postgres
+ public | account         | table | postgres
+ public | account_summary | view  | postgres
+ public | order           | table | postgres
+ public | order_detail    | table | postgres
+ public | product         | table | postgres
+ public | region          | table | postgres
+(17 rows)
+
+</pre>
 
 <p>
 You should at least see Chinook-specific tables like <code>Album</code>,
@@ -593,9 +618,9 @@ You should at least see Chinook-specific tables like <code>Album</code>,
 </div>
 </div>
 
-<div id="outline-container-org6496c95" class="outline-3">
-<h3 id="org6496c95">Step 8:  Choose the <a href="https://start.spring.io/">Spring Initializr</a> for bootstrapping the application.</h3>
-<div class="outline-text-3" id="text-org6496c95">
+<div id="outline-container-orge9244c1" class="outline-3">
+<h3 id="orge9244c1">Step 8:  Choose the <a href="https://start.spring.io/">Spring Initializr</a> for bootstrapping the application.</h3>
+<div class="outline-text-3" id="text-orge9244c1">
 <p>
 The important things with this form are to make these choices:
 </p>
@@ -620,9 +645,9 @@ above.
 </div>
 </div>
 
-<div id="outline-container-orgd8f9324" class="outline-3">
-<h3 id="orgd8f9324">Step 9: <a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.</h3>
-<div class="outline-text-3" id="text-orgd8f9324">
+<div id="outline-container-org94aa881" class="outline-3">
+<h3 id="org94aa881">Step 9: <a href="https://netflix.github.io/dgs/#creating-a-schema">Create</a> a GraphQL schema file.</h3>
+<div class="outline-text-3" id="text-org94aa881">
 <p>
 Maven projects have a standard directory layout, and a standard place
 within that layout for resource files to be packaged into the build
@@ -643,29 +668,29 @@ corresponding <code>type</code> for every table.  For example, for <code>Query</
 </p>
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Query</span> {
-  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Artist</span>]
-  ArtistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Artist</span>
-  Album(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Album</span>]
-  AlbumById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Album</span>
-  Track(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Track</span>]
-  TrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Track</span>
-  Playlist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Playlist</span>]
-  PlaylistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Playlist</span>
-  PlaylistTrack(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">PlaylistTrack</span>]
-  PlaylistTrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">PlaylistTrack</span>
-  Genre(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Genre</span>]
-  GenreById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Genre</span>
-  MediaType(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">MediaType</span>]
-  MediaTypeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">MediaType</span>
-  Customer(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Customer</span>]
-  CustoemrById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Customer</span>
-  Employee(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Employee</span>]
-  EmployeeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Employee</span>
-  Invoice(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Invoice</span>]
-  InvoiceById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Invoice</span>
-  InvoiceLine(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">InvoiceLine</span>]
-  InvoiceLineById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">InvoiceLine</span>
+<pre class="src src-graphql">type Query {
+  Artist(limit: Int): [Artist]
+  ArtistById(id: Int): Artist
+  Album(limit: Int): [Album]
+  AlbumById(id: Int): Album
+  Track(limit: Int): [Track]
+  TrackById(id: Int): Track
+  Playlist(limit: Int): [Playlist]
+  PlaylistById(id: Int): Playlist
+  PlaylistTrack(limit: Int): [PlaylistTrack]
+  PlaylistTrackById(id: Int): PlaylistTrack
+  Genre(limit: Int): [Genre]
+  GenreById(id: Int): Genre
+  MediaType(limit: Int): [MediaType]
+  MediaTypeById(id: Int): MediaType
+  Customer(limit: Int): [Customer]
+  CustoemrById(id: Int): Customer
+  Employee(limit: Int): [Employee]
+  EmployeeById(id: Int): Employee
+  Invoice(limit: Int): [Invoice]
+  InvoiceById(id: Int): Invoice
+  InvoiceLine(limit: Int): [InvoiceLine]
+  InvoiceLineById(id: Int): InvoiceLine
 }
 </pre>
 </div>
@@ -688,36 +713,36 @@ types:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Album</span> {
-  AlbumId  : <span style="color: #63b8ff;">Int</span>
-  Title    : <span style="color: #63b8ff;">String</span>
-  ArtistId : <span style="color: #63b8ff;">Int</span>
-  Artist   : <span style="color: #63b8ff;">Artist</span>
-  Tracks   : [<span style="color: #63b8ff;">Track</span>]
+<pre class="src src-graphql">type Album {
+  AlbumId  : Int
+  Title    : String
+  ArtistId : Int
+  Artist   : Artist
+  Tracks   : [Track]
 }
 
-<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span> {
-  ArtistId: <span style="color: #63b8ff;">Int</span>
-  Name: <span style="color: #63b8ff;">String</span>
-  Albums: [<span style="color: #63b8ff;">Album</span>]
+type Artist {
+  ArtistId: Int
+  Name: String
+  Albums: [Album]
 }
 
-<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Customer</span> {
-  CustomerId   : <span style="color: #63b8ff;">Int</span>
-  FirstName    : <span style="color: #63b8ff;">String</span>
-  LastName     : <span style="color: #63b8ff;">String</span>
-  Company      : <span style="color: #63b8ff;">String</span>
-  Address      : <span style="color: #63b8ff;">String</span>
-  City         : <span style="color: #63b8ff;">String</span>
-  State        : <span style="color: #63b8ff;">String</span>
-  Country      : <span style="color: #63b8ff;">String</span>
-  PostalCode   : <span style="color: #63b8ff;">String</span>
-  Phone        : <span style="color: #63b8ff;">String</span>
-  Fax          : <span style="color: #63b8ff;">String</span>
-  Email        : <span style="color: #63b8ff;">String</span>
-  SupportRepId : <span style="color: #63b8ff;">Int</span>
-  SupportRep   : <span style="color: #63b8ff;">Employee</span>
-  Invoices     : [<span style="color: #63b8ff;">Invoice</span>]
+type Customer {
+  CustomerId   : Int
+  FirstName    : String
+  LastName     : String
+  Company      : String
+  Address      : String
+  City         : String
+  State        : String
+  Country      : String
+  PostalCode   : String
+  Phone        : String
+  Fax          : String
+  Email        : String
+  SupportRepId : Int
+  SupportRep   : Employee
+  Invoices     : [Invoice]
 }
 </pre>
 </div>
@@ -730,9 +755,9 @@ like.  Or, just use the complete version from the shared repository.
 </div>
 </div>
 
-<div id="outline-container-org2ef5604" class="outline-3">
-<h3 id="org2ef5604">Step 10:  Write Java model classes.</h3>
-<div class="outline-text-3" id="text-org2ef5604">
+<div id="outline-container-org942bd95" class="outline-3">
+<h3 id="org942bd95">Step 10:  Write Java model classes.</h3>
+<div class="outline-text-3" id="text-org942bd95">
 <p>
 Within the standard Maven directory layout, Java source code goes into
 <code>./src/main/java</code> and its sub-directories.  Within an appropriate
@@ -745,40 +770,40 @@ Java Record classes just for the minimal amount of boilerplate.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-java">  <span style="color: #00ffff;">package</span> com.graphqljava.tutorial.retail.<span style="color: #8470ff; font-weight: bold;">models</span>;
+<pre class="src src-java">  package com.graphqljava.tutorial.retail.models;
 
-  <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ChinookModels</span> {
-      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
-          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Album</span>
+  public class ChinookModels {
+      public static
+          record Album
           (
-           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">AlbumId</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Title</span>,
-           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">ArtistId</span>
+           Integer AlbumId,
+           String Title,
+           Integer ArtistId
            ) {}
 
-      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
-          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span>
+      public static
+          record Artist
           (
-           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">ArtistId</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Name</span>
+           Integer ArtistId,
+           String Name
            ) {}
 
-      <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span>
-          <span style="color: #63b8ff;">record</span> <span style="color: #00fa9a; font-weight: bold;">Customer</span>
+      public static
+          record Customer
           (
-           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">CustomerId</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">FirstName</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">LastName</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Company</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Address</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">City</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">State</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Country</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">PostalCode</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Phone</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Fax</span>,
-           <span style="color: #63b8ff;">String</span> <span style="color: #7fffd4;">Email</span>,
-           <span style="color: #63b8ff;">Integer</span> <span style="color: #7fffd4;">SupportRepId</span>
+           Integer CustomerId,
+           String FirstName,
+           String LastName,
+           String Company,
+           String Address,
+           String City,
+           String State,
+           String Country,
+           String PostalCode,
+           String Phone,
+           String Fax,
+           String Email,
+           Integer SupportRepId
            ) {}
   ...
 }
@@ -787,9 +812,9 @@ Java Record classes just for the minimal amount of boilerplate.
 </div>
 </div>
 
-<div id="outline-container-org2093367" class="outline-3">
-<h3 id="org2093367">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</h3>
-<div class="outline-text-3" id="text-org2093367">
+<div id="outline-container-orgb9b9e50" class="outline-3">
+<h3 id="orgb9b9e50">Step 11-14:  Write Java controller classes.  Annotate every controller.  Annotate every resolver/data-fetcher.  Implement those resolver/data-fetcher.</h3>
+<div class="outline-text-3" id="text-orgb9b9e50">
 <p>
 These are the Spring <code>@Controller</code> classes, and within them are the
 Spring for GraphQL <code>QueryMapping</code> and <code>@SchemaMapping</code>
@@ -812,65 +837,65 @@ file from the example repository.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-java"><span style="color: #00ffff;">package</span> com.graphqljava.tutorial.retail.<span style="color: #8470ff; font-weight: bold;">controllers</span>; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">It's got to go into a package somewhere.</span>
+<pre class="src src-java">package com.graphqljava.tutorial.retail.controllers; // It's got to go into a package somewhere.
 
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">sql</span>.<span style="color: #63b8ff;">ResultSet</span>;      <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">There's loads of symbols to import.</span>
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">sql</span>.<span style="color: #63b8ff;">SQLException</span>;   <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">This is Java and there's no getting around that.</span>
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #63b8ff;">List</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #63b8ff;">Map</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">java</span>.<span style="color: #8470ff; font-weight: bold;">util</span>.<span style="color: #8470ff; font-weight: bold;">stream</span>.<span style="color: #63b8ff;">Collectors</span>;
+import java.sql.ResultSet;	// There's loads of symbols to import.
+import java.sql.SQLException;	// This is Java and there's no getting around that.
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">beans</span>.<span style="color: #8470ff; font-weight: bold;">factory</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">Autowired</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #63b8ff;">ArgumentValue</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">BatchMapping</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">QueryMapping</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">graphql</span>.<span style="color: #8470ff; font-weight: bold;">data</span>.<span style="color: #8470ff; font-weight: bold;">method</span>.<span style="color: #8470ff; font-weight: bold;">annotation</span>.<span style="color: #63b8ff;">SchemaMapping</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #63b8ff;">RowMapper</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #8470ff; font-weight: bold;">simple</span>.<span style="color: #63b8ff;">JdbcClient</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">jdbc</span>.<span style="color: #8470ff; font-weight: bold;">core</span>.<span style="color: #8470ff; font-weight: bold;">simple</span>.<span style="color: #8470ff; font-weight: bold;">JdbcClient</span>.<span style="color: #63b8ff;">StatementSpec</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">org</span>.<span style="color: #8470ff; font-weight: bold;">springframework</span>.<span style="color: #8470ff; font-weight: bold;">stereotype</span>.<span style="color: #63b8ff;">Controller</span>;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.ArgumentValue;
+import org.springframework.graphql.data.method.annotation.BatchMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
+import org.springframework.stereotype.Controller;
 
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Album</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Artist</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Customer</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Employee</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Genre</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Invoice</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">InvoiceLine</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">MediaType</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Playlist</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">PlaylistTrack</span>;
-<span style="color: #00ffff;">import</span> <span style="color: #8470ff; font-weight: bold;">com</span>.<span style="color: #8470ff; font-weight: bold;">graphqljava</span>.<span style="color: #8470ff; font-weight: bold;">tutorial</span>.<span style="color: #8470ff; font-weight: bold;">retail</span>.<span style="color: #8470ff; font-weight: bold;">models</span>.<span style="color: #8470ff; font-weight: bold;">ChinookModels</span>.<span style="color: #63b8ff;">Track</span>;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Album;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Artist;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Customer;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Employee;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Genre;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Invoice;
+import com.graphqljava.tutorial.retail.models.ChinookModels.InvoiceLine;
+import com.graphqljava.tutorial.retail.models.ChinookModels.MediaType;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Playlist;
+import com.graphqljava.tutorial.retail.models.ChinookModels.PlaylistTrack;
+import com.graphqljava.tutorial.retail.models.ChinookModels.Track;
 
 
-<span style="color: #00ffff;">public</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ChinookControllers</span> { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">You don't have to nest all your controllers in one file. It's just what I do.</span>
-    <span style="color: #8470ff; font-weight: bold;">@Controller</span> <span style="color: #00ffff;">public</span> <span style="color: #00ffff;">static</span> <span style="color: #00ffff;">class</span> <span style="color: #63b8ff;">ArtistController</span> { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Tell Spring about this controller class.</span>
-        <span style="color: #8470ff; font-weight: bold;">@Autowired</span> <span style="color: #63b8ff;">JdbcClient</span> <span style="color: #7fffd4;">jdbcClient</span>; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Lots of ways to get DB access from the container.  This is one way in Spring Data.</span>
-        <span style="color: #63b8ff;">RowMapper</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt;                 <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">I'm not using an ORM, and only a tiny bit of help from Spring Data.</span>
-            <span style="color: #7fffd4;">mapper</span> = <span style="color: #00ffff;">new</span> <span style="color: #63b8ff;">RowMapper</span>&lt;&gt;() {  <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Consequently, there are these RowMapper utility classes involved.</span>
-                    <span style="color: #00ffff;">public</span> Artist mapRow (<span style="color: #63b8ff;">ResultSet</span> <span style="color: #7fffd4;">rs</span>, <span style="color: #63b8ff;">int</span> <span style="color: #7fffd4;">rowNum</span>) <span style="color: #00ffff;">throws</span> <span style="color: #63b8ff;">SQLException</span> {
-                        <span style="color: #00ffff;">return</span>
-                        <span style="color: #00ffff;">new</span> <span style="color: #63b8ff;">Artist</span>(rs.getInt(<span style="color: #ffc1c1;">"ArtistId"</span>),
-                                   rs.getString(<span style="color: #ffc1c1;">"Name"</span>));}};
-        <span style="color: #8470ff; font-weight: bold;">@SchemaMapping</span> <span style="color: #63b8ff;">Artist</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span> (<span style="color: #63b8ff;">Album</span> <span style="color: #7fffd4;">album</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">@QueryMapping when we can, @SchemaMapping when we have to</span>
-            <span style="color: #00ffff;">return</span>                                   <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Here, we're getting an Artist for a given Album.</span>
+public class ChinookControllers { // You don't have to nest all your controllers in one file. It's just what I do.
+    @Controller public static class ArtistController { // Tell Spring about this controller class.
+        @Autowired JdbcClient jdbcClient; // Lots of ways to get DB access from the container.  This is one way in Spring Data.
+        RowMapper&lt;Artist&gt;		  // I'm not using an ORM, and only a tiny bit of help from Spring Data.
+            mapper = new RowMapper&lt;&gt;() {  // Consequently, there are these RowMapper utility classes involved.
+                    public Artist mapRow (ResultSet rs, int rowNum) throws SQLException {
+                        return
+                        new Artist(rs.getInt("ArtistId"),
+                                   rs.getString("Name"));}};
+        @SchemaMapping Artist Artist (Album album) { // @QueryMapping when we can, @SchemaMapping when we have to
+            return				     // Here, we're getting an Artist for a given Album.
                 jdbcClient
-                .sql(<span style="color: #ffc1c1;">"select * from \"Artist\" where \"ArtistId\" = ? limit 1"</span>) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Simple PreparedStatement wrapper</span>
-                .param(<span style="color: #8470ff; font-weight: bold;">album</span>.ArtistId()) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Fish out the relating field ArtistId and pass it into the PreparedStatement</span>
-                .query(mapper)           <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use our RowMapper to turn the JDBC Row into the desired model class object.</span>
-                .optional()              <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use optional to guard against null returns!</span>
-                .orElse(<span style="color: #8470ff; font-weight: bold;">null</span>);}
-        <span style="color: #8470ff; font-weight: bold;">@QueryMapping</span>(name = <span style="color: #ffc1c1;">"ArtistById"</span>) <span style="color: #63b8ff;">Artist</span> <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Another resolver, this time to get an Artist by its primary key identifier</span>
-            <span style="color: #00fa9a; font-weight: bold;">artistById</span> (<span style="color: #63b8ff;">ArgumentValue</span>&lt;<span style="color: #63b8ff;">Integer</span>&gt; <span style="color: #7fffd4;">id</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Note the annotation "name" parameter, when the GraphQL field name doesn't match exactly the method name</span>
-            <span style="color: #00ffff;">for</span> (<span style="color: #63b8ff;">Artist</span> <span style="color: #7fffd4;">a</span> : jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\" where \"ArtistId\" = ?"</span>).param(id.value()).query(mapper).list()) <span style="color: #00ffff;">return</span> a;
-            <span style="color: #00ffff;">return</span> <span style="color: #8470ff; font-weight: bold;">null</span>;}
-        <span style="color: #8470ff; font-weight: bold;">@QueryMapping</span>(name = <span style="color: #ffc1c1;">"Artist"</span>) <span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Yet another resolver, this time to get a List of Artists.</span>
-            <span style="color: #00fa9a; font-weight: bold;">artist</span> (<span style="color: #63b8ff;">ArgumentValue</span>&lt;<span style="color: #63b8ff;">Integer</span>&gt; <span style="color: #7fffd4;">limit</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Note the one "limit" parameter.  ArgumentValue&lt;T&gt; is the way you do this with GraphQL for Java.</span>
-            <span style="color: #63b8ff;">StatementSpec</span>
-                <span style="color: #7fffd4;">spec</span> = limit.isOmitted() ? <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Switch SQL on whether we did or did not get the limit parameter.</span>
-                jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\""</span>) :
-                jdbcClient.sql(<span style="color: #ffc1c1;">"select * from \"Artist\" limit ?"</span>).param(limit.value());
-            <span style="color: #00ffff;">return</span>              <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Run the SQL, map the results, return the List.</span>
+                .sql("select * from \"Artist\" where \"ArtistId\" = ? limit 1") // Simple PreparedStatement wrapper
+                .param(album.ArtistId()) // Fish out the relating field ArtistId and pass it into the PreparedStatement
+                .query(mapper)		 // Use our RowMapper to turn the JDBC Row into the desired model class object.
+                .optional()		 // Use optional to guard against null returns!
+                .orElse(null);}
+        @QueryMapping(name = "ArtistById") Artist // Another resolver, this time to get an Artist by its primary key identifier
+            artistById (ArgumentValue&lt;Integer&gt; id) { // Note the annotation "name" parameter, when the GraphQL field name doesn't match exactly the method name
+            for (Artist a : jdbcClient.sql("select * from \"Artist\" where \"ArtistId\" = ?").param(id.value()).query(mapper).list()) return a;
+            return null;}
+        @QueryMapping(name = "Artist") List&lt;Artist&gt; // Yet another resolver, this time to get a List of Artists.
+            artist (ArgumentValue&lt;Integer&gt; limit) { // Note the one "limit" parameter.  ArgumentValue&lt;T&gt; is the way you do this with GraphQL for Java.
+            StatementSpec
+                spec = limit.isOmitted() ? // Switch SQL on whether we did or did not get the limit parameter.
+                jdbcClient.sql("select * from \"Artist\"") :
+                jdbcClient.sql("select * from \"Artist\" limit ?").param(limit.value());
+            return		// Run the SQL, map the results, return the List.
                 spec
                 .query(mapper)
                 .list();}}
@@ -914,7 +939,7 @@ simple scalar field (e.g., <code>Int</code>, <code>String</code>, <code>Boolean<
 will need a resolver/data-fetcher.</li>
 <li>Every resolver is implemented with a Java method.</li>
 <li>Every resolver method gets annotated with <code>@SchemaMapping</code>,
-<code>@QueryMapping</code>, or <code>@BatchMapping</code> (more on that <a href="#orgf014b48">later</a>).</li>
+<code>@QueryMapping</code>, or <code>@BatchMapping</code> (more on that <a href="#org64c9cff">later</a>).</li>
 <li>Use <code>@QueryMapping</code> when you can because it's simpler.  Use
 <code>@SchemaMapping</code> when you have to (your IDE should nag you).</li>
 <li>If you keep the Java method names in sync with the GraphQL field
@@ -935,14 +960,14 @@ resolver methods, and more combinations thereof.  Deal with it.</li>
 <li>You <i>will</i> experience the urge to be clever, to create abstractions
 that dynamically respond to more and more complex combinations of
 parameters, filters, and other conditions.  Congratulations:
-you're on your way to building a <a href="#orgfe79264">general-purpose query engine</a>.</li>
+you're on your way to building a <a href="#orgd3e9d19">general-purpose query engine</a>.</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-orgf014b48" class="outline-3">
-<h3 id="orgf014b48">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</h3>
-<div class="outline-text-3" id="text-orgf014b48">
+<div id="outline-container-org64c9cff" class="outline-3">
+<h3 id="org64c9cff">Step 15:  Upgrade <i>some</i> of those resolver/data-fetcher methods with the data loader pattern.</h3>
+<div class="outline-text-3" id="text-org64c9cff">
 <p>
 You will quickly realize that this can lead to overly chatty
 interaction with the database, sending too many small SQL statements
@@ -957,7 +982,7 @@ model.  Suppose we have this GraphQL query.
 
 <div class="org-src-container">
 <pre class="src src-graphql">query {
-  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">10</span>) {
+  Artist(limit: 10) {
     ArtistId
     Album {
       AlbumId
@@ -1023,16 +1048,16 @@ Now, for some code.  Here's how this looks in our example.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-java"><span style="color: #8470ff; font-weight: bold;">@BatchMapping</span>(field = <span style="color: #ffc1c1;">"Albums"</span>) <span style="color: #00ffff;">public</span> <span style="color: #63b8ff;">Map</span>&lt;<span style="color: #63b8ff;">Artist</span>, <span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Album</span>&gt;&gt; <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Switch to @BatchMapping</span>
-    <span style="color: #00fa9a; font-weight: bold;">albumsForArtist</span> (<span style="color: #63b8ff;">List</span>&lt;<span style="color: #63b8ff;">Artist</span>&gt; <span style="color: #7fffd4;">artists</span>) { <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Take in a List of parents rather than a single parent</span>
-    <span style="color: #00ffff;">return</span>
+<pre class="src src-java">@BatchMapping(field = "Albums") public Map&lt;Artist, List&lt;Album&gt;&gt; // Switch to @BatchMapping
+    albumsForArtist (List&lt;Artist&gt; artists) { // Take in a List of parents rather than a single parent
+    return
         jdbcClient
-        .sql(<span style="color: #ffc1c1;">"select * from \"Album\" where \"ArtistId\" in (:ids)"</span>) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Use a SQL "in" predicate taking a list of identifiers</span>
-        .param(<span style="color: #ffc1c1;">"ids"</span>, artists.stream().map(x -&gt; <span style="color: #8470ff; font-weight: bold;">x</span>.ArtistId()).toList()) <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Fish the list of identifiers out of the list of parent objects</span>
-        .query(mapper)  <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">Can re-use our usual mapper</span>
+        .sql("select * from \"Album\" where \"ArtistId\" in (:ids)") // Use a SQL "in" predicate taking a list of identifiers
+        .param("ids", artists.stream().map(x -&gt; x.ArtistId()).toList()) // Fish the list of identifiers out of the list of parent objects
+        .query(mapper)	// Can re-use our usual mapper
         .list()
-        .stream().collect(Collectors.groupingBy(x -&gt; artists.stream().collect(Collectors.groupingBy(Artist::ArtistId)).get(<span style="color: #8470ff; font-weight: bold;">x</span>.ArtistId()).getFirst()));
-    <span style="color: #fa8072;">// </span><span style="color: #ff7f24; font-style: italic;">^ Java idiom for grouping child Albums according to their parent Albums</span>
+        .stream().collect(Collectors.groupingBy(x -&gt; artists.stream().collect(Collectors.groupingBy(Artist::ArtistId)).get(x.ArtistId()).getFirst()));
+    // ^ Java idiom for grouping child Albums according to their parent Albums
 }
 </pre>
 </div>
@@ -1064,10 +1089,10 @@ with <a href="https://www.oracle.com/technical-resources/articles/java/ma14-java
 </p>
 </div>
 
-<div id="outline-container-org2bdb95a" class="outline-4">
-<h4 id="org2bdb95a">Editorial Aside!</h4>
-<div class="outline-text-4" id="text-org2bdb95a">
-<details id="orgcd9346b">
+<div id="outline-container-org4d6be9f" class="outline-4">
+<h4 id="org4d6be9f">Editorial Aside!</h4>
+<div class="outline-text-4" id="text-org4d6be9f">
+<details id="orgf0e83cb">
 <p>
 This raises an important point about the "N+1 problem" that is <i>never</i>
 addressed, and that neglect just serves to exaggerate the scale of the
@@ -1103,9 +1128,9 @@ complexity, and in hardware scaling, when confronting the N+1 problem.
 </div>
 </div>
 
-<div id="outline-container-orgfe79264" class="outline-2">
-<h2 id="orgfe79264">Is this the <i>Only</i> way to build a GraphQL API server?</h2>
-<div class="outline-text-2" id="text-orgfe79264">
+<div id="outline-container-orgd3e9d19" class="outline-2">
+<h2 id="orgd3e9d19">Is this the <i>Only</i> way to build a GraphQL API server?</h2>
+<div class="outline-text-2" id="text-orgd3e9d19">
 <p>
 We saw that the "easy way" of building GraphQL servers is the one
 typically offered in tutorials and "Getting Started" guides, and is
@@ -1210,9 +1235,9 @@ GraphQL maturity.
 </div>
 </div>
 
-<div id="outline-container-org681de59" class="outline-2">
-<h2 id="org681de59">How to choose "Buy" over "Buy"</h2>
-<div class="outline-text-2" id="text-org681de59">
+<div id="outline-container-orge86cd9c" class="outline-2">
+<h2 id="orge86cd9c">How to choose "Buy" over "Buy"</h2>
+<div class="outline-text-2" id="text-orge86cd9c">
 <p>
 You don't <i>literally</i> need to <i>buy</i> a GraphQL server.  You can, and
 there can be good reasons to do so in some settings, but there are
@@ -1304,9 +1329,9 @@ host of other databases.
 </div>
 </div>
 
-<div id="outline-container-org3559aeb" class="outline-2">
-<h2 id="org3559aeb">Wrapping up</h2>
-<div class="outline-text-2" id="text-org3559aeb">
+<div id="outline-container-org7376402" class="outline-2">
+<h2 id="org7376402">Wrapping up</h2>
+<div class="outline-text-2" id="text-org7376402">
 <p>
 What I'd like you to take away from this article are these things.
 </p>
@@ -1356,7 +1381,7 @@ Spring Boot, prefer Spring for GraphQL over Netflix DGS.</li>
 <div id="postamble" class="status">
 
 <footer>
-  <p>&copy; 2014-2024 David A. Ventimiglia
+  <p>&copy; 2014-2025 David A. Ventimiglia
     <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Some rights
       reserved.</a></p>
   <p>Powered by <a href="https://gnu.org">GNU/Linux</a></p>
