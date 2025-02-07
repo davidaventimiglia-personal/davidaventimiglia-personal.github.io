@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-02-07 Fri 13:54 -->
+<!-- 2025-02-07 Fri 14:08 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GraphQL is Dead!</title>
@@ -249,14 +249,14 @@ rethinking how GraphQL is implemented.
 </p>
 
 <div class="org-src-container">
-<label class="org-src-name"><span class="listing-number">Listing 1: </span>GraphQL as a Development Tool: from Hasura GraphQL definition&#x2026;</label><pre class="src src-graphql">query GetOnePost {
-  post(limit: 1) {
+<label class="org-src-name"><span class="listing-number">Listing 1: </span>GraphQL as a Development Tool: from Hasura GraphQL definition&#x2026;</label><pre class="src src-graphql"><span style="color: #00ffff;">query</span> <span style="color: #00fa9a; font-weight: bold;">GetOnePost</span> {
+  post(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
     id
     content
-    comments(limit: 1) {
+    comments(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
       id
       content
-      replies(limit: 1) {
+      replies(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
         id
         content
       }
@@ -378,14 +378,14 @@ schema, compile our GraphQL queries, and call it a day.
 </p>
 
 <div class="org-src-container">
-<label class="org-src-name"><span class="listing-number">Listing 3: </span>GraphQL implemented with a compiler:  From GraphQL&#x2026;</label><pre class="src src-graphql">query GetOnePost {
-  post(limit: 1) {
+<label class="org-src-name"><span class="listing-number">Listing 3: </span>GraphQL implemented with a compiler:  From GraphQL&#x2026;</label><pre class="src src-graphql"><span style="color: #00ffff;">query</span> <span style="color: #00fa9a; font-weight: bold;">GetOnePost</span> {
+  post(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
     id
     content
-    comments(limit: 1) {
+    comments(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
       id
       content
-      replies(limit: 1) {
+      replies(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">1</span>) {
         id
         content
       }

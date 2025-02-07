@@ -668,29 +668,29 @@ corresponding <code>type</code> for every table.  For example, for <code>Query</
 </p>
 
 <div class="org-src-container">
-<pre class="src src-graphql">type Query {
-  Artist(limit: Int): [Artist]
-  ArtistById(id: Int): Artist
-  Album(limit: Int): [Album]
-  AlbumById(id: Int): Album
-  Track(limit: Int): [Track]
-  TrackById(id: Int): Track
-  Playlist(limit: Int): [Playlist]
-  PlaylistById(id: Int): Playlist
-  PlaylistTrack(limit: Int): [PlaylistTrack]
-  PlaylistTrackById(id: Int): PlaylistTrack
-  Genre(limit: Int): [Genre]
-  GenreById(id: Int): Genre
-  MediaType(limit: Int): [MediaType]
-  MediaTypeById(id: Int): MediaType
-  Customer(limit: Int): [Customer]
-  CustoemrById(id: Int): Customer
-  Employee(limit: Int): [Employee]
-  EmployeeById(id: Int): Employee
-  Invoice(limit: Int): [Invoice]
-  InvoiceById(id: Int): Invoice
-  InvoiceLine(limit: Int): [InvoiceLine]
-  InvoiceLineById(id: Int): InvoiceLine
+<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Query</span> {
+  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Artist</span>]
+  ArtistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Artist</span>
+  Album(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Album</span>]
+  AlbumById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Album</span>
+  Track(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Track</span>]
+  TrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Track</span>
+  Playlist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Playlist</span>]
+  PlaylistById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Playlist</span>
+  PlaylistTrack(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">PlaylistTrack</span>]
+  PlaylistTrackById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">PlaylistTrack</span>
+  Genre(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Genre</span>]
+  GenreById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Genre</span>
+  MediaType(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">MediaType</span>]
+  MediaTypeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">MediaType</span>
+  Customer(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Customer</span>]
+  CustoemrById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Customer</span>
+  Employee(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Employee</span>]
+  EmployeeById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Employee</span>
+  Invoice(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">Invoice</span>]
+  InvoiceById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">Invoice</span>
+  InvoiceLine(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">Int</span>): [<span style="color: #63b8ff;">InvoiceLine</span>]
+  InvoiceLineById(<span style="color: #7fffd4;">id</span>: <span style="color: #63b8ff;">Int</span>): <span style="color: #63b8ff;">InvoiceLine</span>
 }
 </pre>
 </div>
@@ -713,36 +713,36 @@ types:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-graphql">type Album {
-  AlbumId  : Int
-  Title    : String
-  ArtistId : Int
-  Artist   : Artist
-  Tracks   : [Track]
+<pre class="src src-graphql"><span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Album</span> {
+  AlbumId  : <span style="color: #63b8ff;">Int</span>
+  Title    : <span style="color: #63b8ff;">String</span>
+  ArtistId : <span style="color: #63b8ff;">Int</span>
+  Artist   : <span style="color: #63b8ff;">Artist</span>
+  Tracks   : [<span style="color: #63b8ff;">Track</span>]
 }
 
-type Artist {
-  ArtistId: Int
-  Name: String
-  Albums: [Album]
+<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Artist</span> {
+  ArtistId: <span style="color: #63b8ff;">Int</span>
+  Name: <span style="color: #63b8ff;">String</span>
+  Albums: [<span style="color: #63b8ff;">Album</span>]
 }
 
-type Customer {
-  CustomerId   : Int
-  FirstName    : String
-  LastName     : String
-  Company      : String
-  Address      : String
-  City         : String
-  State        : String
-  Country      : String
-  PostalCode   : String
-  Phone        : String
-  Fax          : String
-  Email        : String
-  SupportRepId : Int
-  SupportRep   : Employee
-  Invoices     : [Invoice]
+<span style="color: #00ffff;">type</span> <span style="color: #00fa9a; font-weight: bold;">Customer</span> {
+  CustomerId   : <span style="color: #63b8ff;">Int</span>
+  FirstName    : <span style="color: #63b8ff;">String</span>
+  LastName     : <span style="color: #63b8ff;">String</span>
+  Company      : <span style="color: #63b8ff;">String</span>
+  Address      : <span style="color: #63b8ff;">String</span>
+  City         : <span style="color: #63b8ff;">String</span>
+  State        : <span style="color: #63b8ff;">String</span>
+  Country      : <span style="color: #63b8ff;">String</span>
+  PostalCode   : <span style="color: #63b8ff;">String</span>
+  Phone        : <span style="color: #63b8ff;">String</span>
+  Fax          : <span style="color: #63b8ff;">String</span>
+  Email        : <span style="color: #63b8ff;">String</span>
+  SupportRepId : <span style="color: #63b8ff;">Int</span>
+  SupportRep   : <span style="color: #63b8ff;">Employee</span>
+  Invoices     : [<span style="color: #63b8ff;">Invoice</span>]
 }
 </pre>
 </div>
@@ -982,7 +982,7 @@ model.  Suppose we have this GraphQL query.
 
 <div class="org-src-container">
 <pre class="src src-graphql">query {
-  Artist(limit: 10) {
+  Artist(<span style="color: #7fffd4;">limit</span>: <span style="color: #63b8ff;">10</span>) {
     ArtistId
     Album {
       AlbumId
@@ -1092,7 +1092,7 @@ with <a href="https://www.oracle.com/technical-resources/articles/java/ma14-java
 <div id="outline-container-org6e86dff" class="outline-4">
 <h4 id="org6e86dff">Editorial Aside!</h4>
 <div class="outline-text-4" id="text-org6e86dff">
-<details id="org9bf296c">
+<details id="orgca73038">
 <p>
 This raises an important point about the "N+1 problem" that is <i>never</i>
 addressed, and that neglect just serves to exaggerate the scale of the
