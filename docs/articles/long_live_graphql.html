@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-02-07 Fri 08:09 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GraphQL is Dead!</title>
+<meta name="author" content="David A. Ventimiglia" />
+<meta name="generator" content="Org Mode" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css">-->
+<!--<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">-->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">-->
+<style>
+h1 {
+  font-size: x-large;
+}
+h2 {
+  font-size: large;
+}
+body {
+  grid-template-columns: 1fr min(55rem, 90%) 1fr;
+}
+header h1 {
+  font-size: xx-large;
+}
+.subtitle {
+  font-size: large;
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+}
+details[open] {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+}
+</style>
+</head>
+<body>
+
+<nav>
+ <a accesskey="H" href="/index.html"> HOME </a>
+</nav>
+<div id="preamble" class="status">
+
+<header>
+  <h1 class="title">David A. Ventimiglia</h1>
+</header>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">GraphQL is Dead!</h1>
+<p class="subtitle" role="doc-subtitle">Long live GraphQL!</p>
+</header>
+<div id="outline-container-org551f684" class="outline-2">
+<h2 id="org551f684">Birth</h2>
+<div class="outline-text-2" id="text-org551f684">
+<p>
+GraphQL's <a href="https://youtu.be/783ccP__No8?si=3dbou_uhzBniMzz0">origin story</a> is an old one: Developers at Facebook created
+GraphQL in 2012 as part of the social media giant's shift from web to
+mobile.  They <i>had</i> a high-performance object-oriented data platform
+as a foundation.  They <i>needed</i> a flexible and expressive web API on
+top of it to satisfy the needs of nimble mobile developers iterating
+rapidly on an inherently dynamic, graph-oriented application.  They
+revamped and open sourced it in 2015 to great fanfare, with the
+Facebook marketing might behind it.  It got a standard, it got a
+standards body, and it got a community.  Along the way, GraphQL's
+value proposition settled on a few simple promises.
+</p>
+
+<ul class="org-ul">
+<li>Ask for what you need, get exactly that.</li>
+<li>Describe what's possible with a type system.</li>
+<li>Move faster with powerful developer tools.</li>
+<li>Evolve your API without versions.</li>
+<li>Bring your own data and code.</li>
+</ul>
+
+<p>
+And, it <a href="https://hasura.io/resources/graphql-handbook-2024">delivered</a>!  GraphQL is a general-purpose query language,
+giving API consumers the ability to ask in a single request for all
+the data they need, and nothing more.  It gave API producers the
+ability to say in a single response exactly what data they offer and
+how.  It gave front-end developers the ability to iterate
+independently of back-end developers.  It gave back-end developers the
+ability to evolve independently of front-end developers.  It gave
+middle-ware developers the ability to help both front-end and back-end
+developers without needing to consult with either.  And, it gave
+architects and data governors the ability to fulfill their dreams of
+harmonic convergence.  GraphQL had its Technology Trigger and was on
+its way up.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org209ea67" class="outline-2">
+<h2 id="org209ea67">Life</h2>
+<div class="outline-text-2" id="text-org209ea67">
+<p>
+GraphQL may have crested the Peak of Inflated Expectations since then,
+but it's reached a broad flat <a href="https://trends.google.com/trends/explore?date=all&amp;geo=US&amp;q=%2Fg%2F11cn3w0w9t,GraphQL&amp;hl=en">plateau</a> where the weather is mild and
+the terrain is gentle.  There have been laudable successes and no
+overt failures.  Needs were met, products were created, wars were
+fought, and empires were founded.
+</p>
+
+<p>
+When plateaus inevitably come to an end, however, pioneers have to
+plan a difficult descent and journey beyond.  The bloom is off the
+GraphQL rose and not all is a bed of roses.  Discontentment rises and
+disillusionment beckons, and the tools and tricks that got us here may
+not work for what lies ahead.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbe6ef64" class="outline-2">
+<h2 id="orgbe6ef64">Death</h2>
+<div class="outline-text-2" id="text-orgbe6ef64">
+<p>
+Rumors of GraphQL's demise are greatly exaggerated.  GraphQL is far
+from extinct, but what environmental conditions threaten its path to
+flourishing?  An emerging <a href="https://bessey.dev/blog/2024/05/24/why-im-over-graphql/">consensus</a> groups the various grumblings
+about GraphQL into three main complaints.
+</p>
+
+<dl class="org-dl">
+<dt>Security</dt><dd>GraphQL exposes public APIs to exfiltration, tampering,
+and denial-of-service from bad actors.</dd>
+<dt>Performance</dt><dd>GraphQL exposes all APIs to bad performance even from
+friendly actors.</dd>
+<dt>Complexity</dt><dd>GraphQL exposes developers&#x2013;especially back-end
+developers&#x2013;to enormous complexity.</dd>
+</dl>
+
+<p>
+In short, if GraphQL APIs are a dream to <i>use</i>, they're a nightmare to
+<i>create</i>, especially if security and performance needs are to be met.
+GraphQL's critics have valid points.  Addressing those points and
+leading it out of a dark wood may require rethinking GraphQL from the
+ground up.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0010a3f" class="outline-2">
+<h2 id="org0010a3f">Rebirth</h2>
+<div class="outline-text-2" id="text-org0010a3f">
+<p>
+What is GraphQL and how is it implemented?  The GraphQL Foundation
+answers those questions in this way:
+</p>
+
+<blockquote>
+<p>
+GraphQL is a query language for your API&#x2026;[and] is created by
+&#x2026;providing functions for each field on each type.
+</p>
+</blockquote>
+
+<p>
+It's time to rethink both parts of that answer.
+</p>
+</div>
+
+<div id="outline-container-org0bffd1d" class="outline-3">
+<h3 id="org0bffd1d">Rethinking What GraphQL Is</h3>
+<div class="outline-text-3" id="text-org0bffd1d">
+<p>
+GraphQL is not <i>necessarily</i> a "query language for your API".  Public
+and partner APIs don't control or even know their clients, can't
+control or even anticipate usage patterns, and therefore would benefit
+from a flexible query language, and yet there are <a href="https://xuorig.medium.com/why-we-dont-see-many-public-graphql-apis-ad972bcb201e">few</a> public and
+partner GraphQL APIs.  Anecdotal evidence suggests that the security
+criticisms of GraphQL listed above constitute the main barrier to
+GraphQL adoption for public APIs.  While there do exist GraphQL
+<a href="https://hasura.io/security/">security measures</a> that can blunt attacks, we should remember that the
+market for public APIs may be small and may be getting smaller as
+enthusiasm for public and even partner APIs <a href="https://youtu.be/BxV14h0kFs0?si=y2a4uhr9Z9X95dXm">wanes</a>.  That leaves
+private APIs.  Yet private APIs typically <i>own</i> their clients, <i>know</i>
+their usage patterns, and don't <i>need</i> a flexible query language.  So,
+what then even <i>is</i> GraphQL in this setting?
+</p>
+
+<p>
+GraphQL is a <i>development tool</i>.  An emerging rebuttal to the
+criticisms of GraphQL listed above is to use persisted queries,
+<a href="https://hasura.io/docs/latest/security/allow-list/">allow-lists</a>, and <a href="https://hasura.io/docs/latest/restified/overview/">RESTified-endpoints</a>.  That blunts the security
+criticism against GraphQL APIs largely by <i>removing</i> GraphQL APIs and
+substituting them with good old-fashioned REST.  GraphQL becomes a way
+to <i>define</i> API endpoints.  It's an alternative to defining API
+endpoints in code, but code is a development tool, so then what <i>is</i>
+GraphQL but a development tool?  If GraphQL is a development tool,
+then what are its benefits (and its drawbacks)?
+</p>
+
+<p>
+The benefits of GraphQL over code as a development tool for defining
+API endpoints accrue to its original strengths: flexibility,
+efficiency, and discoverability.  GraphQL is a <i>lingua-franca</i>, a
+<a href="https://martinfowler.com/bliki/UbiquitousLanguage.html">ubiquitous-language</a> to mediate conversations among front-end
+developers, back-end developers, data modelers, and product owners,
+but it's also an <i>implementation</i> language for the outcome of those
+conversations.  It covers 80% of what code is being asked to do when
+building APIs&#x2013;data marshaling&#x2013;better
+than code can do it.
+</p>
+
+<p>
+The drawbacks of GraphQL over code as a development tool for defining
+API endpoints lie in that remaining 20%:  "business-logic".  API
+server code is a convenient if far from ideal arena for implementing
+business logic.  Business logic&#x2013;unlike data marshaling&#x2013;really does
+benefit from the power of code, and if you're using code to write your
+API server, you might as well just use the same code to implement the
+business logic right in the API server.  Never mind that this mixes
+concerns and leads to tight coupling, it at least has the virtue of
+being obvious.  But, these drawbacks can be overcome by building a
+GraphQL server that has no intrinsic business logic, but instead offers
+channels for injecting business logic:
+</p>
+
+<dl class="org-dl">
+<dt><a href="https://hasura.io/docs/latest/schema/postgres/input-validations/">input-validation</a></dt><dd>synchronous RPC into the language of your choice
+for the simple but common case of validating input data</dd>
+<dt><a href="https://hasura.io/docs/latest/actions/overview/">remote-actions</a></dt><dd>synchronous RPC into the language of your choice
+for the less simple but less common general business-logic case</dd>
+<dt><a href="https://hasura.io/docs/latest/event-triggers/overview/">event-triggers</a></dt><dd>asynchronous event processor in the language of
+your choice for the common case of exhibiting side-effects</dd>
+<dt><a href="https://hasura.io/docs/latest/auth/authorization/index/">authorization</a></dt><dd>elegant strategy for the common but thorny problem
+of access control</dd>
+</dl>
+
+<p>
+Not only do these features equal the "obvious" strategy for
+business-logic of writing it right into the server code, they exceed
+it by freeing it from the language of the server and by separating it
+from the concerns of the server.
+</p>
+
+<p>
+Rethinking what GraphQL is by thinking of it as a development tool
+frees us from a major impediment to GraphQL's progress into the
+future.  The other major impediment is removed as we will see by
+rethinking how GraphQL is implemented.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 1: </span>GraphQL as a Development Tool: from Hasura GraphQL definition&#x2026;</label><pre class="src src-graphql">query GetOnePost {
+  post(limit: 1) {
+    id
+    content
+    comments(limit: 1) {
+      id
+      content
+      replies(limit: 1) {
+        id
+        content
+      }
+    }
+  }
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 2: </span>GraphQL as a Development Tool:  &#x2026;to Hasura REST API!</label><pre class="src src-restclient">GET https://renewed-manatee-36.hasura.app/api/rest/getonepost
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-js">{
+  "post": [
+    {
+      "id": 1,
+      "content": "This is my first post!",
+      "comments": [
+        {
+          "id": 1,
+          "content": "I love your post! Can't wait for more.",
+          "replies": [
+            {
+              "id": 1,
+              "content": "Thank you! I'm glad you enjoyed it."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4db55f7" class="outline-3">
+<h3 id="org4db55f7">Rethinking How GraphQL Is Implemented</h3>
+<div class="outline-text-3" id="text-org4db55f7">
+<p>
+GraphQL need not <i>necessarily</i> be implemented by "providing functions
+for each field on each type."  Those functions are typically called
+resolvers.  They are units of composition in how servers typically
+execute GraphQL operations.  Their granularity and composability
+fulfill the promise of GraphQL flexibility.  Yet they also are to
+blame for the performance criticisms of GraphQL listed above.  Not all
+servers GraphQL or otherwise are over SQL databases, but many are, and
+if we use SQL databases as a representative case, the granularity and
+composability of resolvers also gives rise to the N+1 Problem: a query
+graph whose node number grows exponentially with every level leads to
+a call graph whose resolver function calls grow exponentially, which
+leads to a batch of SQL statements that grows exponentially.  Never
+mind that the retrieved data volume also grows exponentially with
+every level, which imposes a natural limit on how far this can go,
+this is still a problem.  And yet the leading solution to this
+problem&#x2013;the <a href="https://github.com/graphql/dataloader">data-loader</a> pattern&#x2013;only diminishes the problem without
+banishing it, sacrifices much of GraphQL's flexibility, and
+contributes to the complexity which is the third criticism listed
+above.  Confronted with this Gordian knot, it's worth asking another
+foundational question.  Can we implement GraphQL in some <i>other</i> way,
+and if so, how?
+</p>
+
+<p>
+GraphQL can be implemented with a <i><a href="https://hasura.io/blog/compile-dont-resolve-designing-a-feature-rich-high-performance-domain-driven-graphql-api">compiler</a></i>.  GraphQL is a
+general-purpose query language which often (if not always) is over
+data that ultimately comes from database engines with their own
+general-purpose query languages.  If those engines happen to process
+their queries with a network of operators that bear more than a
+passing resemblance to resolvers, that's their business.  All <i>we</i>
+have to do is compile (or translate, or transpile) our query into
+theirs and let them handle the rest.  <a href="https://exograph.dev/blog/graphql-better-with-exograph#data-fetching-and-the-n1-problem">Some</a> <a href="https://grafast.org/grafast/#plan-resolvers">people</a> in the GraphQL
+community are finally getting around to this idea.  <a href="https://www.graphile.org/">Some</a> <a href="https://hasura.io/">of us</a> have
+been here all along.
+</p>
+
+<p>
+The benefits of a compiler approach to GraphQL are many.  It
+<i>eliminates</i> the N+1 problem.  It paves the way for a powerful
+strategy for implementing <a href="https://hasura.io/docs/latest/auth/authorization/index/">authorization</a> as discussed above.  And, by
+generating the GraphQL schema from the database schema, it eliminates
+tedious repetitive boilerplate data modeling that serves high-minded
+ideals that are impractical <a href="https://letmegooglethat.com/?q=database+with+thousands+of+tables">at scale</a>.
+</p>
+
+<p>
+The drawbacks of a compiler approach to GraphQL are legendary, but in
+that word's first meaning rather than its second: <i>"of, relating to,
+or characteristic of legend or a legend"</i>, i.e. folklore.  The fear is
+that by generating the GraphQL schema from the database schema, the
+database is exposed and the data modeler's hands are tied.  That would
+be a problem if it were true, but it isn't.  The GraphQL schema can be
+curated as much or as little as needed via SQL views, SQL functions,
+and <a href="https://www.graphile.org/postgraphile/smart-tags/">affordances</a> and <a href="https://hasura.io/docs/latest/schema/postgres/tables/#tracking-tables">configurations</a> within the GraphQL server.
+Moreover, the proposed alternative isn't as different as one might
+think.  Deliberately, thoughtfully, lovingly "designing" a GraphQL
+data model by meticulously writing resolvers is just making the same
+choices in code as we recommend through configuration, albeit by
+taking the <a href="https://en.wikipedia.org/wiki/Long_Way_Round">long way around</a>.
+</p>
+
+<p>
+Rethinking how GraphQL is implemented by thinking of it as a
+<i>compiler</i> opens up new strategies for addressing old problems.  It
+may not be possible in every case.  In Facebook's OG use-case for
+creating GraphQL, it had a high-performance object-based data model
+many layers of abstraction away from any databases.  That's a blessing
+and a curse.  There may be no query language to compile to, but on the
+other hand you can string together resolvers to your heart's content
+and sleep easy at night knowing the high-performance object-based data
+model's vast reserves of optimized performance will absorb or
+neutralize any N+1 performance problems thrown at it.  For the rest of
+us with our puny SQL databases?  Let's just generate our GraphQL
+schema, compile our GraphQL queries, and call it a day.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 3: </span>GraphQL implemented with a compiler:  From GraphQL&#x2026;</label><pre class="src src-graphql">query GetOnePost {
+  post(limit: 1) {
+    id
+    content
+    comments(limit: 1) {
+      id
+      content
+      replies(limit: 1) {
+        id
+        content
+      }
+    }
+  }
+}
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 4: </span>GraphQL implemented with a compiler:  &#x2026;to optimized SQL!</label><pre class="src src-sql">SELECT
+  coalesce(json_agg("root"), '[]') AS "root"
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_e"
+          FROM
+            (
+              SELECT
+                "_root.base"."id" AS "id",
+                "_root.base"."content" AS "content",
+                "_root.ar.root.comments"."comments" AS "comments"
+-- ...
+-- ...
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org40cd411" class="outline-2">
+<h2 id="org40cd411">Closing</h2>
+<div class="outline-text-2" id="text-org40cd411">
+<p>
+GraphQL is far from dead but it <i>is</i> entering a threatening woods
+prowled by three wolves:  <b>security</b>, <b>performance</b>, <b>complexity</b>.
+The good news is there's a strategy for getting out of the woods:
+rethink what GraphQL <i>is</i> and rethink how GraphQL is <i>implemented</i>.
+</p>
+
+<dl class="org-dl">
+<dt>GraphQL is a <i>development</i> tool.</dt><dd>Benefit from GraphQL's promises
+of independence and nimbleness without sacrificing <b>security</b>, by
+using GraphQL to develop API endpoints.</dd>
+<dt>GraphQL is implemented with a <i>compiler</i>.</dt><dd>Benefit from GraphQL's
+promises of efficiency and type safety without sacrificing
+<b>performance</b> and without confronting <b>complexity</b>, by implementing
+GraphQL with a compiler for the underlying data platform's native
+query interface.</dd>
+</dl>
+
+<p>
+Not every use-case can be satisfied just with API endpoints, and not
+every use-case has the luxury of an underlying data platform with a
+native query interface, of course, but many do. Moreover, they're
+often the ones most exposed to the perceived problems of security,
+performance, and complexity.
+</p>
+
+<p>
+Life is about trade-offs.  Choices have to be made.  GraphQL has a
+choice to live or die, but it won't be made without trade-offs.
+Cherished ideas about what GraphQL is and how it should be implemented
+may have to concede to a changing reality.  The old ways of thinking
+about GraphQL may <i>have</i> to die, to give life to new ways of thinking
+that allow GraphQL to flourish.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+
+<footer>
+  <p>&copy; 2014-2024 David A. Ventimiglia
+    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Some rights
+      reserved.</a></p>
+  <p>Powered by <a href="https://gnu.org">GNU/Linux</a></p>
+</footer>
+</div>
+</body>
+</html>
