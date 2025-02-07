@@ -2,7 +2,7 @@
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil . ((eval . (set (make-local-variable 'my-project-path)
-		      "/home/david-a-ventimiglia/Work/davidaventimiglia.github.io/"))
+		      "/home/david-a-ventimiglia/Work/davidaventimiglia-personal.github.io/"))
 	 (eval . (set (make-local-variable 'org-publish-project-alist)
 		      `(("images"
 			 :base-directory ,(format "%s" my-project-path)

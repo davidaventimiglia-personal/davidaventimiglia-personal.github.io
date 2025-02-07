@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-02-07 Fri 08:09 -->
+<!-- 2025-02-07 Fri 13:54 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GraphQL is Dead!</title>
@@ -55,9 +55,9 @@ details[open] {
 <h1 class="title">GraphQL is Dead!</h1>
 <p class="subtitle" role="doc-subtitle">Long live GraphQL!</p>
 </header>
-<div id="outline-container-org551f684" class="outline-2">
-<h2 id="org551f684">Birth</h2>
-<div class="outline-text-2" id="text-org551f684">
+<div id="outline-container-orgac65fa7" class="outline-2">
+<h2 id="orgac65fa7">Birth</h2>
+<div class="outline-text-2" id="text-orgac65fa7">
 <p>
 GraphQL's <a href="https://youtu.be/783ccP__No8?si=3dbou_uhzBniMzz0">origin story</a> is an old one: Developers at Facebook created
 GraphQL in 2012 as part of the social media giant's shift from web to
@@ -96,9 +96,9 @@ its way up.
 </div>
 </div>
 
-<div id="outline-container-org209ea67" class="outline-2">
-<h2 id="org209ea67">Life</h2>
-<div class="outline-text-2" id="text-org209ea67">
+<div id="outline-container-orgd7a0e4e" class="outline-2">
+<h2 id="orgd7a0e4e">Life</h2>
+<div class="outline-text-2" id="text-orgd7a0e4e">
 <p>
 GraphQL may have crested the Peak of Inflated Expectations since then,
 but it's reached a broad flat <a href="https://trends.google.com/trends/explore?date=all&amp;geo=US&amp;q=%2Fg%2F11cn3w0w9t,GraphQL&amp;hl=en">plateau</a> where the weather is mild and
@@ -117,9 +117,9 @@ not work for what lies ahead.
 </div>
 </div>
 
-<div id="outline-container-orgbe6ef64" class="outline-2">
-<h2 id="orgbe6ef64">Death</h2>
-<div class="outline-text-2" id="text-orgbe6ef64">
+<div id="outline-container-orgd7ed2a3" class="outline-2">
+<h2 id="orgd7ed2a3">Death</h2>
+<div class="outline-text-2" id="text-orgd7ed2a3">
 <p>
 Rumors of GraphQL's demise are greatly exaggerated.  GraphQL is far
 from extinct, but what environmental conditions threaten its path to
@@ -146,9 +146,9 @@ ground up.
 </div>
 </div>
 
-<div id="outline-container-org0010a3f" class="outline-2">
-<h2 id="org0010a3f">Rebirth</h2>
-<div class="outline-text-2" id="text-org0010a3f">
+<div id="outline-container-orgb65a56e" class="outline-2">
+<h2 id="orgb65a56e">Rebirth</h2>
+<div class="outline-text-2" id="text-orgb65a56e">
 <p>
 What is GraphQL and how is it implemented?  The GraphQL Foundation
 answers those questions in this way:
@@ -166,9 +166,9 @@ It's time to rethink both parts of that answer.
 </p>
 </div>
 
-<div id="outline-container-org0bffd1d" class="outline-3">
-<h3 id="org0bffd1d">Rethinking What GraphQL Is</h3>
-<div class="outline-text-3" id="text-org0bffd1d">
+<div id="outline-container-orgd5b05f2" class="outline-3">
+<h3 id="orgd5b05f2">Rethinking What GraphQL Is</h3>
+<div class="outline-text-3" id="text-orgd5b05f2">
 <p>
 GraphQL is not <i>necessarily</i> a "query language for your API".  Public
 and partner APIs don't control or even know their clients, can't
@@ -267,24 +267,24 @@ rethinking how GraphQL is implemented.
 </div>
 
 <div class="org-src-container">
-<label class="org-src-name"><span class="listing-number">Listing 2: </span>GraphQL as a Development Tool:  &#x2026;to Hasura REST API!</label><pre class="src src-restclient">GET https://renewed-manatee-36.hasura.app/api/rest/getonepost
+<label class="org-src-name"><span class="listing-number">Listing 2: </span>GraphQL as a Development Tool:  &#x2026;to Hasura REST API!</label><pre class="src src-restclient"><span style="color: #00ffff;">GET</span> <span style="color: #00fa9a; font-weight: bold;">https://renewed-manatee-36.hasura.app/api/rest/getonepost</span>
 </pre>
 </div>
 
 <div class="org-src-container">
 <pre class="src src-js">{
-  "post": [
+  <span style="color: #ffc1c1;">"post"</span>: [
     {
-      "id": 1,
-      "content": "This is my first post!",
-      "comments": [
+      <span style="color: #ffc1c1;">"id"</span>: 1,
+      <span style="color: #ffc1c1;">"content"</span>: <span style="color: #ffc1c1;">"This is my first post!"</span>,
+      <span style="color: #ffc1c1;">"comments"</span>: [
         {
-          "id": 1,
-          "content": "I love your post! Can't wait for more.",
-          "replies": [
+          <span style="color: #ffc1c1;">"id"</span>: 1,
+          <span style="color: #ffc1c1;">"content"</span>: <span style="color: #ffc1c1;">"I love your post! Can't wait for more."</span>,
+          <span style="color: #ffc1c1;">"replies"</span>: [
             {
-              "id": 1,
-              "content": "Thank you! I'm glad you enjoyed it."
+              <span style="color: #ffc1c1;">"id"</span>: 1,
+              <span style="color: #ffc1c1;">"content"</span>: <span style="color: #ffc1c1;">"Thank you! I'm glad you enjoyed it."</span>
             }
           ]
         }
@@ -297,9 +297,9 @@ rethinking how GraphQL is implemented.
 </div>
 </div>
 
-<div id="outline-container-org4db55f7" class="outline-3">
-<h3 id="org4db55f7">Rethinking How GraphQL Is Implemented</h3>
-<div class="outline-text-3" id="text-org4db55f7">
+<div id="outline-container-orgd60e3e1" class="outline-3">
+<h3 id="orgd60e3e1">Rethinking How GraphQL Is Implemented</h3>
+<div class="outline-text-3" id="text-orgd60e3e1">
 <p>
 GraphQL need not <i>necessarily</i> be implemented by "providing functions
 for each field on each type."  Those functions are typically called
@@ -396,32 +396,32 @@ schema, compile our GraphQL queries, and call it a day.
 </div>
 
 <div class="org-src-container">
-<label class="org-src-name"><span class="listing-number">Listing 4: </span>GraphQL implemented with a compiler:  &#x2026;to optimized SQL!</label><pre class="src src-sql">SELECT
-  coalesce(json_agg("root"), '[]') AS "root"
-FROM
+<label class="org-src-name"><span class="listing-number">Listing 4: </span>GraphQL implemented with a compiler:  &#x2026;to optimized SQL!</label><pre class="src src-sql"><span style="color: #00ffff;">SELECT</span>
+  <span style="color: #b0c4de;">coalesce</span>(json_agg("root"), <span style="color: #ffc1c1;">'[]'</span>) <span style="color: #00ffff;">AS</span> "root"
+<span style="color: #00ffff;">FROM</span>
   (
-    SELECT
+    <span style="color: #00ffff;">SELECT</span>
       row_to_json(
         (
-          SELECT
+          <span style="color: #00ffff;">SELECT</span>
             "_e"
-          FROM
+          <span style="color: #00ffff;">FROM</span>
             (
-              SELECT
-                "_root.base"."id" AS "id",
-                "_root.base"."content" AS "content",
-                "_root.ar.root.comments"."comments" AS "comments"
--- ...
--- ...
+              <span style="color: #00ffff;">SELECT</span>
+                "_root.base"."id" <span style="color: #00ffff;">AS</span> "id",
+                "_root.base"."content" <span style="color: #00ffff;">AS</span> "content",
+                "_root.ar.root.comments"."comments" <span style="color: #00ffff;">AS</span> "comments"
+<span style="color: #fa8072;">-- </span><span style="color: #ff7f24; font-style: italic;">...</span>
+<span style="color: #fa8072;">-- </span><span style="color: #ff7f24; font-style: italic;">...</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org40cd411" class="outline-2">
-<h2 id="org40cd411">Closing</h2>
-<div class="outline-text-2" id="text-org40cd411">
+<div id="outline-container-org7ed5faa" class="outline-2">
+<h2 id="org7ed5faa">Closing</h2>
+<div class="outline-text-2" id="text-org7ed5faa">
 <p>
 GraphQL is far from dead but it <i>is</i> entering a threatening woods
 prowled by three wolves:  <b>security</b>, <b>performance</b>, <b>complexity</b>.
