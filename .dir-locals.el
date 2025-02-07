@@ -81,11 +81,10 @@ details[open] {
 "
 			 :sitemap-format-entry (lambda (file style project)
 						 (cond ((org-publish-find-property file :date project)
-							(format "%s"
-								(org-publish-sitemap-default-entry file style project)))
+							(format "*%s* %s" (format-time-string "%Y-%m-%d" (org-publish-find-date file project)) (org-publish-sitemap-default-entry file style project)))
 						       ((directory-name-p file)
 							(upcase-initials (org-publish-sitemap-default-entry file style project)))
 						       (t
-							(org-publish-sitemap-default-entry file style project))))
+							(format "%s" (org-publish-sitemap-default-entry file style project)))))
 			 :publishing-directory ,(format "%sdocs" my-project-path)
 			 :base-directory ,(format "%s" my-project-path))))))))
