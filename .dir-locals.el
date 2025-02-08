@@ -16,22 +16,16 @@
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
-			 :sitemap-title "Contents"
+			 :sitemap-title "Articles"
 			 :html-preamble t
 			 :html-doctype "html5"
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
 			 :html-home/up-format "
 <nav>
- <a accesskey=\"H\" href=\"%s\"> HOME </a>
+ <a accesskey=\"H\" href=\"%s\"> David A. Ventimiglia </a>
 </nav>
 "
-			 :html-preamble-format (("en" "
-<header>
-  <h1 class=\"title\">David A. Ventimiglia</h1>
-</header>
-"
-						 ))
 			 :sitemap-sort-files anti-chronologically
 			 :html-head-include-scripts nil
 			 :html-validation-link nil
@@ -87,4 +81,4 @@ details[open] {
 						       (t
 							(format "%s" (org-publish-sitemap-default-entry file style project)))))
 			 :publishing-directory ,(format "%sdocs" my-project-path)
-			 :base-directory ,(format "%s" my-project-path))))))))
+			 :base-directory ,(format "%s/articles" my-project-path))))))))
