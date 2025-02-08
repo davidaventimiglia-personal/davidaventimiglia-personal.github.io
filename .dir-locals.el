@@ -2,12 +2,12 @@
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil . ((eval . (set (make-local-variable 'my-project-path)
-		      "/home/david-a-ventimiglia/Work/davidaventimiglia-personal.github.io/"))
+		      "/home/david-a-ventimiglia/Work/davidaventimiglia-personal.github.io"))
 	 (eval . (set (make-local-variable 'org-publish-project-alist)
 		      `(("images"
 			 :base-directory ,(format "%s" my-project-path)
 			 :base-extension "jpg\\|gif\\|png"
-			 :publishing-directory ,(format "%sdocs" my-project-path)
+			 :publishing-directory ,(format "%s/docs" my-project-path)
 			 :publishing-function org-publish-attachment
 			 :exclude "docs"
 			 :recursive t)
@@ -16,14 +16,14 @@
 			 :recursive t
 			 :auto-sitemap t
 			 :sitemap-filename "index.html"
-			 :sitemap-title "Articles"
+			 :sitemap-title "David A. Ventimiglia"
 			 :html-preamble t
 			 :html-doctype "html5"
 			 :html-link-home "/index.html"
 			 :html-link-up "/index.html"
 			 :html-home/up-format "
 <nav>
- <a accesskey=\"H\" href=\"%s\"> David A. Ventimiglia </a>
+ <a accesskey=\"H\" href=\"%s\"> HOME </a>
 </nav>
 "
 			 :sitemap-sort-files anti-chronologically
@@ -71,6 +71,15 @@ details[open] {
   border-bottom: 1px solid #aaa;
   padding: 0.5em;
 }
+ul {
+  list-style-type: none;
+}
+ul li {
+    font-size: x-large;
+}
+ul li ul li {
+    font-size: large;
+}
 </style>
 "
 			 :sitemap-format-entry (lambda (file style project)
@@ -80,5 +89,5 @@ details[open] {
 							(upcase-initials (org-publish-sitemap-default-entry file style project)))
 						       (t
 							(format "%s" (org-publish-sitemap-default-entry file style project)))))
-			 :publishing-directory ,(format "%sdocs" my-project-path)
-			 :base-directory ,(format "%s/articles" my-project-path))))))))
+			 :publishing-directory ,(format "%s/docs" my-project-path)
+			 :base-directory ,(format "%s" my-project-path))))))))
